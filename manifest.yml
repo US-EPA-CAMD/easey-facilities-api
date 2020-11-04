@@ -1,0 +1,11 @@
+---
+applications:
+  - name: facilities-api
+    path: ./
+    command: npm run start
+    random-route: true
+    memory: 512M
+    env:
+      OPTIMIZE_MEMORY: true
+    services:
+      - us-epa-camd-starter-kit-pg-db
