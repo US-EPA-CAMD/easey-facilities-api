@@ -1,4 +1,4 @@
-name: EPA EASEY Feature Branch Workflow
+name: Feature Branch Workflow
 
 on:
   push:
