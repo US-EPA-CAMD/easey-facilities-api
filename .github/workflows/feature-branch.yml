@@ -11,10 +11,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build
       run: |
-        scripts/build.sh
+        devops/scripts/build.sh
     - name: Unit Tests
       run: |
-        scripts/unitTests.sh
+        devops/scripts/unitTests.sh
 
   Codescan:
     runs-on: ubuntu-latest
