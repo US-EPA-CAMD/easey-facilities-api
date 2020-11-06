@@ -1,11 +1,11 @@
-name: Feature Branch Workflow
+name: Develop Branch Workflow
 
 on:
-  push:
-    branches: [ feature/* ]
+  pull_request:
+    branches: [ develop ]
 
 jobs:
-  Build-Test:
+  Build-Test-Deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -16,17 +16,19 @@ jobs:
           auth_header="$(git config --local --get http.https://github.com/.extraheader)"
           git submodule sync --recursive
           git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+    - name: Install cf cli
+      run: devops/scripts/install-pre-reqs.sh
     - name: Build
       run: devops/scripts/build.sh
     - name: Test
       run: devops/scripts/unitTests.sh
+    #- name: Deploy
+    #  run: devops/scripts/deploy.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
 
   SonarCloud:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
