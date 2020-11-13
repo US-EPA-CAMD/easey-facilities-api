@@ -10,12 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Checkout submodules
-      shell: bash
-      run: |
-          git config --global url."https://github.com/".insteadOf "git@github.com:"
-          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          git submodule sync --recursive
-          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+      run: devops/scripts/submodules.sh
     - name: Install cf cli
       run: devops/scripts/install-pre-reqs.sh
     - name: Build
@@ -23,7 +18,11 @@ jobs:
     - name: Test
       run: devops/scripts/unitTests.sh
     #- name: Deploy
-    #  run: devops/scripts/deploy.sh ${{secrets.CF_SERVICE_ACCOUNT_ID}} ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}}
+    #  run: devops/scripts/deploy.sh ${{secrets.CF_API_URL}} `
+    #                                ${{secrets.CF_SERVICE_ACCOUNT_ID}} `
+    #                                ${{secrets.CF_SERVICE_ACCOUNT_PASSWORD}} `
+    #                                ${{secrets.CF_ORG_NAME}} `
+    #                                ${{secrets.CF_ORG_SPACE}}
 
   SonarCloud:
     runs-on: ubuntu-latest
