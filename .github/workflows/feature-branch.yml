@@ -15,27 +15,28 @@ jobs:
         with:
           repository: US-EPA-CAMD/devops
           path: devops
-      # - name: Checkout reposistory
-      #   uses: actions/checkout@v2
-      # - name: Checkout submodules
-      #   run: git submodule update --init --recursive
-      - name: Debug
-        run: ls
       - name: Environment Variables
-        run: devops/scripts/environment-variables.sh
-      - name: Build
-        run: devops/scripts/build.sh
+        run: export CF_API_URL=https://api.fr.cloud.gov
+      - name: Debug
+        run: |
+          ls -l
+          cd devops/
+          ls -l
+          echo "CF_API_URL=${CF_API_URL}"
+      # - name: Build
+      #   run: echo "CF_API_URL=${CF_API_URL}"
       # - name: Test
       #   run: devops/scripts/unit-tests.sh
 
-  SonarCloud:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  # SonarCloud:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: SonarCloud Scan
+  #       uses: sonarsource/sonarcloud-github-action@master
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
