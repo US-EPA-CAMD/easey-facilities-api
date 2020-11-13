@@ -8,25 +8,34 @@ jobs:
   Build-Test:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout reposistory      
-      uses: actions/checkout@v2
-    - name: Checkout submodules
-      run: git submodule update --init --recursive
-    - name: Environment Variables
-      run: devops/scripts/environment-variables.sh
-    - name: Build
-      run: devops/scripts/build.sh
-    - name: Test
-      run: devops/scripts/unit-tests.sh
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Checkout devops
+        uses: actions/checkout@v2
+        with:
+          repository: US-EPA-CAMD/devops
+          path: devops
+      # - name: Checkout reposistory
+      #   uses: actions/checkout@v2
+      # - name: Checkout submodules
+      #   run: git submodule update --init --recursive
+      - name: Debug
+        run: ls
+      - name: Environment Variables
+        run: devops/scripts/environment-variables.sh
+      - name: Build
+        run: devops/scripts/build.sh
+      - name: Test
+        run: devops/scripts/unit-tests.sh
 
   SonarCloud:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
