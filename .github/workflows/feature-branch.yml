@@ -16,17 +16,16 @@ jobs:
           repository: US-EPA-CAMD/devops
           path: devops
       - name: Environment Variables
-        run: export CF_API_URL=https://api.fr.cloud.gov
-      - name: Debug
         run: |
-          ls -l
-          cd devops/
-          ls -l
-          echo "CF_API_URL=${CF_API_URL}"
-      # - name: Build
-      #   run: echo "CF_API_URL=${CF_API_URL}"
-      # - name: Test
-      #   run: devops/scripts/unit-tests.sh
+          echo "CF_ORG_NAME=epa-easey" >> $GITHUB_ENV
+          echo "CF_SPACE_NAME=dev" >> $GITHUB_ENV
+          echo "CF_API_URL=https://api.fr.cloud.gov" >> $GITHUB_ENV
+      - name: Debug
+        run: echo "CF_ORG_NAME=$CF_ORG_NAME"
+      - name: Build
+        run: echo "CF_SPACE_NAME=$CF_SPACE_NAME"
+      - name: Test
+        run: echo "CF_API_URL=$CF_API_URL"
 
   # SonarCloud:
   #   runs-on: ubuntu-latest
