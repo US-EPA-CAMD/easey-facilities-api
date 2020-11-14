@@ -30,8 +30,6 @@ jobs:
       #   run: devops/scripts/unit-tests.sh
       - name: Deploy
         run: devops/scripts/deploy.sh
-        env:
-          DEPLOY_FROM_ARTIFACT: false
 
   # SonarCloud:
   #   runs-on: ubuntu-latest
