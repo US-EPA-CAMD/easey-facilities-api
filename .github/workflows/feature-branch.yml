@@ -8,12 +8,12 @@ jobs:
   Build-Test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout ${{ GITHUB_REPOSITORY }}
+      - name: Checkout $GITHUB_REPOSITORY
         uses: actions/checkout@v2
-      - name: Checkout ${{ GITHUB_ACTOR }}/devops
+      - name: Checkout $GITHUB_ACTOR/devops
         uses: actions/checkout@v2
         with:
-          repository: ${{ GITHUB_ACTOR }}/devops
+          repository: $GITHUB_ACTOR/devops
           path: devops
       - name: Set Environment Variables
         run: devops/scripts/environment-variables.sh
