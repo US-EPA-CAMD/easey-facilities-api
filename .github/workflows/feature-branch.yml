@@ -19,11 +19,11 @@ jobs:
         run: devops/scripts/environment-variables.sh
       - name: Install cf cli
         run: devops/scripts/install-cf-cli.sh
-        env:
-          CF_USERNAME: ${{ secrets.CF_SERVICE_ACCOUNT_ID }}
-          CF_PASSWORD: ${{ secrets.CF_SERVICE_ACCOUNT_PASSWORD }}
       - name: Login to cloud.gov
         run: devops/scripts/cf-login.sh
+        env:
+          CF_USERNAME: ${{ secrets.CF_SERVICE_ACCOUNT_ID }}
+          CF_PASSWORD: ${{ secrets.CF_SERVICE_ACCOUNT_PASSWORD }}        
       # - name: Build
       #   run: devops/scripts/build.sh
       # - name: Run Unit Tests
