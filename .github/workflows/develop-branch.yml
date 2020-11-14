@@ -17,6 +17,8 @@ jobs:
           path: devops
       - name: Set Environment Variables
         run: devops/scripts/environment-variables.sh
+      - name: Install Pre-Reqs
+        run: devops/scripts/install-prereqs.sh
       - name: Build
         run: devops/scripts/build.sh
       - name: Run Unit Tests
