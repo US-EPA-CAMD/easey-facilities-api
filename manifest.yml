@@ -1,4 +1,3 @@
----
 applications:
   - name: facilities-api
     path: ./
@@ -8,4 +7,4 @@ applications:
     env:
       OPTIMIZE_MEMORY: true
     services:
-      - us-epa-camd-starter-kit-pg-db
+      - camd-pg-db

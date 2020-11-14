@@ -1,6 +1,8 @@
 name: Develop Branch Workflow
 
 on:
+  push:
+    branches: [ develop ]
   pull_request:
     branches: [ develop ]
 
@@ -15,19 +17,21 @@ jobs:
         with:
           repository: US-EPA-CAMD/devops
           path: devops
-      - name: Set Environment Variables
+      - name: Configure Env Vars
         run: devops/scripts/environment-variables.sh
-      - name: Install Pre-Reqs
-        run: devops/scripts/install-prereqs.sh
+      - name: Install cf cli
+        run: devops/scripts/install-cf-cli.sh
+      - name: Login to cloud.gov
+        run: devops/scripts/cf-login.sh
+        env:
+          CF_USERNAME: ${{ secrets.CF_SERVICE_ACCOUNT_ID }}
+          CF_PASSWORD: ${{ secrets.CF_SERVICE_ACCOUNT_PASSWORD }}
       - name: Build
         run: devops/scripts/build.sh
       - name: Run Unit Tests
         run: devops/scripts/unit-tests.sh
       - name: Deploy
         run: devops/scripts/deploy.sh
-        env:
-          CF_USERNAME: ${{ secrets.CF_SERVICE_ACCOUNT_ID }}
-          CF_PASSWORD: ${{ secrets.CF_SERVICE_ACCOUNT_PASSWORD }}
 
   SonarCloud:
     runs-on: ubuntu-latest
