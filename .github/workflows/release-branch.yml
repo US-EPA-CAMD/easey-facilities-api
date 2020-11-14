@@ -1,8 +1,12 @@
 name: Develop Branch Workflow
 
 on:
+  push:
+    branches: [ release/v* ]
   pull_request:
-    branches: [ develop ]
+    branches: [ release/v* ]
+#    tags:
+#      - v[0-9]+.[0-9]+_rc[0-9]+
 
 jobs:
   Build-Test-Deploy:
@@ -24,8 +28,13 @@ jobs:
         run: devops/scripts/build.sh
       - name: Run Unit Tests
         run: devops/scripts/unit-tests.sh
+      - name: Get Tag name if exists
+        run: echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
+      - name: Package App
+        run: devops/scripts/package.sh
       - name: Deploy
         run: devops/scripts/deploy.sh
+#       if: env.HEAD_TAG != ''
 
   SonarCloud:
     runs-on: ubuntu-latest
