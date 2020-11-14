@@ -1,11 +1,13 @@
-name: Feature Branch Workflow
+name: Develop Branch Workflow
 
 on:
   push:
-    branches: [ feature/* ]
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
 
 jobs:
-  Build-Test:
+  Build-Test-Deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -17,10 +19,19 @@ jobs:
           path: devops
       - name: Configure Env Vars
         run: devops/scripts/environment-variables.sh
+      - name: Install cf cli
+        run: devops/scripts/install-cf-cli.sh
+      - name: Login to cloud.gov
+        run: devops/scripts/cf-login.sh
+        env:
+          CF_USERNAME: ${{ secrets.CF_SERVICE_ACCOUNT_ID }}
+          CF_PASSWORD: ${{ secrets.CF_SERVICE_ACCOUNT_PASSWORD }}
       - name: Build
         run: devops/scripts/build.sh
       - name: Run Unit Tests
         run: devops/scripts/unit-tests.sh
+      - name: Deploy
+        run: devops/scripts/deploy.sh
 
   SonarCloud:
     runs-on: ubuntu-latest
