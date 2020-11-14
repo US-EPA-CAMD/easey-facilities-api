@@ -8,24 +8,19 @@ jobs:
   Build-Test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout ${{ GITHUB_REPOSITORY }}
         uses: actions/checkout@v2
-      - name: Checkout devops
+      - name: Checkout ${{ GITHUB_ACTOR }}/devops
         uses: actions/checkout@v2
         with:
-          repository: US-EPA-CAMD/devops
+          repository: ${{ GITHUB_ACTOR }}/devops
           path: devops
-      - name: Environment Variables
-        run: |
-          echo "CF_ORG_NAME=epa-easey" >> $GITHUB_ENV
-          echo "CF_SPACE_NAME=dev" >> $GITHUB_ENV
-          echo "CF_API_URL=https://api.fr.cloud.gov" >> $GITHUB_ENV
-      - name: Debug
-        run: echo "CF_ORG_NAME=$CF_ORG_NAME"
+      - name: Set Environment Variables
+        run: devops/scripts/environment-variables.sh
       - name: Build
-        run: echo "CF_SPACE_NAME=$CF_SPACE_NAME"
-      - name: Test
-        run: echo "CF_API_URL=$CF_API_URL"
+        run: devops/scripts/build.sh
+      - name: Run Unit Tests
+        run: devops/scripts/unit-tests.sh
 
   # SonarCloud:
   #   runs-on: ubuntu-latest
