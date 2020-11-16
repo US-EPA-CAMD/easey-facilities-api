@@ -1,4 +1,5 @@
 # easey-facilities-api
+[![GitHub](https://img.shields.io/github/license/US-EPA-CAMD/easey-facilities-api)](https://github.com/US-EPA-CAMD/easey-facilities-api/blob/develop/LICENSE)<br>
 Facilities data API for the EPA CAMD Business Systems EASEY Application
 
 ## Available Scripts
