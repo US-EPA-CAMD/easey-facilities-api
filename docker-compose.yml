@@ -6,7 +6,7 @@ services:
       - POSTGRES_PASSWORD=password
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./db:/docker-entrypoint-initdb.d
+      - ../devops/db:/docker-entrypoint-initdb.d
     ports:
       - '5432:5432'
   facilities-api:
@@ -14,10 +14,10 @@ services:
       - database
     build:
       dockerfile: Dockerfile.dev
-      context: ./facilities-api
+      context: ./
     volumes:
       - /app/node_modules
-      - ./facilities-api:/app
+      - ./:/app
     environment:
       - PG_HOST=database
       - PG_PORT=5432

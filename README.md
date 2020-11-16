@@ -1,4 +1,8 @@
-# easey-facilities-api
+[![GitHub](https://img.shields.io/github/license/US-EPA-CAMD/easey-facilities-api)](https://github.com/US-EPA-CAMD/easey-facilities-api/blob/develop/LICENSE.md)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=US-EPA-CAMD_easey-facilities-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=US-EPA-CAMD_easey-facilities-api)
+[![Develop Branch Pipeline](https://github.com/US-EPA-CAMD/easey-facilities-api/workflows/Develop%20Branch%20Pipeline/badge.svg)](https://github.com/US-EPA-CAMD/easey-facilities-api/actions)
+
+# `EASEY Facilities API`
 Facilities data API for the EPA CAMD Business Systems EASEY Application
 
 ## Available Scripts
@@ -23,13 +27,10 @@ $ npm install
 
 ```bash
 # development
-$ npm run start
-
-# watch mode
 $ npm run start:dev
 
 # production mode
-$ npm run start:prod
+$ npm run start
 ```
 
 ## Test
