@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ release/v* ]
 #    tags:
+#tst-1.0.101
+#stg-1.0.101
+#rbk-1.0.101
 #      - v[0-9]+.[0-9]+_rc[0-9]+
 
 jobs:
@@ -30,8 +33,12 @@ jobs:
           CF_PASSWORD: ${{ secrets.CF_SERVICE_ACCOUNT_PASSWORD }}
       - name: Build
         run: devops/scripts/build.sh
+        env:
+          NESTJS_APP: true        
       - name: Run Unit Tests
         run: devops/scripts/unit-tests.sh
+        env:
+          NESTJS_APP: true        
       - name: Get Tag
         # may move to bash script!!!
         run: echo "HEAD_TAG=$(git tag --points-at HEAD)" >> $GITHUB_ENV
