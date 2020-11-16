@@ -17,6 +17,8 @@ jobs:
           path: devops
       - name: Configure Env Vars
         run: devops/scripts/environment-variables.sh
+        env:
+          ENV: dev
       - name: Build
         run: devops/scripts/build.sh
         env:
