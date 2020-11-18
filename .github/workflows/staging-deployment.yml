@@ -20,10 +20,10 @@ jobs:
         with:
           repository: US-EPA-CAMD/devops
           path: devops
+      - name: Check Tag
+        run: devops/scripts/check-tag.sh
       - name: Configure Env Vars
         run: devops/scripts/environment-variables.sh
-        env:
-          ENV: stg
       - name: Install cf cli
         run: devops/scripts/install-cf-cli.sh
       - name: Login to cloud.gov
@@ -31,11 +31,9 @@ jobs:
         env:
           CF_USERNAME: ${{ secrets.CF_STG_DEPLOYMENT_SVC }}
           CF_PASSWORD: ${{ secrets.CF_STG_DEPLOYMENT_SVC_PWD }}
-      - name: Get Tag
-        # may move to bash script!!!
-        run: echo "HEAD_TAG=$(git tag --points-at HEAD)" >> $GITHUB_ENV
-        # this has been depricated --> echo "::set-env name=HEAD_TAG::$(git tag --points-at HEAD)"
       - name: Deploy
         run: devops/scripts/deploy.sh
         env:
           DEPLOY_FROM_ARTIFACT: true
+          AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_STORAGE_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_STORAGE_SECRET_ACCESS_KEY }}
