@@ -38,6 +38,9 @@ jobs:
           NESTJS_APP: true
       - name: Package App
         run: devops/scripts/package.sh
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_STORAGE_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_STORAGE_SECRET_ACCESS_KEY }}
       - name: Login to cloud.gov
         run: devops/scripts/cf-login.sh
         env:
