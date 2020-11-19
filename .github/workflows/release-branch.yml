@@ -1,15 +1,10 @@
-# The following are valid TAG formats (tst-1.0.101, stg-1.0.101, rbk-1.0.101)
 name: Release Branch Workflow
 
 on:
   push:
     branches: [ release/v* ]
-    tags:
-      - tst-[0-9]+.[0-9]+.[0-9]+
   pull_request:
     branches: [ release/v* ]
-    tags:
-      - tst-[0-9]+.[0-9]+.[0-9]+
 
 jobs:
   Build-Test-Deploy:
@@ -17,19 +12,11 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Checkout devops repo
         uses: actions/checkout@v2
         with:
           repository: US-EPA-CAMD/devops
           path: devops
-      - name: Check Tag
-        run: devops/scripts/check-tag.sh
-      - name: Configure Env Vars
-        run: devops/scripts/environment-variables.sh
-      - name: Install cf cli
-        run: devops/scripts/install-cf-cli.sh
       - name: Build
         run: devops/scripts/build.sh
         env:
@@ -38,20 +25,11 @@ jobs:
         run: devops/scripts/unit-tests.sh
         env:
           NESTJS_APP: true
+      - name: Configure Env Vars
+        run: devops/scripts/environment-variables.sh
       - name: Package App
         run: devops/scripts/package.sh
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_STORAGE_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_STORAGE_SECRET_ACCESS_KEY }}
-      - name: Login to cloud.gov
-        run: devops/scripts/cf-login.sh
-        env:
-          CF_USERNAME: ${{ secrets.CF_TST_DEPLOYMENT_SVC }}
-          CF_PASSWORD: ${{ secrets.CF_TST_DEPLOYMENT_SVC_PWD }}
-      - name: Deploy
-        run: devops/scripts/deploy.sh
-        env:
-          DEPLOY_FROM_ARTIFACT: true
           AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_STORAGE_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_STORAGE_SECRET_ACCESS_KEY }}
 
