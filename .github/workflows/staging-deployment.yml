@@ -1,15 +1,11 @@
-name: Deployment Workflow
+name: Staging Deployment Workflow
 
 on:
   push:
-    branches: [ release/v* ]
     tags:
-      - tst-v[0-9]+.[0-9]+.[0-9]+
       - stg-v[0-9]+.[0-9]+.[0-9]+
   pull_request:
-    branches: [ release/v* ]
     tags:
-      - tst-v[0-9]+.[0-9]+.[0-9]+
       - stg-v[0-9]+.[0-9]+.[0-9]+
 
 jobs:
