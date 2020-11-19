@@ -1,13 +1,11 @@
-name: Deployment Workflow
+name: Staging Deployment Workflow
 
 on:
   push:
     tags:
-      - tst-v[0-9]+.[0-9]+.[0-9]+
       - stg-v[0-9]+.[0-9]+.[0-9]+
   pull_request:
     tags:
-      - tst-v[0-9]+.[0-9]+.[0-9]+
       - stg-v[0-9]+.[0-9]+.[0-9]+
 
 jobs:
