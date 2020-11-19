@@ -7,7 +7,7 @@ on:
     branches: [ release/v* ]
 
 jobs:
-  Build-Test-Deploy:
+  Build-Test-Package:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
