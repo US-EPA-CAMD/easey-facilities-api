@@ -17,12 +17,6 @@ jobs:
         with:
           repository: US-EPA-CAMD/devops
           path: devops
-      - name: Check Tag
-        run: devops/scripts/check-tag.sh
-      - name: Configure Env Vars
-        run: devops/scripts/environment-variables.sh
-      - name: Install cf cli
-        run: devops/scripts/install-cf-cli.sh
       - name: Build
         run: devops/scripts/build.sh
         env:
@@ -31,6 +25,12 @@ jobs:
         run: devops/scripts/unit-tests.sh
         env:
           NESTJS_APP: true
+      - name: Install cf cli
+        run: devops/scripts/install-cf-cli.sh
+      - name: Configure Env Vars
+        run: devops/scripts/environment-variables.sh
+      - name: Check Tag
+        run: devops/scripts/check-tag.sh
       - name: Login to cloud.gov
         run: devops/scripts/cf-login.sh
         env:

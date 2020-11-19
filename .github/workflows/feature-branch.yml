@@ -15,10 +15,6 @@ jobs:
         with:
           repository: US-EPA-CAMD/devops
           path: devops
-      - name: Check Tag
-        run: devops/scripts/check-tag.sh
-      - name: Configure Env Vars
-        run: devops/scripts/environment-variables.sh
       - name: Build
         run: devops/scripts/build.sh
         env:
