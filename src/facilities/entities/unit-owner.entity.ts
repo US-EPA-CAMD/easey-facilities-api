@@ -8,13 +8,13 @@ import { BaseEntity, Entity, Column, PrimaryColumn, Unique } from 'typeorm';
   'BEGIN_DATE',
 ])
 export class UnitOwner extends BaseEntity {
-  @PrimaryColumn({ length: 38 })
+  @PrimaryColumn()
   UNIT_OWNER_ID: number;
 
-  @Column({ length: 38 })
+  @Column()
   UNIT_ID: number;
 
-  @Column({ length: 38 })
+  @Column()
   COMP_ID: number;
 
   @Column({ type: 'varchar', length: 7 })

@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-//import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-//import { typeOrmConfig } from './config/typeorm.config';
+import { typeOrmConfig } from './config/typeorm.config';
 import { FacilitiesModule } from './facilities/facilities.module';
 
 @Module({
@@ -10,7 +10,7 @@ import { FacilitiesModule } from './facilities/facilities.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    //TypeOrmModule.forRoot(typeOrmConfig),
+    TypeOrmModule.forRoot(typeOrmConfig),
     FacilitiesModule,
   ],
 })

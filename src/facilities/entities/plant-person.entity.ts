@@ -2,13 +2,13 @@ import { BaseEntity, Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity({ name: 'PLANT_PERSON' })
 export class PlantPerson extends BaseEntity {
-  @PrimaryColumn({ length: 38 })
+  @PrimaryColumn()
   FAC_PPL_ID: number;
 
-  @Column({ length: 38, nullable: true })
+  @Column({ nullable: true })
   FAC_ID: number;
 
-  @Column({ length: 38 })
+  @Column()
   PPL_ID: number;
 
   @Column({ type: 'varchar', length: 7 })

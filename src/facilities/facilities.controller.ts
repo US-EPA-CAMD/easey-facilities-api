@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 
 import { FacilitiesService } from './facilities.service';
+import { FacilityDTO } from './dto/facility.dto';
 
 @ApiTags('Facilities')
 @Controller()
@@ -29,7 +30,7 @@ export class FacilitiesController {
   @ApiNotFoundResponse({
     description: 'Resource Not Found',
   })
-  getFacilities(): string {
+  getFacilities(): FacilityDTO[] {
     // TODO: will need a query param (state, limit, offset) and DTO
     return this.facilitiesService.getFacilities();
   }

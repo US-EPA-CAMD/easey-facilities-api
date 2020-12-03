@@ -3,10 +3,10 @@ import { BaseEntity, Entity, Column, PrimaryColumn, Unique } from 'typeorm';
 @Entity({ name: 'UNIT' })
 @Unique('UQ_UNIT', ['FAC_ID', 'UNITID'])
 export class Unit extends BaseEntity {
-  @PrimaryColumn({ length: 38 })
+  @PrimaryColumn()
   UNIT_ID: number;
 
-  @Column({ length: 38 })
+  @Column()
   FAC_ID: number;
 
   @Column({ type: 'varchar', length: 6 })
@@ -18,6 +18,6 @@ export class Unit extends BaseEntity {
   @Column({ type: 'date', nullable: true })
   COMM_OP_DATE: Date;
 
-  @Column({ length: 38, nullable: true })
+  @Column({ nullable: true })
   BOILER_SEQUENCE_NUMBER: number;
 }

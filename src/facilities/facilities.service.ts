@@ -1,9 +1,16 @@
+import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
+import { FacilityDTO } from './dto/facility.dto';
+import { FacilityRepository } from './facilities.repository';
 
 @Injectable()
 export class FacilitiesService {
-  getFacilities(): string {
-    return 'Hello getFacilities!';
+  constructor(@InjectRepository(FacilityRepository)
+  private facilityRepository: FacilityRepository
+  ) {}
+
+  getFacilities(): FacilityDTO[] {
+    return this.facilityRepository.getFacilities();
   }
 
   getFacilityById(id: number): string {
