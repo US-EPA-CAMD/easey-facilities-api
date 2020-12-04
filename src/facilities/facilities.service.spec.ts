@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import { FacilitiesService } from './facilities.service'
 import { FacilitiesRepository } from './facilities.repository';
 import { NotFoundException } from '@nestjs/common';
+import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
 
 
 const mockFacilitiesRepository = () => ({
@@ -29,8 +30,16 @@ describe('FacilitiesService', () => {
     it('calls FacilitiesRepository.getFacilities() and gets all facilities from the repository', async () => {
       facilitiesRepository.getFacilities.mockReturnValue('list of facilities');
 
+      const params: FacilityParamsDTO = {
+          state: 'some state',
+          region: 'some region',
+          page: 1,
+          perPage: 1,
+          orderBy: 'some string',
+      }; 
+
       expect(facilitiesRepository.getFacilities).not.toHaveBeenCalled();
-      const result = facilitiesService.getFacilities();
+      const result = facilitiesService.getFacilities(params);
 
       expect(facilitiesRepository.getFacilities).toHaveBeenCalled();
       expect(result).toEqual('list of facilities');

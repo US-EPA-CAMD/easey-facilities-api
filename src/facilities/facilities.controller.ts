@@ -10,10 +10,14 @@ import {
   Param,
   Controller,
   ParseIntPipe,
+  Query,
+  ValidationPipe,
+  Header,
 } from '@nestjs/common';
 
 import { FacilitiesService } from './facilities.service';
 import { FacilityDTO } from './dto/facility.dto';
+import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
 
 @ApiTags('Facilities')
 @Controller()
@@ -21,6 +25,7 @@ export class FacilitiesController {
   constructor(private facilitiesService: FacilitiesService) {}
 
   @Get()
+  @Header('X-Total-Count', '245')
   @ApiOkResponse({
     description: 'Retrieved all Facilities',
   })
@@ -30,9 +35,14 @@ export class FacilitiesController {
   @ApiNotFoundResponse({
     description: 'Resource Not Found',
   })
-  getFacilities(): FacilityDTO[] {
-    // TODO: will need a query param (state, limit, offset) and DTO
-    return this.facilitiesService.getFacilities();
+  getFacilities(
+    @Query(ValidationPipe) facilityParamsDTO: FacilityParamsDTO,
+  ): FacilityDTO[] {
+    const { state, region, page, perPage, orderBy } = facilityParamsDTO;
+    console.log(
+      `state=${state}, region=${region}, page=${page}, perPage=${perPage}, orderBy=${orderBy}`,
+    );
+    return this.facilitiesService.getFacilities(facilityParamsDTO);
   }
 
   @Get('/:id')
@@ -90,7 +100,7 @@ export class FacilitiesController {
   })
   getFacilityUnitById(
     @Param('id', ParseIntPipe) id: number,
-    @Param('unitId', ParseIntPipe) unitId: number
+    @Param('unitId', ParseIntPipe) unitId: number,
   ): string {
     return this.facilitiesService.getFacilityUnitById(id, unitId);
   }

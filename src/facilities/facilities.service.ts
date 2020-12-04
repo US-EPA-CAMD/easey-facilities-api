@@ -2,6 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { FacilityDTO } from './dto/facility.dto';
 import { FacilitiesRepository } from './facilities.repository';
+import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
 
 @Injectable()
 export class FacilitiesService {
@@ -9,8 +10,8 @@ export class FacilitiesService {
   private facilitiesRepository: FacilitiesRepository
   ) {}
 
-  getFacilities(): FacilityDTO[] {
-    return this.facilitiesRepository.getFacilities();
+  getFacilities(facilityParamsDTO: FacilityParamsDTO): FacilityDTO[] {
+    return this.facilitiesRepository.getFacilities(facilityParamsDTO);
   }
 
   // will eventually use facilitiesRepository.findOne(id) once connected to DB

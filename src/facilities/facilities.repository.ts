@@ -4,6 +4,7 @@ import { FacilityDTO } from './dto/facility.dto';
 import { Plant } from './entities/plant.entity';
 import { LinkDTO } from './dto/link.dto';
 import { NotFoundException } from '@nestjs/common';
+import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
 
 function createLinks(facId: number): LinkDTO[] {
   const links: Array<LinkDTO> = [
@@ -17,6 +18,7 @@ function createLinks(facId: number): LinkDTO[] {
   return links;
 }
 
+// static data
 const facilities: Array<FacilityDTO> = [
   new FacilityDTO(1, 3, 'Barry', 'AL', createLinks(1)),
   new FacilityDTO(2, 9, 'Copper Station', 'TX', createLinks(2)),
@@ -35,7 +37,14 @@ const facilities: Array<FacilityDTO> = [
 @EntityRepository(Plant)
 export class FacilitiesRepository extends Repository<Plant>{
   
-  getFacilities(): FacilityDTO[] {
+  getFacilities(facilityParamsDTO: FacilityParamsDTO): FacilityDTO[] {
+    const { state } = facilityParamsDTO;
+
+    if (state) {
+      const filteredFacilities: FacilityDTO[] = facilities.filter(x => x.state === state);
+      return filteredFacilities;
+    }
+    
     return facilities;
   }
 

@@ -3,6 +3,7 @@ export class LinkDTO {
     this.rel = rel;
     this.href = href;
   }
+
   rel: string;
   href: string;
 }
