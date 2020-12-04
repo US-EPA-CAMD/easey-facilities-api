@@ -5,7 +5,7 @@ export class UnitCapacity extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', length: 45 })
   UNIT_CAP_ID: string;
 
-  @Column({ length: 38 })
+  @Column()
   UNIT_ID: number;
 
   @Column({ type: 'decimal', precision: 7, scale: 1, nullable: true })

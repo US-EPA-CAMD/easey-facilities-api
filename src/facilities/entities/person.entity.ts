@@ -3,7 +3,7 @@ import { BaseEntity, Entity, PrimaryColumn, Column, Unique } from 'typeorm';
 @Entity({ name: 'PERSON' })
 @Unique('UQ_PERSON_LOGIN', ['LOGIN'])
 export class Person extends BaseEntity {
-  @PrimaryColumn({ length: 38 })
+  @PrimaryColumn()
   PPL_ID: number;
 
   @Column({ type: 'varchar', length: 7 })
@@ -24,10 +24,10 @@ export class Person extends BaseEntity {
   @Column({ type: 'varchar', length: 100, nullable: true })
   JOB_TITLE: string;
 
-  @Column({ length: 38, nullable: true })
+  @Column({ nullable: true })
   COMPANY_ID: number;
 
-  @Column({ length: 38, nullable: true })
+  @Column({ nullable: true })
   AGENCY_ID: number;
 
   @Column({ type: 'varchar', length: 50, nullable: true })

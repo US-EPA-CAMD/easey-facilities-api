@@ -13,6 +13,7 @@ export class FacilityDTO {
     this.state = state;
     this.links = links;
   }
+
   facId: number;
   orisCode: number;
   name: string;

@@ -2,11 +2,11 @@ import { BaseEntity, Entity, Column, PrimaryColumn, Unique } from 'typeorm';
 
 @Entity({ name: 'PLANT' })
 @Unique('UQ_PLANT_NAME_STATE', ['FACILITY_NAME', 'STATE'])
-export class Unit extends BaseEntity {
-  @PrimaryColumn({ length: 38})
+export class Plant extends BaseEntity {
+  @PrimaryColumn()
   FAC_ID: number;
 
-  @Column({ length: 6 ,nullable: true})
+  @Column({ nullable: true})
   ORIS_CODE: number;
 
   @Column({ type: 'varchar', length: 4000 })
@@ -21,10 +21,10 @@ export class Unit extends BaseEntity {
   @Column({ type: 'varchar', length: 8 ,nullable: true})
   COUNTY: string;
 
-  @Column({ length: 4 ,nullable: true})
+  @Column({ nullable: true})
   SIC_CODE: number;
 
-  @Column({ length: 2 ,nullable: true})
+  @Column({ nullable: true})
   EPA_REGION: number;
 
   @Column({ length: 5 ,nullable: true})
@@ -45,10 +45,10 @@ export class Unit extends BaseEntity {
   @Column({ type: 'decimal', precision: 8, scale: 4, nullable: true })
   LONGITUDE: number;
   
-  @Column({ length: 12 ,nullable: true})
+  @Column({ nullable: true})
   FRS_ID: string;
 
-  @Column({ length: 6 ,nullable: true})
+  @Column({ nullable: true})
   PAYEE_ID: number;
 
   @Column({ type: 'date', nullable: true })
@@ -60,7 +60,7 @@ export class Unit extends BaseEntity {
   @Column({ type: 'varchar', length: 4000, nullable: true })
   TRIBAL_LAND_CD: string;
 
-  @Column({ length: 38 ,nullable: true})
+  @Column({ nullable: true})
   PAYEFIRST_ECMPS_RPT_PERIOD_ID: number;
 
   
