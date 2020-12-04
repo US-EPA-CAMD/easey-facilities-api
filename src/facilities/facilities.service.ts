@@ -1,20 +1,27 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { FacilityDTO } from './dto/facility.dto';
-import { FacilityRepository } from './facilities.repository';
+import { FacilitiesRepository } from './facilities.repository';
 
 @Injectable()
 export class FacilitiesService {
-  constructor(@InjectRepository(FacilityRepository)
-  private facilityRepository: FacilityRepository
+  constructor(@InjectRepository(FacilitiesRepository)
+  private facilitiesRepository: FacilitiesRepository
   ) {}
 
   getFacilities(): FacilityDTO[] {
-    return this.facilityRepository.getFacilities();
+    return this.facilitiesRepository.getFacilities();
   }
 
-  getFacilityById(id: number): string {
-    return 'Hello getFacilityById!';
+  // will eventually use facilitiesRepository.findOne(id) once connected to DB
+  getFacilityById(id: number): FacilityDTO {
+    const facility = this.facilitiesRepository.getFacilityById(id);
+
+    if (facility === undefined) {
+      throw new NotFoundException;
+    }
+
+    return facility;
   }
 
   getFacilityUnits(FacId: number): string {
@@ -29,7 +36,7 @@ export class FacilitiesService {
     return 'Hello getFacilityContact!';
   }
 
-  getFacilityMonitoringPlan(id: number): string {
-    return 'Hello getFacilityMonitoringPlan!';
-  }
+  // getFacilityMonitoringPlan(id: number): string {
+  //   return 'Hello getFacilityMonitoringPlan!';
+  // }
 }

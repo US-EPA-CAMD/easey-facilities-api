@@ -45,7 +45,7 @@ export class FacilitiesController {
   @ApiNotFoundResponse({
     description: 'A facility with the specificed ID was not found.',
   })
-  getFacilityById(@Param('id', ParseIntPipe) id: number): string {
+  getFacilityById(@Param('id', ParseIntPipe) id: number): FacilityDTO {
     return this.facilitiesService.getFacilityById(id);
   }
 
@@ -95,18 +95,18 @@ export class FacilitiesController {
     return this.facilitiesService.getFacilityUnitById(id, unitId);
   }
 
-  @Get('/:id/monitoring-plans')
-  @ApiOkResponse({
-    description: 'Retrieved all monitoring plans of the specified facility.',
-  })
-  @ApiBadRequestResponse({
-    description: 'The specified facility ID is invalid.',
-  })
-  @ApiNotFoundResponse({
-    description: 'A facility with the specificed ID was not found.',
-  })
-  getFacilityMonitoringPlan(@Param('id', ParseIntPipe) id: number): string {
-    // TODO: will need a query param (status, limit, offest) and DTO
-    return this.facilitiesService.getFacilityMonitoringPlan(id);
-  }
+  // @Get('/:id/monitoring-plans')
+  // @ApiOkResponse({
+  //   description: 'Retrieved all monitoring plans of the specified facility.',
+  // })
+  // @ApiBadRequestResponse({
+  //   description: 'The specified facility ID is invalid.',
+  // })
+  // @ApiNotFoundResponse({
+  //   description: 'A facility with the specificed ID was not found.',
+  // })
+  // getFacilityMonitoringPlan(@Param('id', ParseIntPipe) id: number): string {
+  //   // TODO: will need a query param (status, limit, offest) and DTO
+  //   return this.facilitiesService.getFacilityMonitoringPlan(id);
+  // }
 }

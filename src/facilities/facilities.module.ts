@@ -3,11 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { FacilitiesController } from './facilities.controller';
 import { FacilitiesService } from './facilities.service';
-import { FacilityRepository } from './facilities.repository';
+import { FacilitiesRepository } from './facilities.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([FacilityRepository]),
+    TypeOrmModule.forFeature([FacilitiesRepository]),
   ],
   controllers: [FacilitiesController],
   providers: [FacilitiesService],
