@@ -1,13 +1,12 @@
 import { Test } from '@nestjs/testing';
-import { FacilitiesService } from './facilities.service'
+import { FacilitiesService } from './facilities.service';
 import { FacilitiesRepository } from './facilities.repository';
 import { NotFoundException } from '@nestjs/common';
 import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
 
-
 const mockFacilitiesRepository = () => ({
-    getFacilities: jest.fn(),
-    getFacilityById: jest.fn(),
+  getFacilities: jest.fn(),
+  getFacilityById: jest.fn(),
 });
 
 describe('FacilitiesService', () => {
@@ -23,7 +22,9 @@ describe('FacilitiesService', () => {
     }).compile();
 
     facilitiesService = await module.get<FacilitiesService>(FacilitiesService);
-    facilitiesRepository = await module.get<FacilitiesRepository>(FacilitiesRepository);
+    facilitiesRepository = await module.get<FacilitiesRepository>(
+      FacilitiesRepository,
+    );
   });
 
   describe('getFacilities', () => {
@@ -31,12 +32,12 @@ describe('FacilitiesService', () => {
       facilitiesRepository.getFacilities.mockReturnValue('list of facilities');
 
       const params: FacilityParamsDTO = {
-          state: 'some state',
-          region: 'some region',
-          page: 1,
-          perPage: 1,
-          orderBy: 'some string',
-      }; 
+        state: 'some state',
+        region: 'some region',
+        page: 1,
+        perPage: 1,
+        orderBy: 'some string',
+      };
 
       expect(facilitiesRepository.getFacilities).not.toHaveBeenCalled();
       const result = facilitiesService.getFacilities(params);
@@ -49,7 +50,7 @@ describe('FacilitiesService', () => {
   describe('getFacilityById', () => {
     it('calls facilitiesRepository.getFacilityById() and successfully retrieves and returns the facility', async () => {
       facilitiesRepository.getFacilityById.mockReturnValue('one facility');
-      
+
       const result = facilitiesService.getFacilityById(1);
 
       expect(facilitiesRepository.getFacilityById).toHaveBeenCalledWith(1);
@@ -57,7 +58,30 @@ describe('FacilitiesService', () => {
     });
 
     it('throws an error as facility is not found', () => {
-      expect(() => {facilitiesService.getFacilityById(12)}).toThrow(NotFoundException);
+      expect(() => {
+        facilitiesService.getFacilityById(12);
+      }).toThrow(NotFoundException);
+    });
+  });
+
+  describe('getFacilityUnits', () => {
+    it('returns static data', async () => {
+      const result = facilitiesService.getFacilityUnits(1);
+      expect(result).toEqual('Hello getFacilityUnits!');
+    });
+  });
+
+  describe('getFacilityUnitById', () => {
+    it('returns static data', async () => {
+      const result = facilitiesService.getFacilityUnitById(1, 1);
+      expect(result).toEqual('Hello getFacilityUnitById!');
+    });
+  });
+
+  describe('getFacilityContact', () => {
+    it('returns static data', async () => {
+      const result = facilitiesService.getFacilityContact(1);
+      expect(result).toEqual('Hello getFacilityContact!');
     });
   });
 });

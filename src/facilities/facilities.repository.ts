@@ -3,7 +3,6 @@ import { Repository, EntityRepository } from 'typeorm';
 import { FacilityDTO } from './dto/facility.dto';
 import { Plant } from './entities/plant.entity';
 import { LinkDTO } from './dto/link.dto';
-import { NotFoundException } from '@nestjs/common';
 import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
 
 function createLinks(facId: number): LinkDTO[] {
@@ -32,20 +31,46 @@ const facilities: Array<FacilityDTO> = [
   new FacilityDTO(10, 596, 'Madison Street', 'DE', createLinks(10)),
 ];
 
-
-
+export function sortFacilities(orderBy: string):any {
+  return (a: FacilityDTO, b: FacilityDTO) => {
+    switch(orderBy) {
+      case 'facId': 
+        return a.facId < b.facId ? -1 : a.facId > b.facId ? 1 : 0;
+      case 'orisCode':
+        return a.orisCode < b.orisCode ? -1 : a.orisCode > b.orisCode ? 1 : 0;
+      case 'name':
+        return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+      case 'state':
+        return a.state < b.state ? -1 : a.state > b.state ? 1 : 0;
+    };
+  };
+};
 @EntityRepository(Plant)
 export class FacilitiesRepository extends Repository<Plant>{
   
   getFacilities(facilityParamsDTO: FacilityParamsDTO): FacilityDTO[] {
-    const { state } = facilityParamsDTO;
+    const { state, page, perPage, orderBy } = facilityParamsDTO;
+    let facilitiesArray: Array<FacilityDTO> = facilities;
+
+    if (orderBy){
+      facilitiesArray = facilities.sort(sortFacilities(orderBy));
+    }
 
     if (state) {
-      const filteredFacilities: FacilityDTO[] = facilities.filter(x => x.state === state);
-      return filteredFacilities;
+      facilitiesArray = facilities.filter(x => x.state === state);
     }
     
-    return facilities;
+    if (page && perPage) {
+      const pageNum: number = +page;
+      const perPageNum: number = +perPage;
+
+      const begin: number = ((pageNum - 1)*perPageNum);
+      const end: number = (begin + perPageNum);
+
+      facilitiesArray = facilities.slice(begin, end);
+    }
+
+    return facilitiesArray;
   }
 
   getFacilityById(facId: number): FacilityDTO {
