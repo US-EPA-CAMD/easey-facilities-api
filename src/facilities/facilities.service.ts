@@ -29,10 +29,10 @@ export class FacilitiesService {
 
       // setting response headers
       if (totalPages !== 1) {
-        const first: string = `</facilities?page=1&per-page=${ perPage }>; rel="first"`;
-        const prev: string = `</facilities?page=${ +page - 1 }&per-page=${ perPage }>; rel="previous"`;
-        const next: string = `</facilities?page=${ +page + 1 }&per-page=${ perPage }>; rel="next"`;
-        const last: string = `</facilities?page=${ totalPages }&per-page=${ perPage }>; rel="last"`; 
+        const first: string = `</facilities?page=1&perPage=${ perPage }>; rel="first"`;
+        const prev: string = `</facilities?page=${ +page - 1 }&perPage=${ perPage }>; rel="previous"`;
+        const next: string = `</facilities?page=${ +page + 1 }&perPage=${ perPage }>; rel="next"`;
+        const last: string = `</facilities?page=${ totalPages }&perPage=${ perPage }>; rel="last"`; 
 
         let concatLinks:string;
 
