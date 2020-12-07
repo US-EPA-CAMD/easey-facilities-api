@@ -15,7 +15,7 @@ export class FacilitiesService {
     const { page, perPage } = facilityParamsDTO;
     let facilities = this.facilitiesRepository.getFacilities(facilityParamsDTO);
     const total: number = facilities.length;
-    const totalPages: number = this.facilitiesRepository.numOfFacilitiesPages(facilityParamsDTO);
+    const totalPages: number = Math.ceil(facilities.length / (+perPage));
 
     if (page && perPage) {
       // pagination
