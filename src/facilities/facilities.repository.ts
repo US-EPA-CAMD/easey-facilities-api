@@ -73,6 +73,15 @@ export class FacilitiesRepository extends Repository<Plant>{
     return facilitiesArray;
   }
 
+  // calculates how many pages there will be given what perPage is
+  numOfFacilitiesPages(facilityParamsDTO: FacilityParamsDTO): number {
+    const { perPage } = facilityParamsDTO;
+    const facParam = new FacilityParamsDTO();
+    const numFacilities: number = Math.ceil((this.getFacilities(facParam)).length / (+perPage));
+
+    return numFacilities;
+  }
+
   getFacilityById(facId: number): FacilityDTO {
       const facility = facilities.filter(x => x.facId === facId);
 

@@ -12,8 +12,10 @@ import {
   ParseIntPipe,
   Query,
   ValidationPipe,
-  Header,
+  Req
 } from '@nestjs/common';
+
+import { Request } from 'express'; 
 
 import { FacilitiesService } from './facilities.service';
 import { FacilityDTO } from './dto/facility.dto';
@@ -25,7 +27,6 @@ export class FacilitiesController {
   constructor(private facilitiesService: FacilitiesService) {}
 
   @Get()
-  @Header('X-Total-Count', '245')
   @ApiOkResponse({
     description: 'Retrieved all Facilities',
   })
@@ -37,12 +38,14 @@ export class FacilitiesController {
   })
   getFacilities(
     @Query(ValidationPipe) facilityParamsDTO: FacilityParamsDTO,
+    @Req() req: Request
   ): FacilityDTO[] {
     const { state, region, page, perPage, orderBy } = facilityParamsDTO;
     console.log(
       `state=${state}, region=${region}, page=${page}, perPage=${perPage}, orderBy=${orderBy}`,
     );
-    return this.facilitiesService.getFacilities(facilityParamsDTO);
+    // response headers are set in service
+    return this.facilitiesService.getFacilities(facilityParamsDTO, req);
   }
 
   @Get('/:id')
