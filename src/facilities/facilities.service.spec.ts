@@ -3,6 +3,7 @@ import { FacilitiesService } from './facilities.service';
 import { FacilitiesRepository } from './facilities.repository';
 import { NotFoundException } from '@nestjs/common';
 import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
+import { FacilityDTO } from './dto/facility.dto';
 
 const mockFacilitiesRepository = () => ({
   getFacilities: jest.fn(),
@@ -28,7 +29,12 @@ describe('FacilitiesService', () => {
 
   describe('getFacilities', () => {
     it('calls FacilitiesRepository.getFacilities() and gets all facilities from the repository', async () => {
-      facilitiesRepository.getFacilities.mockReturnValue('list of facilities');
+      const facilities: Array<FacilityDTO> = [
+        new FacilityDTO(1, 3, 'Barry', 'AL', undefined),
+        new FacilityDTO(2, 9, 'Copper Station', 'TX', undefined)
+      ];
+      
+      facilitiesRepository.getFacilities.mockReturnValue(facilities);
       facilitiesRepository.numOfFacilitiesPages.mockReturnValue('some number');
       
       const request = {
@@ -39,11 +45,11 @@ describe('FacilitiesService', () => {
       request.res.setHeader.mockReturnValue('some response');
 
       const params: FacilityParamsDTO = {
-        state: 'some state',
-        region: 'some region',
+        state: undefined,
+        region: undefined,
         page: 1,
-        perPage: 1,
-        orderBy: 'some string',
+        perPage: 2,
+        orderBy: undefined,
       };
 
       expect(facilitiesRepository.getFacilities).not.toHaveBeenCalled();
@@ -52,7 +58,7 @@ describe('FacilitiesService', () => {
 
       expect(facilitiesRepository.getFacilities).toHaveBeenCalled();
       expect(facilitiesRepository.numOfFacilitiesPages).toHaveBeenCalled();
-      expect(result).toEqual('list of facilities');
+      expect(result).toEqual(facilities);
     });
   });
 
