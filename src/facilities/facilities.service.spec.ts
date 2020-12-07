@@ -7,6 +7,7 @@ import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
 const mockFacilitiesRepository = () => ({
   getFacilities: jest.fn(),
   getFacilityById: jest.fn(),
+  numOfFacilitiesPages: jest.fn(),
 });
 
 describe('FacilitiesService', () => {
@@ -22,14 +23,20 @@ describe('FacilitiesService', () => {
     }).compile();
 
     facilitiesService = await module.get<FacilitiesService>(FacilitiesService);
-    facilitiesRepository = await module.get<FacilitiesRepository>(
-      FacilitiesRepository,
-    );
+    facilitiesRepository = await module.get<FacilitiesRepository>(FacilitiesRepository);
   });
 
   describe('getFacilities', () => {
     it('calls FacilitiesRepository.getFacilities() and gets all facilities from the repository', async () => {
       facilitiesRepository.getFacilities.mockReturnValue('list of facilities');
+      facilitiesRepository.numOfFacilitiesPages.mockReturnValue('some number');
+      
+      const request = {
+        res: {
+          setHeader: jest.fn(),
+        }
+      }
+      request.res.setHeader.mockReturnValue('some response');
 
       const params: FacilityParamsDTO = {
         state: 'some state',
@@ -40,9 +47,11 @@ describe('FacilitiesService', () => {
       };
 
       expect(facilitiesRepository.getFacilities).not.toHaveBeenCalled();
-      const result = facilitiesService.getFacilities(params);
+      expect(facilitiesRepository.numOfFacilitiesPages).not.toHaveBeenCalled();
+      const result = facilitiesService.getFacilities(params, request);
 
       expect(facilitiesRepository.getFacilities).toHaveBeenCalled();
+      expect(facilitiesRepository.numOfFacilitiesPages).toHaveBeenCalled();
       expect(result).toEqual('list of facilities');
     });
   });

@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { FacilityDTO } from './dto/facility.dto';
 import { FacilitiesRepository } from './facilities.repository';
 import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
+import { Request } from 'express'; 
 
 @Injectable()
 export class FacilitiesService {
@@ -10,7 +11,21 @@ export class FacilitiesService {
   private facilitiesRepository: FacilitiesRepository
   ) {}
 
-  getFacilities(facilityParamsDTO: FacilityParamsDTO): FacilityDTO[] {
+  getFacilities(facilityParamsDTO: FacilityParamsDTO, req: Request): FacilityDTO[] {
+    const { page, perPage } = facilityParamsDTO;
+
+    const last = this.facilitiesRepository.numOfFacilitiesPages(facilityParamsDTO);
+
+    // if page = 1, "previous" is page 0
+    req.res.setHeader('Link', `</facilities?page=${ +page - 1 }&per-page=${ perPage }>; rel="previous",`+
+
+    `</facilities?page=${ +page + 1 }&per-page=${ perPage }>; rel="next",`+
+
+    `</facilities?page=${ last }&per-page=${ perPage }>; rel="last"`
+    );
+
+    req.res.setHeader('X-Total-Count', 245);
+
     return this.facilitiesRepository.getFacilities(facilityParamsDTO);
   }
 

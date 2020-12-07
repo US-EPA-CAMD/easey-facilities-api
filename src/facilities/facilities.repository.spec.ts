@@ -36,4 +36,20 @@ describe('FacilitiesRepository', () => {
       expect(result).toBeInstanceOf(FacilityDTO);
     });
   });
+
+  describe('numOfFacilitiesPages', () => {
+    it('calculates how many pages there will be given what perPage is', async () => {
+      const params: FacilityParamsDTO = {
+        state: 'some state',
+        region: 'some region',
+        page: 2,
+        perPage: 3,
+        orderBy: 'some string',
+      };
+
+      const result = facilitiesRepository.numOfFacilitiesPages(params);
+      expect(result).toBe(4);
+
+    });
+  });
 });
