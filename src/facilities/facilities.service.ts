@@ -29,7 +29,7 @@ export class FacilitiesService {
     return 'Hello getFacilityUnits!';
   }
 
-  getFacilityUnitById(facId: number, unitId): string {
+  getFacilityUnitById(facId: number, unitId: number): string {
     return 'Hello getFacilityUnitById!';
   }
 
