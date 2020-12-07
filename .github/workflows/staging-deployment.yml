@@ -4,9 +4,11 @@ on:
   push:
     tags:
       - stg-v[0-9]+.[0-9]+.[0-9]+
+      - rbk-stg-v[0-9]+.[0-9]+.[0-9]+
   pull_request:
     tags:
       - stg-v[0-9]+.[0-9]+.[0-9]+
+      - rbk-stg-v[0-9]+.[0-9]+.[0-9]+
 
 jobs:
   Deploy:
