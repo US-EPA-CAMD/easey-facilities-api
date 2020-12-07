@@ -7,6 +7,6 @@ applications:
       HOST: ((host))
       OPTIMIZE_MEMORY: true
     routes:
-      - route: ((host))/api/facilities
+      - route: ((host))/api/facility-mgmt
     services:
       - camd-pg-db

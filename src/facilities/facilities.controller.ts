@@ -20,7 +20,7 @@ import { FacilityDTO } from './dto/facility.dto';
 import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
 
 @ApiTags('Facilities')
-@Controller()
+@Controller('facilities')
 export class FacilitiesController {
   constructor(private facilitiesService: FacilitiesService) {}
 
