@@ -4,7 +4,7 @@ applications:
     command: npm run start
     memory: 512M
     env:
-      EASEY_FACILITY_MGMT_API_HOST: ((host))
+      EASEY_API_HOST: ((host))
       OPTIMIZE_MEMORY: true
     routes:
       - route: ((host))/api/facility-mgmt

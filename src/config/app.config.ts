@@ -2,7 +2,7 @@ import { registerAs } from '@nestjs/config';
 
 const title = 'Facility Management';
 const path = 'api/facility-mgmt';
-const host = process.env.EASEY_FACILITY_MGMT_API_HOST || 'localhost';
+const host = process.env.EASEY_API_HOST || 'localhost';
 const port = process.env.EASEY_FACILITY_MGMT_API_PORT || 8080;
 
 let uri = `https://${host}/${path}`
