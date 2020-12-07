@@ -2,15 +2,24 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { typeOrmConfig } from './config/typeorm.config';
+import dbConfig from './config/db.config'
+import appConfig from './config/app.config'
+import { TypeOrmConfigService } from './config/typeorm.config';
+
 import { FacilitiesModule } from './facilities/facilities.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
+   ConfigModule.forRoot({
       isGlobal: true,
+      load: [
+        dbConfig,
+        appConfig,
+      ],
     }),
-    TypeOrmModule.forRoot(typeOrmConfig),
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfigService,
+    }),
     FacilitiesModule,
   ],
 })
