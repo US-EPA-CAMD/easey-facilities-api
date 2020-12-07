@@ -4,11 +4,11 @@ on:
   push:
     tags:
       - tst-v[0-9]+.[0-9]+.[0-9]+
-      - rbk-tst-v[0-9]+.[0-9]+.[0-9]+
+      - rbktst-v[0-9]+.[0-9]+.[0-9]+
   pull_request:
     tags:
       - tst-v[0-9]+.[0-9]+.[0-9]+
-      - rbk-tst-v[0-9]+.[0-9]+.[0-9]+
+      - rbktst-v[0-9]+.[0-9]+.[0-9]+
 
 jobs:
   Deploy:
