@@ -13,20 +13,48 @@ export class FacilitiesService {
 
   getFacilities(facilityParamsDTO: FacilityParamsDTO, req: Request): FacilityDTO[] {
     const { page, perPage } = facilityParamsDTO;
+    let facilities = this.facilitiesRepository.getFacilities(facilityParamsDTO);
+    const total: number = facilities.length;
+    const totalPages: number = Math.ceil(facilities.length / (+perPage));
 
-    const last = this.facilitiesRepository.numOfFacilitiesPages(facilityParamsDTO);
+    if (page && perPage) {
+      // pagination
+      const pageNum: number = +page;
+      const perPageNum: number = +perPage;
 
-    // if page = 1, "previous" is page 0
-    req.res.setHeader('Link', `</facilities?page=${ +page - 1 }&per-page=${ perPage }>; rel="previous",`+
+      const begin: number = ((pageNum - 1)*perPageNum);
+      const end: number = (begin + perPageNum);
 
-    `</facilities?page=${ +page + 1 }&per-page=${ perPage }>; rel="next",`+
+      facilities = facilities.slice(begin, end);
 
-    `</facilities?page=${ last }&per-page=${ perPage }>; rel="last"`
-    );
+      // setting response headers
+      if (totalPages !== 1) {
+        const first: string = `</facilities?page=1&perPage=${ perPage }>; rel="first"`;
+        const prev: string = `</facilities?page=${ +page - 1 }&perPage=${ perPage }>; rel="previous"`;
+        const next: string = `</facilities?page=${ +page + 1 }&perPage=${ perPage }>; rel="next"`;
+        const last: string = `</facilities?page=${ totalPages }&perPage=${ perPage }>; rel="last"`; 
 
-    req.res.setHeader('X-Total-Count', 245);
+        let concatLinks:string;
 
-    return this.facilitiesRepository.getFacilities(facilityParamsDTO);
+        switch (+page) {
+          case 1: {
+              concatLinks = next + ',' + last;
+            break;
+          }
+          case totalPages: {
+            concatLinks = first + ',' + prev;
+            break;
+          }
+          default: {
+            concatLinks = first + ',' + prev + ',' + next + ',' + last;
+            break;
+          }
+        };
+        req.res.setHeader('X-Total-Count', total);
+        req.res.setHeader('Link', concatLinks );
+      };
+    }
+    return facilities;
   }
 
   // will eventually use facilitiesRepository.findOne(id) once connected to DB

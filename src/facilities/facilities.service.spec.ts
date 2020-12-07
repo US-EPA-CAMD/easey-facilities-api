@@ -3,6 +3,7 @@ import { FacilitiesService } from './facilities.service';
 import { FacilitiesRepository } from './facilities.repository';
 import { NotFoundException } from '@nestjs/common';
 import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
+import { FacilityDTO } from './dto/facility.dto';
 
 const mockFacilitiesRepository = () => ({
   getFacilities: jest.fn(),
@@ -28,8 +29,13 @@ describe('FacilitiesService', () => {
 
   describe('getFacilities', () => {
     it('calls FacilitiesRepository.getFacilities() and gets all facilities from the repository', async () => {
-      facilitiesRepository.getFacilities.mockReturnValue('list of facilities');
-      facilitiesRepository.numOfFacilitiesPages.mockReturnValue('some number');
+      const facilities: Array<FacilityDTO> = [
+        new FacilityDTO(1, 3, 'Barry', 'AL', undefined),
+        new FacilityDTO(2, 9, 'Copper Station', 'TX', undefined),
+        new FacilityDTO(3, 51, 'Dolet Hills Power Station', 'LA', undefined),
+        new FacilityDTO(4, 87, 'Escalante', 'NM', undefined),
+      ]; 
+      facilitiesRepository.getFacilities.mockReturnValue(facilities);
       
       const request = {
         res: {
@@ -39,20 +45,18 @@ describe('FacilitiesService', () => {
       request.res.setHeader.mockReturnValue('some response');
 
       const params: FacilityParamsDTO = {
-        state: 'some state',
-        region: 'some region',
-        page: 1,
-        perPage: 1,
-        orderBy: 'some string',
+        state: undefined,
+        region: undefined,
+        page: 2,
+        perPage: 2,
+        orderBy: undefined,
       };
 
       expect(facilitiesRepository.getFacilities).not.toHaveBeenCalled();
-      expect(facilitiesRepository.numOfFacilitiesPages).not.toHaveBeenCalled();
       const result = facilitiesService.getFacilities(params, request);
 
       expect(facilitiesRepository.getFacilities).toHaveBeenCalled();
-      expect(facilitiesRepository.numOfFacilitiesPages).toHaveBeenCalled();
-      expect(result).toEqual('list of facilities');
+      expect(result).toEqual(facilities.slice(2,4));
     });
   });
 

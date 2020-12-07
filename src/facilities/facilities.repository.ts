@@ -49,7 +49,7 @@ export function sortFacilities(orderBy: string):any {
 export class FacilitiesRepository extends Repository<Plant>{
   
   getFacilities(facilityParamsDTO: FacilityParamsDTO): FacilityDTO[] {
-    const { state, page, perPage, orderBy } = facilityParamsDTO;
+    const { state, orderBy } = facilityParamsDTO;
     let facilitiesArray: Array<FacilityDTO> = facilities;
 
     if (orderBy){
@@ -59,27 +59,8 @@ export class FacilitiesRepository extends Repository<Plant>{
     if (state) {
       facilitiesArray = facilities.filter(x => x.state === state);
     }
-    
-    if (page && perPage) {
-      const pageNum: number = +page;
-      const perPageNum: number = +perPage;
-
-      const begin: number = ((pageNum - 1)*perPageNum);
-      const end: number = (begin + perPageNum);
-
-      facilitiesArray = facilities.slice(begin, end);
-    }
 
     return facilitiesArray;
-  }
-
-  // calculates how many pages there will be given what perPage is
-  numOfFacilitiesPages(facilityParamsDTO: FacilityParamsDTO): number {
-    const { perPage } = facilityParamsDTO;
-    const facParam = new FacilityParamsDTO();
-    const numFacilities: number = Math.ceil((this.getFacilities(facParam)).length / (+perPage));
-
-    return numFacilities;
   }
 
   getFacilityById(facId: number): FacilityDTO {
