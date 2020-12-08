@@ -10,12 +10,19 @@ import {
   Param,
   Controller,
   ParseIntPipe,
+  Query,
+  ValidationPipe,
+  Req
 } from '@nestjs/common';
 
+import { Request } from 'express'; 
+
 import { FacilitiesService } from './facilities.service';
+import { FacilityDTO } from './dto/facility.dto';
+import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
 
 @ApiTags('Facilities')
-@Controller()
+@Controller('facilities')
 export class FacilitiesController {
   constructor(private facilitiesService: FacilitiesService) {}
 
@@ -29,9 +36,16 @@ export class FacilitiesController {
   @ApiNotFoundResponse({
     description: 'Resource Not Found',
   })
-  getFacilities(): string {
-    // TODO: will need a query param (state, limit, offset) and DTO
-    return this.facilitiesService.getFacilities();
+  getFacilities(
+    @Query(ValidationPipe) facilityParamsDTO: FacilityParamsDTO,
+    @Req() req: Request
+  ): FacilityDTO[] {
+    const { state, region, page, perPage, orderBy } = facilityParamsDTO;
+    console.log(
+      `state=${state}, region=${region}, page=${page}, perPage=${perPage}, orderBy=${orderBy}`,
+    );
+    // response headers are set in service
+    return this.facilitiesService.getFacilities(facilityParamsDTO, req);
   }
 
   @Get('/:id')
@@ -44,7 +58,7 @@ export class FacilitiesController {
   @ApiNotFoundResponse({
     description: 'A facility with the specificed ID was not found.',
   })
-  getFacilityById(@Param('id', ParseIntPipe) id: number): string {
+  getFacilityById(@Param('id', ParseIntPipe) id: number): FacilityDTO {
     return this.facilitiesService.getFacilityById(id);
   }
 
@@ -89,23 +103,23 @@ export class FacilitiesController {
   })
   getFacilityUnitById(
     @Param('id', ParseIntPipe) id: number,
-    @Param('unitId', ParseIntPipe) unitId: number
+    @Param('unitId', ParseIntPipe) unitId: number,
   ): string {
     return this.facilitiesService.getFacilityUnitById(id, unitId);
   }
 
-  @Get('/:id/monitoring-plans')
-  @ApiOkResponse({
-    description: 'Retrieved all monitoring plans of the specified facility.',
-  })
-  @ApiBadRequestResponse({
-    description: 'The specified facility ID is invalid.',
-  })
-  @ApiNotFoundResponse({
-    description: 'A facility with the specificed ID was not found.',
-  })
-  getFacilityMonitoringPlan(@Param('id', ParseIntPipe) id: number): string {
-    // TODO: will need a query param (status, limit, offest) and DTO
-    return this.facilitiesService.getFacilityMonitoringPlan(id);
-  }
+  // @Get('/:id/monitoring-plans')
+  // @ApiOkResponse({
+  //   description: 'Retrieved all monitoring plans of the specified facility.',
+  // })
+  // @ApiBadRequestResponse({
+  //   description: 'The specified facility ID is invalid.',
+  // })
+  // @ApiNotFoundResponse({
+  //   description: 'A facility with the specificed ID was not found.',
+  // })
+  // getFacilityMonitoringPlan(@Param('id', ParseIntPipe) id: number): string {
+  //   // TODO: will need a query param (status, limit, offest) and DTO
+  //   return this.facilitiesService.getFacilityMonitoringPlan(id);
+  // }
 }

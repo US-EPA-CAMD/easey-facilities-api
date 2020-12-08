@@ -6,7 +6,7 @@ export class UnitFuel extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', length: 45 })
   UF_ID: string;
 
-  @Column({ length: 38 })
+  @Column()
   UNIT_ID: number;
 
   @Column({ type: 'varchar', length: 7 })
