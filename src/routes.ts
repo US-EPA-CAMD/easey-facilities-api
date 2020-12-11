@@ -5,7 +5,7 @@ import { UnitsModule } from "./units/units.module";
 
 const routes: Routes = [
   {
-    path: '',
+    path: '/facilities',
     module: FacilitiesModule,
     children: [
       {

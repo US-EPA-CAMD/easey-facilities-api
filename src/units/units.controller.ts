@@ -18,7 +18,7 @@ import { UnitDTO } from '../dtos/unit.dto';
 import { UnitsService } from './units.service';
 
 @ApiTags('Facilities')
-@Controller('/facilities/:id/units')
+@Controller()
 export class UnitsController {
   constructor(
     private service: UnitsService,
