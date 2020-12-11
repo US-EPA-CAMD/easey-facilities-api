@@ -1,86 +1,65 @@
+import { Request } from 'express';
+import { FindManyOptions } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { FacilityDTO } from './dto/facility.dto';
+
+import { FacilityDTO } from '../dtos/facility.dto';
+import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesRepository } from './facilities.repository';
-import { FacilityParamsDTO } from './dto/facilitiesParams.dto';
-import { Request } from 'express'; 
+import { ResponseHeaders } from './../utils/response.headers';
+import { FacilityMap } from '../maps/facility.map';
 
 @Injectable()
 export class FacilitiesService {
   constructor(@InjectRepository(FacilitiesRepository)
-  private facilitiesRepository: FacilitiesRepository
+    private repository: FacilitiesRepository,
+    private map: FacilityMap,    
   ) {}
 
-  getFacilities(facilityParamsDTO: FacilityParamsDTO, req: Request): FacilityDTO[] {
-    const { page, perPage } = facilityParamsDTO;
-    let facilities = this.facilitiesRepository.getFacilities(facilityParamsDTO);
-    const total: number = facilities.length;
-    const totalPages: number = Math.ceil(facilities.length / (+perPage));
+  async getFacilities(facilityParamsDTO: FacilityParamsDTO, req: Request): Promise<FacilityDTO[]> {
+    const { state, region, page, perPage } = facilityParamsDTO;
+
+    let findOpts: FindManyOptions = {
+      select: [ "id", "orisCode", "name", "state", "region" ],
+      order: {
+        id: "ASC",
+      }
+    }
 
     if (page && perPage) {
-      // pagination
-      const pageNum: number = +page;
-      const perPageNum: number = +perPage;
-
-      const begin: number = ((pageNum - 1)*perPageNum);
-      const end: number = (begin + perPageNum);
-
-      facilities = facilities.slice(begin, end);
-
-      // setting response headers
-      if (totalPages !== 1) {
-        const first: string = `</facilities?page=1&perPage=${ perPage }>; rel="first"`;
-        const prev: string = `</facilities?page=${ +page - 1 }&perPage=${ perPage }>; rel="previous"`;
-        const next: string = `</facilities?page=${ +page + 1 }&perPage=${ perPage }>; rel="next"`;
-        const last: string = `</facilities?page=${ totalPages }&perPage=${ perPage }>; rel="last"`; 
-
-        let concatLinks:string;
-
-        switch (+page) {
-          case 1: {
-              concatLinks = next + ',' + last;
-            break;
-          }
-          case totalPages: {
-            concatLinks = first + ',' + prev;
-            break;
-          }
-          default: {
-            concatLinks = first + ',' + prev + ',' + next + ',' + last;
-            break;
-          }
-        };
-        req.res.setHeader('X-Total-Count', total);
-        req.res.setHeader('Link', concatLinks );
-      };
+      findOpts.skip = (page - 1) * perPage;
+      findOpts.take = perPage;
     }
-    return facilities;
+
+    if (state && !region) {
+      findOpts.where = { state: state }
+    }
+
+    if (!state && region) {
+      findOpts.where = { region: region}
+    }
+
+    if (state && region) {
+      findOpts.where = [
+        { state: state },
+        { region: region }
+      ];
+    }
+
+    const [results, totalCount] = await this.repository.findAndCount(findOpts);
+
+    ResponseHeaders.setPagination(req, totalCount);
+    return this.map.many(results);
   }
 
   // will eventually use facilitiesRepository.findOne(id) once connected to DB
   getFacilityById(id: number): FacilityDTO {
-    const facility = this.facilitiesRepository.getFacilityById(id);
+    // const facility = this.repository.getFacilityById(id);
 
-    if (facility === undefined) {
-      throw new NotFoundException;
-    }
+    // if (facility === undefined) {
+    //   throw new NotFoundException;
+    // }
 
-    return facility;
+    return new FacilityDTO();
   }
-
-  getFacilityUnits(FacId: number): string {
-    return 'Hello getFacilityUnits!';
-  }
-
-  getFacilityUnitById(facId: number, unitId: number): string {
-    return 'Hello getFacilityUnitById!';
-  }
-
-  getFacilityContact(id: number): string {
-    return 'Hello getFacilityContact!';
-  }
-
-  // getFacilityMonitoringPlan(id: number): string {
-  //   return 'Hello getFacilityMonitoringPlan!';
-  // }
 }

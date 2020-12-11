@@ -11,7 +11,8 @@ From within the `easey-facilities-api` project directory, you can run:
 ### `npm run start:dev`
 
 Runs the api in the development mode.<br />
-* Open [http://localhost:7000/api/facilities/swagger](http://localhost:7000/api/facilities/swagger) to view swagger documentation.
+* Open [http://localhost:8080/api/facilities/swagger](http://localhost:8080/api/facilities/swagger) to view swagger documentation.
+NOTE: The port can be changed by setting the EASEY_FACILITY_MGMT_API_PORT environment variable
 
 The page will reload if you make edits via the use of nodemon.<br />
 You will also see any lint errors in the console.
