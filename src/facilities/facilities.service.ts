@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { FindManyOptions } from 'typeorm';
+import { Not, IsNull, FindManyOptions } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -20,30 +20,22 @@ export class FacilitiesService {
     const { state, region, page, perPage } = facilityParamsDTO;
 
     let findOpts: FindManyOptions = {
-      select: [ "id", "orisCode", "name", "state", "region" ],
+      select: [ "id", "orisCode", "name", "state" ],
       order: {
         id: "ASC",
       }
     }
 
+    if (state) {
+      findOpts.where = { orisCode: Not(IsNull()), state: state }
+    }
+    else {
+      findOpts.where = { orisCode: Not(IsNull()) }      
+    }
+
     if (page && perPage) {
       findOpts.skip = (page - 1) * perPage;
       findOpts.take = perPage;
-    }
-
-    if (state && !region) {
-      findOpts.where = { state: state }
-    }
-
-    if (!state && region) {
-      findOpts.where = { region: region}
-    }
-
-    if (state && region) {
-      findOpts.where = [
-        { state: state },
-        { region: region }
-      ];
     }
 
     const [results, totalCount] = await this.repository.findAndCount(findOpts);
