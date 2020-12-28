@@ -5,12 +5,17 @@ import { FacilitiesController } from './facilities.controller';
 import { FacilitiesService } from './facilities.service';
 import { FacilitiesRepository } from './facilities.repository';
 
+import { FacilityMap } from '../maps/facility.map';
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([FacilitiesRepository]),
   ],
   controllers: [FacilitiesController],
-  providers: [FacilitiesService],
+  providers: [
+    FacilityMap,
+    FacilitiesService,
+  ],
 })
 
 export class FacilitiesModule {}

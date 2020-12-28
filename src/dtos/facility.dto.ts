@@ -1,24 +1,13 @@
 import { LinkDTO } from './link.dto';
-export class FacilityDTO {
-  constructor(
-    facId: number,
-    orisCode: number,
-    facilityName: string,
-    state: string,
-    links: Array<LinkDTO>,
-  ) {
-    this.facId = facId;
-    this.orisCode = orisCode;
-    this.name = facilityName;
-    this.state = state;
-    this.links = links;
-  }
 
+export class FacilityDTO {
   facId: number;
   orisCode: number;
   name: string;
   state: string;
-  links: Array<LinkDTO>;
+  region: number;
+  links: LinkDTO[];
+
   //description: string;
   //county: string;
   //sicCode: number;
