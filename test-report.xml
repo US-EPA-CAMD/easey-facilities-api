@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
   <file path="C:\Projects\US-EPA-CAMD\easey-facilities-api\src\facilities\facilities.controller.spec.ts">
-    <testCase name="-- Facilities Controller -- * Get Facility By Id should return a single Facility" duration="2"/>
+    <testCase name="-- Facilities Controller -- * Get Facility By Id should return a single Facility" duration="1"/>
   </file>
 </testExecutions>
