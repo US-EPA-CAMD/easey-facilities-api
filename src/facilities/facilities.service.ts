@@ -44,14 +44,8 @@ export class FacilitiesService {
     return this.map.many(results);
   }
 
-  // will eventually use facilitiesRepository.findOne(id) once connected to DB
-  getFacilityById(id: number): FacilityDTO {
-    // const facility = this.repository.getFacilityById(id);
-
-    // if (facility === undefined) {
-    //   throw new NotFoundException;
-    // }
-
-    return new FacilityDTO();
+  async getFacilityById(id: number): Promise<FacilityDTO> {
+    const facility = await this.repository.findOne(id);
+    return this.map.one(facility);
   }
 }

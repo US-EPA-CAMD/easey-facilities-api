@@ -55,7 +55,7 @@ export class FacilitiesController {
   @ApiNotFoundResponse({
     description: 'A facility with the specificed ID was not found.',
   })
-  getFacilityById(@Param('id', ParseIntPipe) id: number): FacilityDTO {
+  getFacilityById(@Param('id', ParseIntPipe) id: number): Promise<FacilityDTO> {
     return this.service.getFacilityById(id);
   }
 }
