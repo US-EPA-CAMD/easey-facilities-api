@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { Not, IsNull, FindManyOptions } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { FacilityDTO } from '../dtos/facility.dto';
@@ -17,7 +17,7 @@ export class FacilitiesService {
   ) {}
 
   async getFacilities(facilityParamsDTO: FacilityParamsDTO, req: Request): Promise<FacilityDTO[]> {
-    const { state, region, page, perPage } = facilityParamsDTO;
+    const { state, page, perPage } = facilityParamsDTO;
 
     let findOpts: FindManyOptions = {
       select: [ "id", "orisCode", "name", "state" ],
@@ -40,12 +40,17 @@ export class FacilitiesService {
 
     const [results, totalCount] = await this.repository.findAndCount(findOpts);
 
-    ResponseHeaders.setPagination(req, totalCount);
+    ResponseHeaders.setPagination(page, perPage, totalCount, req);
     return this.map.many(results);
   }
 
   async getFacilityById(id: number): Promise<FacilityDTO> {
     const facility = await this.repository.findOne(id);
+
+    if (facility === undefined) {
+      throw new NotFoundException(`Facility with Id ${id} does not exist`);
+    }
+
     return this.map.one(facility);
   }
 }

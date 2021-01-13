@@ -3,8 +3,9 @@ import { Test } from "@nestjs/testing";
 import { FacilitiesRepository } from "./facilities.repository";
 import { FacilitiesController } from './facilities.controller';
 import { FacilitiesService } from './facilities.service';
-import { FacilityMap } from './../maps/facility.map';
+import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilityDTO } from '../dtos/facility.dto';
+import { FacilityMap } from './../maps/facility.map';
 
 describe('-- Facilities Controller --', () => {
   let facilitiesController: FacilitiesController;
@@ -20,41 +21,31 @@ describe('-- Facilities Controller --', () => {
         ],
       }).compile();
 
-    facilitiesService = module.get<FacilitiesService>(FacilitiesService);
-    facilitiesController = module.get(FacilitiesController);
+      facilitiesController = module.get(FacilitiesController);
+      facilitiesService = module.get(FacilitiesService);
   });
 
   afterEach(() => {
     jest.resetAllMocks();
   });
 
-  // describe('getFacilities', () => {
-  //   it('should return an array of Facilities', async () => {
-  //     const result = new Promise<FacilityDTO[]>(() => new FacilityDTO[0]);
-  //     jest.spyOn(facilitiesService, 'getFacilities').mockImplementation(() => result);
-  //     expect(await facilitiesController.getFacilities(new FacilityParamsDTO(), request)).toBe(result);
-  //   });
-  // });
+  describe('* getFacilities', () => {
+    const paramsDto = new FacilityParamsDTO();
 
-  describe('* Get Facility By Id', () => {
-    it('should return a single Facility', async () => {
-      const expectedResult = new FacilityDTO();
-      const mockNumberToSatisfyParameters = 0;
-      jest.spyOn(facilitiesService, 'getFacilityById').mockResolvedValue(expectedResult);
-      expect(await facilitiesController.getFacilityById(mockNumberToSatisfyParameters)).toBe(expectedResult);
+    it('should return a list of Facilities', async () => {
+      const expectedResult: FacilityDTO[] = [];
+      jest.spyOn(facilitiesService, 'getFacilities').mockResolvedValue(expectedResult);
+      expect(await facilitiesController.getFacilities(paramsDto, null)).toBe(expectedResult);
     });
   });
 
-  // it("should throw NotFoundException if facility not found", async (done) => {
-  //   const expectedResult = undefined;
-  //   const mockNumberToSatisfyParameters = 0;
-  //   jest.spyOn(facilitiesService, "getFacilityById").mockResolvedValue(expectedResult);
-  //   await facilitiesController.getFacilityById(mockNumberToSatisfyParameters)
-  //    .then(() => done.fail("Facilities controller should return NotFoundException error of 404 but did not"))
-  //    .catch((error) => {
-  //      expect(error.status).toBe(404);
-  //      expect(error.message).toMatchObject({error: "Not Found", statusCode: 404});
-  //      done();
-  //    });
-  // });
+  describe('* getFacilityById', () => {
+    const facilityId = -1;
+
+    it('should return a single Facility', async () => {
+      const expectedResult = new FacilityDTO();
+      jest.spyOn(facilitiesService, 'getFacilityById').mockResolvedValue(expectedResult);
+      expect(await facilitiesController.getFacilityById(facilityId)).toBe(expectedResult);
+    });
+  });
  });
