@@ -1,100 +1,216 @@
-// import { Test } from '@nestjs/testing';
-// import { FacilitiesService } from './facilities.service';
-// import { FacilitiesRepository } from './facilities.repository';
-// import { NotFoundException } from '@nestjs/common';
-// import { FacilityParamsDTO } from '../dtos/facility.params.dto';
-// import { FacilityDTO } from '../dtos/facility.dto';
+import { Repository } from 'typeorm';
+import { Test } from "@nestjs/testing";
 
-// const mockFacilitiesRepository = () => ({
-//   getFacilities: jest.fn(),
-//   getFacilityById: jest.fn(),
-//   numOfFacilitiesPages: jest.fn(),
-// });
+import { FacilityParamsDTO } from '../dtos/facility.params.dto';
+import { FacilitiesRepository } from './facilities.repository';
+import { FacilitiesService } from './facilities.service';
+import { FacilityMap } from '../maps/facility.map';
+import { Plant } from '../entities/plant.entity';
 
-// describe('FacilitiesService', () => {
-//   let facilitiesService;
-//   let facilitiesRepository;
+const mockRequest = (url: string) => {
+  return {
+    url,
+    res: {
+      setHeader: jest.fn(),
+    }
+  }
+};
 
-//   beforeEach(async () => {
-//     const module = await Test.createTestingModule({
-//       providers: [
-//         FacilitiesService,
-//         { provide: FacilitiesRepository, useFactory: mockFacilitiesRepository },
-//       ],
-//     }).compile();
+const mockPlant = (id: number, name: string, orisCode: number, state: string) => {
+  const plant = new Plant();
+  plant.id = id;
+  plant.name = name;
+  plant.orisCode = orisCode;
+  plant.state = state;
+  return plant;
+}
 
-//     facilitiesService = await module.get<FacilitiesService>(FacilitiesService);
-//     facilitiesRepository = await module.get<FacilitiesRepository>(FacilitiesRepository);
-//   });
+describe('-- Facilities Service --', () => {
+  let facilitiesRepositoryMock: MockType<Repository<Plant>>;
+  let facilitiesService: FacilitiesService;
+  let facilityMap = new FacilityMap();
 
-//   describe('getFacilities', () => {
-//     it('calls FacilitiesRepository.getFacilities() and gets all facilities from the repository', async () => {
-//       const facilities: Array<FacilityDTO> = [
-//         new FacilityDTO(1, 3, 'Barry', 'AL', undefined),
-//         new FacilityDTO(2, 9, 'Copper Station', 'TX', undefined),
-//         new FacilityDTO(3, 51, 'Dolet Hills Power Station', 'LA', undefined),
-//         new FacilityDTO(4, 87, 'Escalante', 'NM', undefined),
-//       ]; 
-//       facilitiesRepository.getFacilities.mockReturnValue(facilities);
-      
-//       const request = {
-//         res: {
-//           setHeader: jest.fn(),
-//         }
-//       }
-//       request.res.setHeader.mockReturnValue('some response');
+  beforeAll(async () => {
+    const module = await Test.createTestingModule({
+      providers: [
+        FacilityMap,
+        FacilitiesService,
+        {
+          provide: FacilitiesRepository,
+          useFactory: repositoryMockFactory
+        },
+      ],
+    }).compile();
 
-//       const params: FacilityParamsDTO = {
-//         state: undefined,
-//         region: undefined,
-//         page: 2,
-//         perPage: 2,
-//         orderBy: undefined,
-//       };
+    facilitiesService = module.get(FacilitiesService);
+    facilitiesRepositoryMock = module.get(FacilitiesRepository);
+  });
 
-//       expect(facilitiesRepository.getFacilities).not.toHaveBeenCalled();
-//       const result = facilitiesService.getFacilities(params, request);
+  describe('* getFacilities', () => {
+    let n = 1;
+    const plantList: Plant[] = [
+      mockPlant(n, `Test Plant ${n}`, n++, 'TX'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'AL'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'FL'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'GA'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'TX'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'AL'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'FL'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'GA'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'TX'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'AL'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'FL'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'GA'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'TX'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'AL'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'FL'),
+      mockPlant(n, `Test Plant ${n}`, n++, 'GA'),      
+    ];
+    let totalCount = plantList.length;
 
-//       expect(facilitiesRepository.getFacilities).toHaveBeenCalled();
-//       expect(result).toEqual(facilities.slice(2,4));
-//     });
-//   });
+    it('should return array with all facilities', async () => {
+      const paramsDto: FacilityParamsDTO = new FacilityParamsDTO();
+      const facilities = await facilityMap.many(plantList);
+      facilitiesRepositoryMock.findAndCount.mockReturnValue([plantList, totalCount]);
+      const results = await facilitiesService.getFacilities(paramsDto, undefined);
+      //expect(facilitiesRepositoryMock.findAndCount).toHaveBeenCalled();
+      expect(results).toStrictEqual(facilities);
+    });
 
-//   describe('getFacilityById', () => {
-//     it('calls facilitiesRepository.getFacilityById() and successfully retrieves and returns the facility', async () => {
-//       facilitiesRepository.getFacilityById.mockReturnValue('one facility');
+    it('should return 1-4 of 16 facilities', async () => {
+      const page = 1;
+      const perPage = 4;
+      const end = page*perPage;
+      const start = (page*perPage)-perPage+1;
+      const req: any = mockRequest(`/facilities?page=${page}&perPage=${perPage}`);
+      req.res.setHeader.mockReturnValue();
+      const paramsDto: FacilityParamsDTO = {
+        page: page,
+        perPage: perPage,
+        orderBy: undefined,
+        state: undefined,
+        region: undefined,
+      };
+      const plants = plantList.slice(start,end);
+      const facilities = await facilityMap.many(plants);
+      facilitiesRepositoryMock.findAndCount.mockReturnValue([plants, totalCount]);
+      const results = await facilitiesService.getFacilities(paramsDto, req);
+      //expect(facilitiesRepositoryMock.findAndCount).toHaveBeenCalled();
+      expect(results).toStrictEqual(facilities);
+    });
 
-//       const result = facilitiesService.getFacilityById(1);
+    it('should return 5-8 of 16 facilities', async () => {
+      const page = 2;
+      const perPage = 4;
+      const end = page*perPage;
+      const start = (page*perPage)-perPage+1;
+      const req: any = mockRequest(`/facilities?page=${page}&perPage=${perPage}`);
+      req.res.setHeader.mockReturnValue();
+      const paramsDto: FacilityParamsDTO = {
+        page: page,
+        perPage: perPage,
+        orderBy: undefined,
+        state: undefined,
+        region: undefined,
+      };
+      const plants = plantList.slice(start,end);
+      const facilities = await facilityMap.many(plants);
+      facilitiesRepositoryMock.findAndCount.mockReturnValue([plants, totalCount]);
+      const results = await facilitiesService.getFacilities(paramsDto, req);
+      //expect(facilitiesRepositoryMock.findAndCount).toHaveBeenCalled();
+      expect(results).toStrictEqual(facilities);
+    });
 
-//       expect(facilitiesRepository.getFacilityById).toHaveBeenCalledWith(1);
-//       expect(result).toEqual('one facility');
-//     });
+    it('should return 9-12 of 16 facilities', async () => {
+      const page = 3;
+      const perPage = 4;
+      const end = page*perPage;
+      const start = (page*perPage)-perPage+1;
+      const req: any = mockRequest(`/facilities?page=${page}&perPage=${perPage}`);
+      req.res.setHeader.mockReturnValue();
+      const paramsDto: FacilityParamsDTO = {
+        page: page,
+        perPage: perPage,
+        orderBy: undefined,
+        state: undefined,
+        region: undefined,
+      };
+      const plants = plantList.slice(start,end);
+      const facilities = await facilityMap.many(plants);
+      facilitiesRepositoryMock.findAndCount.mockReturnValue([plants, totalCount]);
+      const results = await facilitiesService.getFacilities(paramsDto, req);
+      //expect(facilitiesRepositoryMock.findAndCount).toHaveBeenCalled();
+      expect(results).toStrictEqual(facilities);
+    });
 
-//     it('throws an error as facility is not found', () => {
-//       expect(() => {
-//         facilitiesService.getFacilityById(12);
-//       }).toThrow(NotFoundException);
-//     });
-//   });
+    it('should return 13-16 of 16 facilities', async () => {
+      const page = 4;
+      const perPage = 4;
+      const end = page*perPage;
+      const start = (page*perPage)-perPage+1;
+      const req: any = mockRequest(`/facilities?page=${page}&perPage=${perPage}`);
+      req.res.setHeader.mockReturnValue();
+      const paramsDto: FacilityParamsDTO = {
+        page: page,
+        perPage: perPage,
+        orderBy: undefined,
+        state: undefined,
+        region: undefined,
+      };
+      const plants = plantList.slice(start,end);
+      const facilities = await facilityMap.many(plants);
+      facilitiesRepositoryMock.findAndCount.mockReturnValue([plants, totalCount]);
+      const results = await facilitiesService.getFacilities(paramsDto, req);
+      //expect(facilitiesRepositoryMock.findAndCount).toHaveBeenCalled();
+      expect(results).toStrictEqual(facilities);
+    });
 
-//   describe('getFacilityUnits', () => {
-//     it('returns static data', async () => {
-//       const result = facilitiesService.getFacilityUnits(1);
-//       expect(result).toEqual('Hello getFacilityUnits!');
-//     });
-//   });
+    it('should return array with 4 facilities in TX', async () => {
+      const paramsDto: FacilityParamsDTO = {
+        page: undefined,
+        perPage: undefined,
+        orderBy: undefined,
+        state: 'TX',
+        region: undefined,
+      };
+      const plants = plantList.filter(p => p.state = paramsDto.state);
+      totalCount = plants.length;
+      const facilities = await facilityMap.many(plants);
+      facilitiesRepositoryMock.findAndCount.mockReturnValue([plants, totalCount]);
+      const results = await facilitiesService.getFacilities(paramsDto, undefined);
+      //expect(facilitiesRepositoryMock.findAndCount).toHaveBeenCalled();
+      expect(results).toStrictEqual(facilities);
+    });
+  });
 
-//   describe('getFacilityUnitById', () => {
-//     it('returns static data', async () => {
-//       const result = facilitiesService.getFacilityUnitById(1, 1);
-//       expect(result).toEqual('Hello getFacilityUnitById!');
-//     });
-//   });
+  describe('* getFacilityById', () => {
+    it('should return a single Facility', async () => {
+      const facilityId = 1000;
+      const plant = mockPlant(facilityId, 'Test Plant', 123456, 'TX');
+      const facility = await facilityMap.one(plant);
+      facilitiesRepositoryMock.findOne.mockReturnValue(plant);
+      expect(await facilitiesService.getFacilityById(facilityId)).toStrictEqual(facility);
+    });
 
-//   describe('getFacilityContact', () => {
-//     it('returns static data', async () => {
-//       const result = facilitiesService.getFacilityContact(1);
-//       expect(result).toEqual('Hello getFacilityContact!');
-//     });
-//   });
-// });
+    it('should throw NotFoundException if facility not found', async (done) => {
+      facilitiesRepositoryMock.findOne.mockReturnValue(undefined);
+      await facilitiesService.getFacilityById(-1)
+      .then(() => done.fail('Facilities service should return NotFoundException error of 404 but did not'))
+      .catch((error) => {
+        expect(error.status).toBe(404);
+        expect(error.message).toBe('Facility with Id -1 does not exist');
+        done();
+      });
+    });
+  });
+});
+
+// @ts-ignore
+export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(() => ({
+  findOne: jest.fn(),
+  findAndCount: jest.fn(),
+ }));
+
+export type MockType<T> = {
+  [P in keyof T]: jest.Mock<{}>;
+};

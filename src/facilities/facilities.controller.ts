@@ -30,13 +30,10 @@ export class FacilitiesController {
 
   @Get()
   @ApiOkResponse({
-    description: 'Retrieved Facilities',
+    description: 'Retrieves a list of Facilities',
   })
   @ApiBadRequestResponse({
     description: 'Invalid Request',
-  })
-  @ApiNotFoundResponse({
-    description: 'Resource Not Found',
   })
   getFacilities(
     @Query(ValidationPipe) facilityParamsDTO: FacilityParamsDTO,
@@ -47,15 +44,15 @@ export class FacilitiesController {
 
   @Get('/:id')
   @ApiOkResponse({
-    description: 'Retrieved Facilitiy By ID',
+    description: 'Retrieves a single Facilitiy By Id',
   })
   @ApiBadRequestResponse({
-    description: 'The specified facility ID is invalid.',
+    description: 'Invalid Request',
   })
   @ApiNotFoundResponse({
-    description: 'A facility with the specificed ID was not found.',
+    description: 'Resource not found',
   })
-  getFacilityById(@Param('id', ParseIntPipe) id: number): FacilityDTO {
+  getFacilityById(@Param('id', ParseIntPipe) id: number): Promise<FacilityDTO> {
     return this.service.getFacilityById(id);
   }
 }
