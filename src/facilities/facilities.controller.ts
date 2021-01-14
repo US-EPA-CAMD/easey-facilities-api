@@ -15,7 +15,6 @@ import {
   Controller,
   ParseIntPipe,
   ValidationPipe,
-  NotFoundException,
 } from '@nestjs/common';
 
 import { FacilityDTO } from '../dtos/facility.dto';

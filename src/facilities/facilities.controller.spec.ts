@@ -3,7 +3,6 @@ import { Test } from "@nestjs/testing";
 import { FacilitiesRepository } from "./facilities.repository";
 import { FacilitiesController } from './facilities.controller';
 import { FacilitiesService } from './facilities.service';
-import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityMap } from './../maps/facility.map';
 
@@ -30,22 +29,18 @@ describe('-- Facilities Controller --', () => {
   });
 
   describe('* getFacilities', () => {
-    const paramsDto = new FacilityParamsDTO();
-
     it('should return a list of Facilities', async () => {
       const expectedResult: FacilityDTO[] = [];
       jest.spyOn(facilitiesService, 'getFacilities').mockResolvedValue(expectedResult);
-      expect(await facilitiesController.getFacilities(paramsDto, null)).toBe(expectedResult);
+      expect(await facilitiesController.getFacilities(null, null)).toBe(expectedResult);
     });
   });
 
   describe('* getFacilityById', () => {
-    const facilityId = -1;
-
     it('should return a single Facility', async () => {
       const expectedResult = new FacilityDTO();
       jest.spyOn(facilitiesService, 'getFacilityById').mockResolvedValue(expectedResult);
-      expect(await facilitiesController.getFacilityById(facilityId)).toBe(expectedResult);
+      expect(await facilitiesController.getFacilityById(-1)).toBe(expectedResult);
     });
   });
  });
