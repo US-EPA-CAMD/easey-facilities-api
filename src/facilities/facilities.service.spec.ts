@@ -1,13 +1,11 @@
 import { Repository } from 'typeorm';
 import { Test } from "@nestjs/testing";
-import { getMockReq, getMockRes } from '@jest-mock/express';
 
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesRepository } from './facilities.repository';
 import { FacilitiesService } from './facilities.service';
 import { FacilityMap } from '../maps/facility.map';
 import { Plant } from '../entities/plant.entity';
-import { totalmem } from 'os';
 
 const mockRequest = (url: string) => {
   return {
