@@ -1,16 +1,12 @@
 import { IsOptional } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class PaginationDTO {
   @IsOptional()
-  @ApiPropertyOptional()
-  page: number;
+  page?: number;
 
   @IsOptional()
-  @ApiPropertyOptional()
-  perPage: number;
+  perPage?: number;
 
   @IsOptional()
-  @ApiPropertyOptional()
-  orderBy: string;
+  orderBy?: string;
 }

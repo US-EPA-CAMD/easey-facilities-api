@@ -7,21 +7,4 @@ export class FacilityDTO {
   state: string;
   region: number;
   links: LinkDTO[];
-
-  //description: string;
-  //county: string;
-  //sicCode: number;
-  //epaRegion: number;
-  //nercRegion: string;
-  //airsId: string ;
-  //findSid: string;
-  //stateId: string;
-  //latitude: number;
-  //longitude: number;
-  //frsId: string;
-  //payeeId: number;
-  //permitExpDate: Date;
-  //latlonSource: string;
-  //tribalLandCd: string;
-  //payefirstEcmpsRptPeriodId: number;
 }
