@@ -26,7 +26,7 @@ async function bootstrap() {
   SwaggerModule.setup(`${appPath}/swagger`, app, document);
 
   await app.listen(configService.get<number>('app.port'));
-  console.log(`Application is running on: ${await app.getUrl()}/${appPath}`);
+  console.log(`Application is running on: ${await app.getUrl()}/${appPath}/swagger`);
 }
 
 bootstrap();
