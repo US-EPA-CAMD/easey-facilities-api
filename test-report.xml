@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
   <file path="C:\Projects\US-EPA-CAMD\easey-facilities-api\src\facilities\facilities.service.spec.ts">
-    <testCase name="-- Facilities Service -- * getFacilities should return array with all facilities" duration="3"/>
-    <testCase name="-- Facilities Service -- * getFacilities should return 1-4 of 16 facilities" duration="1"/>
-    <testCase name="-- Facilities Service -- * getFacilities should return 5-8 of 16 facilities" duration="0"/>
+    <testCase name="-- Facilities Service -- * getFacilities should return array with all facilities" duration="4"/>
+    <testCase name="-- Facilities Service -- * getFacilities should return 1-4 of 16 facilities" duration="0"/>
+    <testCase name="-- Facilities Service -- * getFacilities should return 5-8 of 16 facilities" duration="1"/>
     <testCase name="-- Facilities Service -- * getFacilities should return 9-12 of 16 facilities" duration="1"/>
-    <testCase name="-- Facilities Service -- * getFacilities should return 13-16 of 16 facilities" duration="1"/>
-    <testCase name="-- Facilities Service -- * getFacilities should return array with 4 facilities in TX" duration="1"/>
-    <testCase name="-- Facilities Service -- * getFacilityById should return a single Facility" duration="1"/>
-    <testCase name="-- Facilities Service -- * getFacilityById should throw NotFoundException if facility not found" duration="0"/>
+    <testCase name="-- Facilities Service -- * getFacilities should return 13-16 of 16 facilities" duration="0"/>
+    <testCase name="-- Facilities Service -- * getFacilities should return array with 4 facilities in TX" duration="2"/>
+    <testCase name="-- Facilities Service -- * getFacilityById should return a single Facility" duration="0"/>
+    <testCase name="-- Facilities Service -- * getFacilityById should throw NotFoundException if facility not found" duration="1"/>
   </file>
   <file path="C:\Projects\US-EPA-CAMD\easey-facilities-api\src\facilities\facilities.controller.spec.ts">
     <testCase name="-- Facilities Controller -- * getFacilities should return a list of Facilities" duration="2"/>

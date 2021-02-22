@@ -79,7 +79,7 @@
       "!**/*.config.ts",
       "!**/*.module.ts",
       "!routes.ts",
-      "!main.ts"      
+      "!main.ts"
     ],
     "testResultsProcessor": "jest-sonar-reporter",
     "coveragePathIgnorePatterns": [
