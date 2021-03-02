@@ -38,7 +38,7 @@ jobs:
       uses: actions/checkout@v2
     - name: Download CodeQL queries
       run: |
-        # git clone https://github.com/github/codeql.git
+        git clone https://github.com/github/codeql.git ../
         ls -ltr
         pwd
         ls -ltr ../
