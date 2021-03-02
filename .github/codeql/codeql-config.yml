@@ -1,10 +1,10 @@
 name: "My CodeQL config"
 
-disable-default-queries: true
+disable-default-queries: false
 
-queries:
-  - name: Use a query suite file (run queries from a query suite in this repo)
-    uses: ./codeql/javascript/ql/src/codeql-suites/javascript-lgtm.qls 
+# queries:
+  # - name: Use a query suite file (run queries from a query suite in this repo)
+    # uses: ./codeql/javascript/ql/src/codeql-suites/javascript-lgtm.qls 
 
 paths:
   - src 
