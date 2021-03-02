@@ -38,10 +38,11 @@ jobs:
       uses: actions/checkout@v2
     - name: Download CodeQL queries
       run: |
-        git clone https://github.com/github/codeql.git ../
+        cd ..
+        git clone https://github.com/github/codeql.git
         ls -ltr
         pwd
-        ls -ltr ../
+
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
