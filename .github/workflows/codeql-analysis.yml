@@ -39,7 +39,7 @@ jobs:
     - name: Download CodeQL queries
       run: |
         git clone https://github.com/github/codeql.git /tmp/codeql
-        ls -ltr /tmp/codeql
+        ls -ltr /tmp/codeql/javascript/ql/src/codeql-suites/javascript-lgtm.qls
 
 
 
@@ -51,7 +51,7 @@ jobs:
         # If you wish to specify custom queries, you can do so here or in a config file.
         # By default, queries listed here will override any specified in a config file.
         # Prefix the list here with "+" to use these queries and those in the config file.
-        # queries: ./path/to/local/query, your-org/your-repo/queries@main
+        queries: + /tmp/codeql/javascript/ql/src/codeql-suites/javascript-lgtm.qls
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
