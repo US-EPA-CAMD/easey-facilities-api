@@ -9,7 +9,6 @@ import appConfig from './config/app.config';
 import { TypeOrmConfigService } from './config/typeorm.config';
 
 import { FacilitiesModule } from './facilities/facilities.module';
-//import { UnitsModule } from './units/units.module';
 
 @Module({
   imports: [
@@ -25,7 +24,6 @@ import { FacilitiesModule } from './facilities/facilities.module';
       useClass: TypeOrmConfigService,
     }),
     FacilitiesModule,
-    //UnitsModule,
   ],
 })
 export class AppModule {}

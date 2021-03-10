@@ -1,12 +1,15 @@
 applications:
-  - name: facilities-api
+  - name: ((name))
     path: .
     command: npm run start
-    memory: 512M
+    memory: ((memory))
     env:
-      EASEY_API_HOST: ((host))
       OPTIMIZE_MEMORY: true
+      EASEY_FACILITIES_API_TITLE: ((title))
+      EASEY_FACILITIES_API_HOST: ((host))
+      EASEY_FACILITIES_API_PATH: ((path))
+      EASEY_FACILITIES_API_ENV: ((environment))
     routes:
-      - route: ((host))/api/facility-mgmt
+      - route: ((host))/((path))
     services:
       - camd-pg-db
