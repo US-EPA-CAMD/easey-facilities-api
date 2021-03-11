@@ -1,6 +1,0 @@
-name: facilities-api
-title: Facilities Management
-path: api/facility-mgmt
-environment: development
-host: easey-dev.app.cloud.gov
-memory: 512M
