@@ -28,6 +28,9 @@ jobs:
 
   CodeScanning:
     runs-on: ubuntu-latest
+    environment:
+      name: Development
+      url: 'Sonar Scanning Stage'
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
