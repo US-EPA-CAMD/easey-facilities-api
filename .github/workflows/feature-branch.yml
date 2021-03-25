@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Development
-      url: 'Development Deployment'
+      url: 'http://development.deployment.org'
     steps:
       - name: Deployment
         run: echo "Include steps to deploy to Development Environment"
@@ -41,7 +41,18 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Test
-      url: 'Test Deployment'
+      url: 'http://test.deployment.org'
+    steps:
+      - name: Deployment
+        run: echo "Include steps to deploy to Test Environment"
+
+        
+  StageDeployment:
+    needs: TestDeployment
+    runs-on: ubuntu-latest
+    environment:
+      name: Stage
+      url: 'http://stage.deployment.org'
     steps:
       - name: Deployment
         run: echo "Include steps to deploy to Test Environment"
