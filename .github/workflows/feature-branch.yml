@@ -51,7 +51,7 @@ jobs:
     needs: TestDeployment
     runs-on: ubuntu-latest
     environment:
-      name: Stage
+      name: Staging
       url: 'http://stage.deployment.org'
     steps:
       - name: Deployment
