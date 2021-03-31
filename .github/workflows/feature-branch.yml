@@ -32,6 +32,8 @@ jobs:
         id: output
       - name: Output Variables
         run: echo "Date Captured = ${{ steps.output.outputs.OUTPUT  }}"
+      - name: Set Env Value
+        run: echo "my_name=regeti" >> $GITHUB_ENV
 
   DevelopmentDeployment:
     needs: Build-Test
@@ -52,7 +54,9 @@ jobs:
       url: 'http://TEST.deployment.org'
     steps:
       - name: Deployment
-        run: echo "Include steps to deploy to Test Environment"
+        run: |
+          echo "Include steps to deploy to Test Environment"
+          echo ${{ env.my_name  }}
 
         
   StageDeployment:
