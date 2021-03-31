@@ -29,6 +29,9 @@ jobs:
         run: |
           OUTPUT=$(date);
           echo "::set-output name=OUTPUT::$OUTPUT"
+        id: output
+      - name: Output Variables
+        run: echo "Date Captured = ${{ steps.output.outputs.OUTPUT  }}"
 
   DevelopmentDeployment:
     needs: Build-Test
