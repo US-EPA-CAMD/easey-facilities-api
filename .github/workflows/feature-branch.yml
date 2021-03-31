@@ -25,6 +25,10 @@ jobs:
         run: devops/scripts/build.sh
       - name: Run Unit Tests
         run: devops/scripts/unit-tests.sh
+      - name: Testing Variables
+        run: |
+          OUTPUT=$(date);
+          echo "::set-output name=OUTPUT::$OUTPUT"
 
   DevelopmentDeployment:
     needs: Build-Test
