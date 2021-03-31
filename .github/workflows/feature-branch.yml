@@ -31,10 +31,10 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Development
-      if:   github.event_name == 'push' && github.ref == 'refs/heads/master'
       url: 'http://DEVELOPMENT.deployment.org'
     steps:
       - name: Deployment
+        if:   github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: echo "Include steps to deploy to Development Environment"
 
   TestDeployment:
