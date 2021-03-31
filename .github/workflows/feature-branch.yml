@@ -46,7 +46,7 @@ jobs:
     steps:
       - name: Deployment
         if:   startsWith(github.ref, 'refs/tags/dev')
-        run: echo "Include steps to deploy to Development Environment"
+        run: echo "Include steps to deploy to Development Environment on a valid Tag and approval"
 
   TestDeployment:
     needs: DevelopmentDeployment
