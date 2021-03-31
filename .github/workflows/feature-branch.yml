@@ -45,7 +45,7 @@ jobs:
       url: 'http://DEVELOPMENT.deployment.org'
     steps:
       - name: Deployment
-        if:   startsWith(github.ref, 'refs/heads/feature')
+        if:   startsWith(github.ref, 'refs/tags/dev')
         run: echo "Include steps to deploy to Development Environment"
 
   TestDeployment:
