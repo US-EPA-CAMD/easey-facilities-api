@@ -3,7 +3,9 @@ name: Develop Branch Workflow
 on:
   push:
     branches: [ develop ]
-
+    paths-ignore:
+    - '.github/**'
+    
 jobs:
   Build-Test-Deploy:
     runs-on: ubuntu-latest
