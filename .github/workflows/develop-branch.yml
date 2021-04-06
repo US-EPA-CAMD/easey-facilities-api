@@ -3,8 +3,6 @@ name: Develop Branch Workflow
 on:
   push:
     branches: [ develop ]
-  pull_request:
-    branches: [ develop ]
 
 jobs:
   Build-Test-Deploy:
