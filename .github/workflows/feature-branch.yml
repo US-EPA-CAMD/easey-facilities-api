@@ -3,6 +3,8 @@ name: Feature Branch Workflow
 on:
   push:
     branches: [ feature/* ]
+    paths-ignore:
+    - '.github/**'
 
 jobs:
   Build-Test:
