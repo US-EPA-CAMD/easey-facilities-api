@@ -5,10 +5,6 @@ on:
     tags:
       - stg-v[0-9]+.[0-9]+.[0-9]+
       - rbkstg-v[0-9]+.[0-9]+.[0-9]+
-  pull_request:
-    tags:
-      - stg-v[0-9]+.[0-9]+.[0-9]+
-      - rbkstg-v[0-9]+.[0-9]+.[0-9]+
 
 jobs:
   Deploy:
@@ -26,18 +22,17 @@ jobs:
       - name: Configure Env Vars
         run: devops/scripts/environment-variables.sh
         env:
-          NESTJS_APP: true
-          DEPLOY_FROM_ARTIFACT: true
+          ENV_VAR_PREFIX: EASEY
       - name: Install cf cli
         run: devops/scripts/install-cf-cli.sh
-      - name: Check Tag
-        run: devops/scripts/check-tag.sh
       - name: Login to cloud.gov
         run: devops/scripts/cf-login.sh
         env:
           CF_USERNAME: ${{ secrets.CF_STG_DEPLOYMENT_SVC }}
           CF_PASSWORD: ${{ secrets.CF_STG_DEPLOYMENT_SVC_PWD }}
-      - name: Deploy
+      - name: Download Deployment Package
+        run: devops/scripts/download-artifact.sh
+      - name: Deploy Package
         run: devops/scripts/deploy.sh
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_STORAGE_ACCESS_KEY_ID }}
