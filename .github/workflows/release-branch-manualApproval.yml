@@ -1,4 +1,4 @@
-name: Release Branch Workflow
+name: Release Branch Workflow Debugging
 
 on:
   push:
