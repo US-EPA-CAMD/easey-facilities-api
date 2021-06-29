@@ -67,4 +67,4 @@ jobs:
           CF_PASSWORD: ${{ secrets.CF_TST_DEPLOYMENT_SVC_PWD }}
       - name: Deployment
         run: |
-          echo "Test Deployment here ..."
+          devops/scripts/deploy.sh
