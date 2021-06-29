@@ -50,7 +50,7 @@ jobs:
           repository: US-EPA-CAMD/devops
           path: devops
       - name: Configure Env Vars
-        run: devops/scripts/environment-variables-noTag.sh
+        run: devops/scripts/environment-variables-noTag.sh TEST
         env:
           NESTJS_APP: true
           DEPLOY_FROM_ARTIFACT: true
