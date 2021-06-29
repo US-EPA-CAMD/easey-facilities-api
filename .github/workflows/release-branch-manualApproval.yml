@@ -22,7 +22,7 @@ jobs:
       - name: Configure Env Vars
         run: devops/scripts/environment-variables-noTag.sh
         env:
-          NESTJS_APP: true
+          ENV_VAR_PREFIX: EASEY
       - name: Build
         run: devops/scripts/build.sh
       - name: Run Unit Tests
@@ -56,8 +56,7 @@ jobs:
       - name: Configure Env Vars
         run: devops/scripts/environment-variables-noTag.sh TEST
         env:
-          NESTJS_APP: true
-          DEPLOY_FROM_ARTIFACT: true
+          ENV_VAR_PREFIX: EASEY
       - name: Install cf cli
         run: devops/scripts/install-cf-cli.sh
       - name: Login to cloud.gov
