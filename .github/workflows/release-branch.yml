@@ -59,6 +59,7 @@ jobs:
         with:
           repository: US-EPA-CAMD/devops
           path: devops
+          ref: yq-merge-deploy
       - name: Configure Env Vars
         run: devops/scripts/environment-variables-noTag.sh TEST
         env:
