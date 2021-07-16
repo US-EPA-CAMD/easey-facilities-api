@@ -82,7 +82,7 @@ jobs:
     needs: TestDeploynent
     runs-on: ubuntu-latest
     environment:
-      name: Stage
+      name: Staging
       url: 'http://staging.org'
     steps:
       - name: Checkout repo
