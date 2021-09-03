@@ -8,29 +8,39 @@ import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesRepository } from './facilities.repository';
 import { ResponseHeaders } from './../utils/response.headers';
 import { FacilityMap } from '../maps/facility.map';
+import { ProgramYearDimRepository } from './program-year-dim.repository';
+import { ApplicableFacilityAttributesParamsDTO } from 'src/dtos/applicable-facility-attributes.params.dto';
+import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
+import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 
 @Injectable()
 export class FacilitiesService {
-  constructor(@InjectRepository(FacilitiesRepository)
-    private repository: FacilitiesRepository,
-    private map: FacilityMap,    
+  constructor(
+    @InjectRepository(FacilitiesRepository)
+    private facilitiesRepository: FacilitiesRepository,
+    private facilityMap: FacilityMap,
+    @InjectRepository(ProgramYearDimRepository)
+    private readonly programYearRepository: ProgramYearDimRepository,
+    private readonly applicableFacilityAttributesMap: ApplicableFacilityAttributesMap,
   ) {}
 
-  async getFacilities(facilityParamsDTO: FacilityParamsDTO, req: Request): Promise<FacilityDTO[]> {
+  async getFacilities(
+    facilityParamsDTO: FacilityParamsDTO,
+    req: Request,
+  ): Promise<FacilityDTO[]> {
     const { state, page, perPage } = facilityParamsDTO;
 
-    let findOpts: FindManyOptions = {
-      select: [ "id", "orisCode", "name", "state" ],
+    const findOpts: FindManyOptions = {
+      select: ['id', 'orisCode', 'name', 'state'],
       order: {
-        id: "ASC",
-      }
-    }
+        id: 'ASC',
+      },
+    };
 
     if (state) {
-      findOpts.where = { orisCode: Not(IsNull()), state: state }
-    }
-    else {
-      findOpts.where = { orisCode: Not(IsNull()) }      
+      findOpts.where = { orisCode: Not(IsNull()), state: state };
+    } else {
+      findOpts.where = { orisCode: Not(IsNull()) };
     }
 
     if (page && perPage) {
@@ -38,19 +48,35 @@ export class FacilitiesService {
       findOpts.take = perPage;
     }
 
-    const [results, totalCount] = await this.repository.findAndCount(findOpts);
+    const [results, totalCount] = await this.facilitiesRepository.findAndCount(
+      findOpts,
+    );
 
     ResponseHeaders.setPagination(page, perPage, totalCount, req);
-    return this.map.many(results);
+    return this.facilityMap.many(results);
   }
 
   async getFacilityById(id: number): Promise<FacilityDTO> {
-    const facility = await this.repository.findOne(id);
+    const facility = await this.facilitiesRepository.findOne(id);
 
     if (facility === undefined) {
       throw new NotFoundException(`Facility with Id ${id} does not exist`);
     }
 
-    return this.map.one(facility);
+    return this.facilityMap.one(facility);
+  }
+
+  getFacilityAttributes(): string {
+    return 'hello getFacilityAttributes';
+  }
+
+  async getApplicableFacilitiesAttributes(
+    applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
+  ): Promise<ApplicableFacilityAttributesDTO[]> {
+    const query = await this.programYearRepository.getApplicableFacilityAttributes(
+      applicableFacilityAttributesParamsDTO
+    );
+
+    return this.applicableFacilityAttributesMap.many(query)
   }
 }
