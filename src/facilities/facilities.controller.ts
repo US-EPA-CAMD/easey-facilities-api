@@ -3,8 +3,6 @@ import { Request } from 'express';
 import {
   ApiTags,
   ApiOkResponse,
-  ApiBadRequestResponse,
-  ApiNotFoundResponse,
   ApiQuery,
 } from '@nestjs/swagger';
 
@@ -56,15 +54,15 @@ export class FacilitiesController {
     return this.service.getFacilityById(id);
   }
 
-  @Get('/attributes')
-  @ApiOkResponse({
-    description: 'Retrieves Facility Attributes',
-  })
-  @BadRequestResponse()
-  @NotFoundResponse()
-  getFacilityAtrributes(): string {
-    return this.service.getFacilityAttributes();
-  }
+  // @Get('/attributes')
+  // @ApiOkResponse({
+  //   description: 'Retrieves Facility Attributes',
+  // })
+  // @BadRequestResponse()
+  // @NotFoundResponse()
+  // getFacilityAtrributes(): string {
+  //   return this.service.getFacilityAttributes();
+  // }
 
   @Get('/attributes/applicable')
   @ApiOkResponse({
@@ -82,7 +80,7 @@ export class FacilitiesController {
     @Query()
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
   ): Promise<ApplicableFacilityAttributesDTO[]> {
-    return this.service.getApplicableFacilitiesAttributes(
+    return this.service.getApplicableFacilityAtrributes(
       applicableFacilityAttributesParamsDTO,
     );
   }

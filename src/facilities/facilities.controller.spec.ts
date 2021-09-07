@@ -5,6 +5,7 @@ import { FacilitiesController } from './facilities.controller';
 import { FacilitiesService } from './facilities.service';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityMap } from './../maps/facility.map';
+import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 
 describe('-- Facilities Controller --', () => {
   let facilitiesController: FacilitiesController;
@@ -41,6 +42,14 @@ describe('-- Facilities Controller --', () => {
       const expectedResult = new FacilityDTO();
       jest.spyOn(facilitiesService, 'getFacilityById').mockResolvedValue(expectedResult);
       expect(await facilitiesController.getFacilityById(-1)).toBe(expectedResult);
+    });
+  });
+
+  describe('* getApplicableFacilityAtrributes', () => {
+    it('should return a list of Applicable Facilities Attributes', async () => {
+      const expectedResult: ApplicableFacilityAttributesDTO[] = [];
+      jest.spyOn(facilitiesService, 'getApplicableFacilityAtrributes').mockResolvedValue(expectedResult);
+      expect(await facilitiesController.getApplicableFacilityAtrributes(null)).toBe(expectedResult);
     });
   });
  });

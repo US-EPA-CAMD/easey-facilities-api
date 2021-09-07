@@ -70,7 +70,7 @@ export class FacilitiesService {
     return 'hello getFacilityAttributes';
   }
 
-  async getApplicableFacilitiesAttributes(
+  async getApplicableFacilityAtrributes(
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
   ): Promise<ApplicableFacilityAttributesDTO[]> {
     const archivedYear = new Date().getFullYear() - 4;
