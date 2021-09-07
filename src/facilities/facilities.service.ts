@@ -9,7 +9,7 @@ import { FacilitiesRepository } from './facilities.repository';
 import { ResponseHeaders } from './../utils/response.headers';
 import { FacilityMap } from '../maps/facility.map';
 import { ProgramYearDimRepository } from './program-year-dim.repository';
-import { ApplicableFacilityAttributesParamsDTO } from 'src/dtos/applicable-facility-attributes.params.dto';
+import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 
@@ -17,8 +17,8 @@ import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-att
 export class FacilitiesService {
   constructor(
     @InjectRepository(FacilitiesRepository)
-    private facilitiesRepository: FacilitiesRepository,
-    private facilityMap: FacilityMap,
+    private readonly facilitiesRepository: FacilitiesRepository,
+    private readonly facilityMap: FacilityMap,
     @InjectRepository(ProgramYearDimRepository)
     private readonly programYearRepository: ProgramYearDimRepository,
     private readonly applicableFacilityAttributesMap: ApplicableFacilityAttributesMap,

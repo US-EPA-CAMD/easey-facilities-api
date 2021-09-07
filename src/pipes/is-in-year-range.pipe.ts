@@ -23,8 +23,8 @@ export function IsInYearRange(
       validator: {
         validate(value: any, args: ValidationArguments) {
           if (value) {
-            const date = new Date(value, 0)
-            
+            const date = new Date(value, 0);
+
             return (
               value === '1980' ||
               value === '1985' ||

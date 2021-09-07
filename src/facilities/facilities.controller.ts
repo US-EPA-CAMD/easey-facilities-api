@@ -21,26 +21,27 @@ import {
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesService } from './facilities.service';
-import { ApplicableFacilityAttributesParamsDTO } from 'src/dtos/applicable-facility-attributes.params.dto';
+import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
+import {
+  BadRequestResponse,
+  NotFoundResponse,
+} from '../utils/swagger-decorator.const';
 
 @ApiTags('Facilities')
 @Controller()
 export class FacilitiesController {
-  constructor(
-    private service: FacilitiesService,
-  ) {}
+  constructor(private readonly service: FacilitiesService) {}
 
   @Get()
   @ApiOkResponse({
     description: 'Retrieves a list of Facilities',
   })
-  @ApiBadRequestResponse({
-    description: 'Invalid Request',
-  })
+  @BadRequestResponse()
+  @NotFoundResponse()
   getFacilities(
     @Query(ValidationPipe) facilityParamsDTO: FacilityParamsDTO,
-    @Req() req: Request
+    @Req() req: Request,
   ): Promise<FacilityDTO[]> {
     return this.service.getFacilities(facilityParamsDTO, req);
   }
@@ -49,12 +50,8 @@ export class FacilitiesController {
   @ApiOkResponse({
     description: 'Retrieves a single Facilitiy By Id',
   })
-  @ApiBadRequestResponse({
-    description: 'Invalid Request',
-  })
-  @ApiNotFoundResponse({
-    description: 'Resource not found',
-  })
+  @BadRequestResponse()
+  @NotFoundResponse()
   getFacilityById(@Param('id', ParseIntPipe) id: number): Promise<FacilityDTO> {
     return this.service.getFacilityById(id);
   }
@@ -63,12 +60,8 @@ export class FacilitiesController {
   @ApiOkResponse({
     description: 'Retrieves Facility Attributes',
   })
-  @ApiBadRequestResponse({
-    description: 'Invalid Request',
-  })
-  @ApiNotFoundResponse({
-    description: 'Resource not found',
-  })
+  @BadRequestResponse()
+  @NotFoundResponse()
   getFacilityAtrributes(): string {
     return this.service.getFacilityAttributes();
   }
@@ -77,21 +70,20 @@ export class FacilitiesController {
   @ApiOkResponse({
     description: 'Retrieves Applicable Facility Attributes',
   })
-  @ApiBadRequestResponse({
-    description: 'Invalid Request',
-  })
-  @ApiNotFoundResponse({
-    description: 'Resource not found',
-  })
+  @BadRequestResponse()
+  @NotFoundResponse()
   @ApiQuery({
     style: 'pipeDelimited',
     name: 'year',
     required: true,
     explode: false,
   })
-  getApplicableFacilityAtrributes(@Query() applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
-    ): Promise<ApplicableFacilityAttributesDTO[]> {
-    return this.service.getApplicableFacilitiesAttributes(applicableFacilityAttributesParamsDTO);
+  getApplicableFacilityAtrributes(
+    @Query()
+    applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
+  ): Promise<ApplicableFacilityAttributesDTO[]> {
+    return this.service.getApplicableFacilitiesAttributes(
+      applicableFacilityAttributesParamsDTO,
+    );
   }
-
 }

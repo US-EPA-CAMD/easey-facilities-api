@@ -1,7 +1,4 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-
-import { AnnualUnitData } from './annual-unit-data.entity';
-import { AnnualUnitDataArch } from './annual-unit-data-a.entity';
+import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity({ name: 'camddmw.unit_fact' })
 export class UnitFact extends BaseEntity {
@@ -22,16 +19,4 @@ export class UnitFact extends BaseEntity {
 
   @Column()
   state: string;
-
-  @OneToMany(
-    () => AnnualUnitData,
-    annualUnit => annualUnit.unitFact,
-  )
-  annualUnitData: AnnualUnitData[];
-
-  @OneToMany(
-    () => AnnualUnitDataArch,
-    annualUnit => annualUnit.unitFact,
-  )
-  annualUnitDataArch: AnnualUnitDataArch[];
 }
