@@ -1,4 +1,4 @@
-import { Repository, EntityRepository } from 'typeorm';
+import { Repository, EntityRepository, getManager } from 'typeorm';
 
 import { ProgramYearDim } from '../entities/program-year-dim.entity';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
@@ -7,12 +7,37 @@ import { UnitFact } from '../entities/unit-fact.entity';
 import { UnitTypeYearDim } from '../entities/unit-type-year-dim.entity';
 import { FuelYearDim } from '../entities/fuel-year-dim.entity';
 import { ControlYearDim } from '../entities/control-year-dim.entity';
+import { AnnualUnitDataArch } from '../entities/annual-unit-data-a.entity';
 
 @EntityRepository(ProgramYearDim)
 export class ProgramYearDimRepository extends Repository<ProgramYearDim> {
   async getApplicableFacilityAttributes(
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
+    isArchived: boolean,
+    isUnion: boolean,
   ): Promise<ProgramYearDim[]> {
+    const entityManager = getManager();
+    const yearArray = applicableFacilityAttributesParamsDTO.year;
+
+    if (isUnion) {
+      const curr = await this.queryBuilderHelper(false, yearArray, true);
+      const arch = await this.queryBuilderHelper(true, yearArray, true);
+
+      return entityManager.query(
+        `${curr.getQuery()} WHERE "pyd"."op_year" = ANY($1) UNION ${arch.getQuery()} WHERE "pyd"."op_year" = ANY($1)`,
+        [yearArray],
+      );
+    } else {
+      const query = await this.queryBuilderHelper(isArchived, yearArray, false);
+      return query.getRawMany();
+    }
+  }
+
+  async queryBuilderHelper(
+    isArchived: boolean,
+    yearArray: number[],
+    isUnion: boolean,
+  ): Promise<any> {
     const query = this.createQueryBuilder('pyd')
       .select([
         'pyd.opYear',
@@ -24,7 +49,7 @@ export class ProgramYearDimRepository extends Repository<ProgramYearDim> {
         'cyd.controlCode',
       ])
       .innerJoin(
-        AnnualUnitData,
+        isArchived ? AnnualUnitDataArch : AnnualUnitData,
         'aud',
         'pyd.opYear = aud.opYear AND pyd.unitId = aud.unitId',
       )
@@ -58,12 +83,11 @@ export class ProgramYearDimRepository extends Repository<ProgramYearDim> {
         'cyd.control_code',
       ]);
 
-    query.andWhere(`pyd.opYear IN (:...years)`, {
-      years: applicableFacilityAttributesParamsDTO.year,
-    });
-
-    query.orderBy('pyd.opYear').addOrderBy('pyd.programCode');
-    
-    return query.getRawMany();
+    if (!isUnion) {
+      query.andWhere(`pyd.opYear IN (:...years)`, {
+        years: yearArray,
+      });
+    }
+    return query;
   }
 }

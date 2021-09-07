@@ -1,6 +1,7 @@
 import { BaseEntity, Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 import { AnnualUnitData } from './annual-unit-data.entity';
+import { AnnualUnitDataArch } from './annual-unit-data-a.entity';
 
 @Entity({ name: 'camddmw.program_year_dim' })
 export class ProgramYearDim extends BaseEntity {
@@ -29,4 +30,10 @@ export class ProgramYearDim extends BaseEntity {
     annualUnit => annualUnit.programYearDim,
   )
   annualUnitData: AnnualUnitData;
+
+  @OneToMany(
+    () => AnnualUnitDataArch,
+    annualUnit => annualUnit.programYearDim,
+  )
+  annualUnitDataArch: AnnualUnitDataArch;
 }

@@ -73,10 +73,26 @@ export class FacilitiesService {
   async getApplicableFacilitiesAttributes(
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
   ): Promise<ApplicableFacilityAttributesDTO[]> {
+    const archivedYear = new Date().getFullYear() - 4;
+    const yearData = applicableFacilityAttributesParamsDTO.year.map(
+      el => Number(el) >= archivedYear,
+    );
+    let isArchived = false;
+    let isUnion = false;
+
+    if (yearData.includes(false)) {
+      isArchived = true;
+      if (yearData.includes(true)) {
+        isUnion = true;
+      }
+    }
+
     const query = await this.programYearRepository.getApplicableFacilityAttributes(
-      applicableFacilityAttributesParamsDTO
+      applicableFacilityAttributesParamsDTO,
+      isArchived,
+      isUnion,
     );
 
-    return this.applicableFacilityAttributesMap.many(query)
+    return this.applicableFacilityAttributesMap.many(query);
   }
 }
