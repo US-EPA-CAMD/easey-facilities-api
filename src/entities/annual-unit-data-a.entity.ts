@@ -1,0 +1,18 @@
+import {
+  BaseEntity,
+  Entity,
+  PrimaryColumn,
+} from 'typeorm';
+
+@Entity({ name: 'camddmw_arch.annual_unit_data_a' })
+export class AnnualUnitDataArch extends BaseEntity {
+  @PrimaryColumn({
+    name: 'unit_id',
+  })
+  unitId: number;
+
+  @PrimaryColumn({
+    name: 'op_year',
+  })
+  opYear: number;
+}

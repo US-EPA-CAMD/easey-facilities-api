@@ -6,15 +6,18 @@ import { FacilitiesService } from './facilities.service';
 import { FacilitiesRepository } from './facilities.repository';
 
 import { FacilityMap } from '../maps/facility.map';
+import { ProgramYearDimRepository } from './program-year-dim.repository';
+import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([FacilitiesRepository]),
+    TypeOrmModule.forFeature([FacilitiesRepository, ProgramYearDimRepository]),
   ],
   controllers: [FacilitiesController],
   providers: [
     FacilityMap,
     FacilitiesService,
+    ApplicableFacilityAttributesMap
   ],
 })
 
