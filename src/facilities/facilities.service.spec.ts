@@ -10,6 +10,7 @@ import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
+import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 
 const mockRequest = (url: string) => {
   return {
@@ -48,11 +49,14 @@ describe('-- Facilities Service --', () => {
   let facilityMap = new FacilityMap();
   let programYearDimRepository;
   let applicableFacilityAttributesMap;
+  let facilityAttributesMap;
+  let req: any;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       providers: [
         FacilityMap,
+        FacilityAttributesMap,
         FacilitiesService,
         {
           provide: FacilitiesRepository,
@@ -66,6 +70,10 @@ describe('-- Facilities Service --', () => {
           provide: ApplicableFacilityAttributesMap,
           useFactory: mockMap,
         },
+        {
+          provide: FacilityAttributesMap,
+          useFactory: mockMap,
+        },
       ],
     }).compile();
 
@@ -75,6 +83,7 @@ describe('-- Facilities Service --', () => {
     applicableFacilityAttributesMap = module.get(
       ApplicableFacilityAttributesMap,
     );
+    facilityAttributesMap = module.get(FacilityAttributesMap);
   });
 
   describe('* getFacilities', () => {
