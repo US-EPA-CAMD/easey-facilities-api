@@ -96,7 +96,7 @@ export class ProgramYearDimRepository extends Repository<ProgramYearDim> {
   ): Promise<ProgramYearDim[]> {
     const { page, perPage } = facilityAttributesParamsDTO;
 
-    let query = this.createQueryBuilder('pyd')
+    const query = this.createQueryBuilder('pyd')
       .select([
         'pyd.id',
         'pyd.opYear',
