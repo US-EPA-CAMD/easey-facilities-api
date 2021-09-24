@@ -24,19 +24,27 @@ export class FacilityAttributesMap extends BaseMap<
     return {
       state: entity.unitFact.state,
       facilityName: entity.unitFact.facilityName,
-      facilityId: entity.unitFact.facilityId,
+      facilityId: entity.unitFact.facilityId
+        ? Number(entity.unitFact.facilityId)
+        : entity.unitFact.facilityId,
       unitId: entity.unitFact.unitId,
       associatedStacks: entity.unitFact.associatedStacks,
-      year: entity.opYear,
+      year: Number(entity.opYear),
       programCodeInfo: entity.programCode,
-      epaRegion: entity.unitFact.epaRegion,
+      epaRegion: entity.unitFact.epaRegion
+        ? Number(entity.unitFact.epaRegion)
+        : entity.unitFact.epaRegion,
       nercRegion: entity.unitFact.nercRegion,
       county: entity.unitFact.county,
       countyCode: entity.unitFact.countyCode,
       fipsCode: entity.unitFact.fipsCode,
       sourceCategory: entity.unitFact.sourceCategory,
-      latitude: entity.unitFact.latitude,
-      longitude: entity.unitFact.longitude,
+      latitude: entity.unitFact.latitude
+        ? Number(entity.unitFact.latitude)
+        : entity.unitFact.latitude,
+      longitude: entity.unitFact.longitude
+        ? Number(entity.unitFact.longitude)
+        : entity.unitFact.longitude,
       ownerOperator: ownerOperator.length > 0 ? `${ownerOperator})` : null,
       so2Phase: entity.unitFact.so2Phase,
       noxPhase: entity.unitFact.noxPhase,
@@ -47,9 +55,11 @@ export class FacilityAttributesMap extends BaseMap<
       noxControlInfo: entity.unitFact.noxControlInfo,
       pmControlInfo: entity.unitFact.pmControlInfo,
       hgControlInfo: entity.unitFact.hgControlInfo,
-      commercialOperationDate: entity.unitFact.commercialOperationDate,
+      commercialOperationDate: entity.unitFact.commercialOperationDate.toISOString().split('T')[0],
       operatingStatus: entity.unitFact.operatingStatus,
-      maxHourlyHIRate: entity.unitFact.maxHourlyHIRate,
+      maxHourlyHIRate: entity.unitFact.maxHourlyHIRate
+        ? Number(entity.unitFact.maxHourlyHIRate)
+        : entity.unitFact.maxHourlyHIRate,
       reportingFrequency: entity.reportingFrequency,
     };
   }
