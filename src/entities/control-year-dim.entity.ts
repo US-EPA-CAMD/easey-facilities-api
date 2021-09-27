@@ -5,7 +5,7 @@ export class ControlYearDim extends BaseEntity {
   @PrimaryColumn({
     name: 'unit_id',
   })
-  unitId: number;
+  id: number;
 
   @PrimaryColumn({
     name: 'op_year',

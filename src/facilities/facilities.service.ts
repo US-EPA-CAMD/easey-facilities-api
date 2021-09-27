@@ -12,6 +12,11 @@ import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
+import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
+import { FacilityAttributesMap } from '../maps/facility-attributes.map';
+import { fieldMappings } from '../constants/field-mappings';
+import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 
 @Injectable()
 export class FacilitiesService {
@@ -22,6 +27,9 @@ export class FacilitiesService {
     @InjectRepository(ProgramYearDimRepository)
     private readonly programYearRepository: ProgramYearDimRepository,
     private readonly applicableFacilityAttributesMap: ApplicableFacilityAttributesMap,
+    @InjectRepository(FacilityUnitAttributesRepository)
+    private readonly facilityUnitAttributesRepository: FacilityUnitAttributesRepository,
+    private readonly facilityAttributesMap: FacilityAttributesMap,
   ) {}
 
   async getFacilities(
@@ -66,11 +74,24 @@ export class FacilitiesService {
     return this.facilityMap.one(facility);
   }
 
-  getFacilityAttributes(): string {
-    return 'hello getFacilityAttributes';
+  async getAllFacilityAttributes(
+    facilityAttributesParamsDTO: FacilityAttributesParamsDTO,
+    req: Request,
+  ): Promise<FacilityAttributesDTO[]> {
+    const query = await this.facilityUnitAttributesRepository.getAllFacilityAttributes(
+      facilityAttributesParamsDTO,
+      req,
+    );
+
+    req.res.setHeader(
+      'X-Field-Mappings',
+      JSON.stringify(fieldMappings.facilities.attributes),
+    );
+
+    return this.facilityAttributesMap.many(query);
   }
 
-  async getApplicableFacilityAtrributes(
+  async getApplicableFacilityAttributes(
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
   ): Promise<ApplicableFacilityAttributesDTO[]> {
     const archivedYear = new Date().getFullYear() - 4;

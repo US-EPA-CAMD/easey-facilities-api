@@ -1,11 +1,20 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
+
+import { UnitFact } from './unit-fact.entity';
 
 @Entity({ name: 'camddmw.program_year_dim' })
 export class ProgramYearDim extends BaseEntity {
   @PrimaryColumn({
     name: 'unit_id',
   })
-  unitId: number;
+  id: number;
 
   @PrimaryColumn({
     name: 'op_year',
@@ -20,5 +29,21 @@ export class ProgramYearDim extends BaseEntity {
   @Column({
     name: 'report_freq',
   })
-  reportFreq: string;
+  reportingFrequency: string;
+
+  @ManyToOne(
+    () => UnitFact,
+    uf => uf.programYearDim,
+  )
+  @JoinColumn([
+    {
+      name: 'unit_id',
+      referencedColumnName: 'id',
+    },
+    {
+      name: 'op_year',
+      referencedColumnName: 'opYear',
+    },
+  ])
+  unitFact: UnitFact;
 }

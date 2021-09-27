@@ -1,11 +1,11 @@
 import { Request } from 'express';
-
 import {
   ApiTags,
   ApiOkResponse,
   ApiQuery,
+  getSchemaPath,
+  ApiExtraModels,
 } from '@nestjs/swagger';
-
 import {
   Req,
   Get,
@@ -14,6 +14,7 @@ import {
   Controller,
   ParseIntPipe,
   ValidationPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 
 import { FacilityDTO } from '../dtos/facility.dto';
@@ -21,13 +22,18 @@ import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesService } from './facilities.service';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
+import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import {
+  ApiQueryAttributesMultiSelect,
   BadRequestResponse,
   NotFoundResponse,
 } from '../utils/swagger-decorator.const';
+import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
+import { Json2CsvInterceptor } from '../interceptors/json2csv.interceptor';
 
 @ApiTags('Facilities')
 @Controller()
+@UseInterceptors(Json2CsvInterceptor)
 export class FacilitiesController {
   constructor(private readonly service: FacilitiesService) {}
 
@@ -44,25 +50,36 @@ export class FacilitiesController {
     return this.service.getFacilities(facilityParamsDTO, req);
   }
 
-  @Get('/:id')
+  @Get('/attributes')
   @ApiOkResponse({
-    description: 'Retrieves a single Facilitiy By Id',
+    description: 'Retrieves Facility Unit Attributes',
+    content: {
+      'application/json': {
+        schema: {
+          $ref: getSchemaPath(FacilityAttributesDTO),
+        },
+      },
+      'text/csv': {
+        schema: {
+          type: 'string',
+        },
+      },
+    },
   })
   @BadRequestResponse()
   @NotFoundResponse()
-  getFacilityById(@Param('id', ParseIntPipe) id: number): Promise<FacilityDTO> {
-    return this.service.getFacilityById(id);
+  @ApiQueryAttributesMultiSelect()
+  @ApiExtraModels(FacilityAttributesDTO)
+  getAllFacilityAttributes(
+    @Query()
+    facilityattributesParamsDTO: FacilityAttributesParamsDTO,
+    @Req() req: Request,
+  ): Promise<FacilityAttributesDTO[]> {
+    return this.service.getAllFacilityAttributes(
+      facilityattributesParamsDTO,
+      req,
+    );
   }
-
-  // @Get('/attributes')
-  // @ApiOkResponse({
-  //   description: 'Retrieves Facility Attributes',
-  // })
-  // @BadRequestResponse()
-  // @NotFoundResponse()
-  // getFacilityAtrributes(): string {
-  //   return this.service.getFacilityAttributes();
-  // }
 
   @Get('/attributes/applicable')
   @ApiOkResponse({
@@ -76,12 +93,22 @@ export class FacilitiesController {
     required: true,
     explode: false,
   })
-  getApplicableFacilityAtrributes(
+  getApplicableFacilityAttributes(
     @Query()
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
   ): Promise<ApplicableFacilityAttributesDTO[]> {
-    return this.service.getApplicableFacilityAtrributes(
+    return this.service.getApplicableFacilityAttributes(
       applicableFacilityAttributesParamsDTO,
     );
+  }
+
+  @Get('/:id')
+  @ApiOkResponse({
+    description: 'Retrieves a single Facilitiy By Id',
+  })
+  @BadRequestResponse()
+  @NotFoundResponse()
+  getFacilityById(@Param('id', ParseIntPipe) id: number): Promise<FacilityDTO> {
+    return this.service.getFacilityById(id);
   }
 }

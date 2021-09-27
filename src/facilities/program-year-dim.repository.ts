@@ -51,27 +51,23 @@ export class ProgramYearDimRepository extends Repository<ProgramYearDim> {
       .innerJoin(
         isArchived ? AnnualUnitDataArch : AnnualUnitData,
         'aud',
-        'pyd.opYear = aud.opYear AND pyd.unitId = aud.unitId',
+        'pyd.opYear = aud.opYear AND pyd.id = aud.id',
       )
-      .innerJoin(
-        UnitFact,
-        'uf',
-        'aud.opYear = uf.opYear AND aud.unitId = uf.unitId',
-      )
+      .innerJoin(UnitFact, 'uf', 'aud.opYear = uf.opYear AND aud.id = uf.id')
       .innerJoin(
         UnitTypeYearDim,
         'utyd',
-        'uf.opYear = utyd.opYear AND uf.unitId = utyd.unitId',
+        'uf.opYear = utyd.opYear AND uf.id = utyd.id',
       )
       .innerJoin(
         FuelYearDim,
         'fyd',
-        'utyd.opYear = fyd.opYear AND utyd.unitId = fyd.unitId',
+        'utyd.opYear = fyd.opYear AND utyd.id = fyd.id',
       )
       .innerJoin(
         ControlYearDim,
         'cyd',
-        'fyd.opYear = cyd.opYear AND fyd.unitId = cyd.unitId',
+        'fyd.opYear = cyd.opYear AND fyd.id = cyd.id',
       )
       .distinctOn([
         'pyd.op_year',
