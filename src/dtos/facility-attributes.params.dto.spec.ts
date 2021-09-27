@@ -43,7 +43,6 @@ describe('-- Facility Attributes Params DTO --', () => {
       @IsOrisCode()
       orisCode: string;
 
-
       @IsControlTechnology()
       controlTech: string;
 
