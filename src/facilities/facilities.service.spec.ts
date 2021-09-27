@@ -11,6 +11,15 @@ import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-att
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
+import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
+import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
+import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import { State } from '../enums/state.enum';
+import { UnitType } from '../enums/unit-type.enum';
+import { UnitFuelType } from '../enums/unit-fuel-type.enum';
+import { ControlTechnology } from '../enums/control-technology.enum';
+import { Program } from '../enums/program.enum';
+import { SourceCategory } from '../enums/source-category.enum';
 
 const mockRequest = (url: string) => {
   return {
@@ -39,6 +48,10 @@ const mockPyd = () => ({
   getApplicableFacilityAttributes: jest.fn(),
 });
 
+const mockFua = () => ({
+  getAllFacilityAttributes: jest.fn(),
+});
+
 const mockMap = () => ({
   many: jest.fn(),
 });
@@ -49,6 +62,7 @@ describe('-- Facilities Service --', () => {
   let facilityMap = new FacilityMap();
   let programYearDimRepository;
   let applicableFacilityAttributesMap;
+  let facilityUnitAttributesRepository;
   let facilityAttributesMap;
   let req: any;
 
@@ -74,6 +88,10 @@ describe('-- Facilities Service --', () => {
           provide: FacilityAttributesMap,
           useFactory: mockMap,
         },
+        {
+          provide: FacilityUnitAttributesRepository,
+          useFactory: mockFua,
+        },
       ],
     }).compile();
 
@@ -84,6 +102,9 @@ describe('-- Facilities Service --', () => {
       ApplicableFacilityAttributesMap,
     );
     facilityAttributesMap = module.get(FacilityAttributesMap);
+    facilityUnitAttributesRepository = module.get(
+      FacilityUnitAttributesRepository,
+    );
   });
 
   describe('* getFacilities', () => {
@@ -295,7 +316,39 @@ describe('-- Facilities Service --', () => {
       applicableFacilityAttributesMap.many.mockResolvedValue(expectedResult);
 
       expect(
-        await facilitiesService.getApplicableFacilityAtrributes(params),
+        await facilitiesService.getApplicableFacilityAttributes(params),
+      ).toBe(expectedResult);
+    });
+  });
+
+  describe('* getAllFacilityAtrributes', () => {
+    it('should return a list of All Facilities Attributes', async () => {
+      const expectedResult: FacilityAttributesDTO[] = [];
+      const params: FacilityAttributesParamsDTO = {
+        year: [2016, 2017],
+        page: undefined,
+        perPage: undefined,
+        state: [State.TX],
+        orisCode: [3],
+        unitType: [UnitType.BUBBLING_FLUIDIZED, UnitType.ARCH_FIRE_BOILER],
+        unitFuelType: [UnitFuelType.COAL, UnitFuelType.DIESEL_OIL],
+        controlTechnologies: [
+          ControlTechnology.ADDITIVES_TO_ENHANCE,
+          ControlTechnology.OTHER,
+        ],
+        program: [Program.ARP, Program.RGGI],
+        sourceCategory: [SourceCategory.AUTOMOTIVE_STAMPINGS],
+      };
+      const req: any = mockRequest(
+        `/facilities/attributes?page=${params.page}&perPage=${params.perPage}`,
+      );
+      facilityUnitAttributesRepository.getAllFacilityAttributes.mockResolvedValue(
+        'entities',
+      );
+      facilityAttributesMap.many.mockResolvedValue(expectedResult);
+
+      expect(
+        await facilitiesService.getAllFacilityAttributes(params, req),
       ).toBe(expectedResult);
     });
   });

@@ -16,6 +16,7 @@ import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.d
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { fieldMappings } from '../constants/field-mappings';
+import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 
 @Injectable()
 export class FacilitiesService {
@@ -26,6 +27,8 @@ export class FacilitiesService {
     @InjectRepository(ProgramYearDimRepository)
     private readonly programYearRepository: ProgramYearDimRepository,
     private readonly applicableFacilityAttributesMap: ApplicableFacilityAttributesMap,
+    @InjectRepository(FacilityUnitAttributesRepository)
+    private readonly facilityUnitAttributesRepository: FacilityUnitAttributesRepository,
     private readonly facilityAttributesMap: FacilityAttributesMap,
   ) {}
 
@@ -75,7 +78,7 @@ export class FacilitiesService {
     facilityAttributesParamsDTO: FacilityAttributesParamsDTO,
     req: Request,
   ): Promise<FacilityAttributesDTO[]> {
-    const query = await this.programYearRepository.getAllFacilityAttributes(
+    const query = await this.facilityUnitAttributesRepository.getAllFacilityAttributes(
       facilityAttributesParamsDTO,
       req,
     );
@@ -88,7 +91,7 @@ export class FacilitiesService {
     return this.facilityAttributesMap.many(query);
   }
 
-  async getApplicableFacilityAtrributes(
+  async getApplicableFacilityAttributes(
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
   ): Promise<ApplicableFacilityAttributesDTO[]> {
     const archivedYear = new Date().getFullYear() - 4;

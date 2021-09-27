@@ -27,6 +27,6 @@ export class FacilityAttributesDTO {
   commercialOperationDate: string;
   operatingStatus: string;
   maxHourlyHIRate?: number;
-  // generatorId: string;
+  generatorId: string;
   reportingFrequency: string;
 }

@@ -9,10 +9,22 @@ import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-att
 import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
+import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
+import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
+
+const mockRequest = (url: string) => {
+  return {
+    url,
+    res: {
+      setHeader: jest.fn(),
+    },
+  };
+};
 
 describe('-- Facilities Controller --', () => {
   let facilitiesController: FacilitiesController;
   let facilitiesService: FacilitiesService;
+  let req: any;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -24,11 +36,14 @@ describe('-- Facilities Controller --', () => {
         FacilitiesService,
         FacilitiesRepository,
         ProgramYearDimRepository,
+        FacilityUnitAttributesRepository,
       ],
     }).compile();
 
     facilitiesController = module.get(FacilitiesController);
     facilitiesService = module.get(FacilitiesService);
+    req = mockRequest('');
+    req.res.setHeader.mockReturnValue();
   });
 
   afterEach(() => {
@@ -63,10 +78,22 @@ describe('-- Facilities Controller --', () => {
     it('should return a list of Applicable Facilities Attributes', async () => {
       const expectedResult: ApplicableFacilityAttributesDTO[] = [];
       jest
-        .spyOn(facilitiesService, 'getApplicableFacilityAtrributes')
+        .spyOn(facilitiesService, 'getApplicableFacilityAttributes')
         .mockResolvedValue(expectedResult);
       expect(
-        await facilitiesController.getApplicableFacilityAtrributes(null),
+        await facilitiesController.getApplicableFacilityAttributes(null),
+      ).toBe(expectedResult);
+    });
+  });
+
+  describe('* getAllFacilityAttributes', () => {
+    it('should return a list of All Facilities Attributes', async () => {
+      const expectedResult: FacilityAttributesDTO[] = [];
+      jest
+        .spyOn(facilitiesService, 'getAllFacilityAttributes')
+        .mockResolvedValue(expectedResult);
+      expect(
+        await facilitiesController.getAllFacilityAttributes(null, req),
       ).toBe(expectedResult);
     });
   });

@@ -29,8 +29,8 @@ const attributes = [
   { ...facilityAttributesFields.commercialOperationDate },
   { ...facilityAttributesFields.operatingStatus },
   { ...facilityAttributesFields.maxHourlyHIRate },
-  // {...facilityAttributesFields.generatorId},
   { ...facilityAttributesFields.reportingFrequency },
+  { ...facilityAttributesFields.generatorId },
 ];
 
 export const fieldMappings = {

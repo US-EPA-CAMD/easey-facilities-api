@@ -9,20 +9,18 @@ import { Program } from '../enums/program.enum';
 import { ResponseHeaders } from '../utils/response.headers';
 import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { SourceCategory } from '../enums/source-category.enum';
-import { ProgramYearDimRepository } from './program-year-dim.repository';
-import { ProgramYearDim } from '../entities/program-year-dim.entity';
+import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
+import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
 
 const mockQueryBuilder = () => ({
   andWhere: jest.fn(),
   getMany: jest.fn(),
   select: jest.fn(),
-  innerJoin: jest.fn(),
   orderBy: jest.fn(),
   addOrderBy: jest.fn(),
   getCount: jest.fn(),
   skip: jest.fn(),
   take: jest.fn(),
-  where: jest.fn(),
 });
 
 let filters: FacilityAttributesParamsDTO = {
@@ -31,7 +29,7 @@ let filters: FacilityAttributesParamsDTO = {
   year: [2019],
   state: [State.TX],
   orisCode: [3],
-  unitType: [UnitType.BUBBLING_FLUIDIZED],
+  unitType: [UnitType.BUBBLING_FLUIDIZED, UnitType.ARCH_FIRE_BOILER],
   unitFuelType: [UnitFuelType.COAL, UnitFuelType.DIESEL_OIL],
   controlTechnologies: [
     ControlTechnology.ADDITIVES_TO_ENHANCE,
@@ -41,35 +39,33 @@ let filters: FacilityAttributesParamsDTO = {
   sourceCategory: [SourceCategory.AUTOMOTIVE_STAMPINGS],
 };
 
-describe('ProgramYearDimRepository', () => {
-  let programYearDimRepository;
+describe('FacilityUnitAttributesRepository', () => {
+  let facilityUnitAttributesRepository;
   let queryBuilder;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
-        ProgramYearDimRepository,
+        FacilityUnitAttributesRepository,
         { provide: SelectQueryBuilder, useFactory: mockQueryBuilder },
       ],
     }).compile();
 
-    programYearDimRepository = module.get<ProgramYearDimRepository>(
-      ProgramYearDimRepository,
-    );
-    queryBuilder = module.get<SelectQueryBuilder<ProgramYearDim>>(
+    facilityUnitAttributesRepository = module.get<
+      FacilityUnitAttributesRepository
+    >(FacilityUnitAttributesRepository);
+    queryBuilder = module.get<SelectQueryBuilder<FacilityUnitAttributes>>(
       SelectQueryBuilder,
     );
 
-    programYearDimRepository.createQueryBuilder = jest
+    facilityUnitAttributesRepository.createQueryBuilder = jest
       .fn()
       .mockReturnValue(queryBuilder);
     queryBuilder.select.mockReturnValue(queryBuilder);
-    queryBuilder.innerJoin.mockReturnValue(queryBuilder);
     queryBuilder.andWhere.mockReturnValue(queryBuilder);
     queryBuilder.orderBy.mockReturnValue(queryBuilder);
     queryBuilder.addOrderBy.mockReturnValue(queryBuilder);
     queryBuilder.skip.mockReturnValue(queryBuilder);
-    queryBuilder.where.mockReturnValue(queryBuilder);
     queryBuilder.take.mockReturnValue('mockPagination');
     queryBuilder.getCount.mockReturnValue('mockCount');
     queryBuilder.getMany.mockReturnValue('mockFacilityAttributes');
@@ -79,11 +75,13 @@ describe('ProgramYearDimRepository', () => {
     it('calls createQueryBuilder and gets all facility attributes from the repository', async () => {
       // branch coverage
       const emptyFilters: FacilityAttributesParamsDTO = new FacilityAttributesParamsDTO();
-      let result = await programYearDimRepository.getAllFacilityAttributes(
+      let result = await facilityUnitAttributesRepository.getAllFacilityAttributes(
         emptyFilters,
       );
 
-      result = await programYearDimRepository.getAllFacilityAttributes(filters);
+      result = await facilityUnitAttributesRepository.getAllFacilityAttributes(
+        filters,
+      );
 
       expect(queryBuilder.getMany).toHaveBeenCalled();
       expect(result).toEqual('mockFacilityAttributes');
@@ -98,7 +96,7 @@ describe('ProgramYearDimRepository', () => {
       paginatedFilters.page = 1;
       paginatedFilters.perPage = 10;
 
-      const paginatedResult = await programYearDimRepository.getAllFacilityAttributes(
+      const paginatedResult = await facilityUnitAttributesRepository.getAllFacilityAttributes(
         paginatedFilters,
       );
 

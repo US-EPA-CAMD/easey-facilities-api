@@ -52,7 +52,7 @@ export class FacilitiesController {
 
   @Get('/attributes')
   @ApiOkResponse({
-    description: 'Retrieves Facility Attributes',
+    description: 'Retrieves Facility Unit Attributes',
     content: {
       'application/json': {
         schema: {
@@ -70,7 +70,7 @@ export class FacilitiesController {
   @NotFoundResponse()
   @ApiQueryAttributesMultiSelect()
   @ApiExtraModels(FacilityAttributesDTO)
-  getFacilityAtrributes(
+  getAllFacilityAttributes(
     @Query()
     facilityattributesParamsDTO: FacilityAttributesParamsDTO,
     @Req() req: Request,
@@ -93,11 +93,11 @@ export class FacilitiesController {
     required: true,
     explode: false,
   })
-  getApplicableFacilityAtrributes(
+  getApplicableFacilityAttributes(
     @Query()
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
   ): Promise<ApplicableFacilityAttributesDTO[]> {
-    return this.service.getApplicableFacilityAtrributes(
+    return this.service.getApplicableFacilityAttributes(
       applicableFacilityAttributesParamsDTO,
     );
   }
