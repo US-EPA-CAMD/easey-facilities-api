@@ -53,8 +53,8 @@ export class FacilityAttributesMap extends BaseMap<
       maxHourlyHIRate: entity.maxHourlyHIRate
         ? Number(entity.maxHourlyHIRate)
         : entity.maxHourlyHIRate,
-      reportingFrequency: entity.reportingFrequency,
       generatorId: entity.generatorId,
+      reportingFrequency: entity.reportingFrequency,
     };
   }
 }
