@@ -1,5 +1,4 @@
 import { Repository, EntityRepository, getManager } from 'typeorm';
-import { Request } from 'express';
 
 import { ProgramYearDim } from '../entities/program-year-dim.entity';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
