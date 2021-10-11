@@ -5,7 +5,7 @@ import { BaseMap } from './base.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 
 @Injectable()
-export class ApplicableFacilityAttributesMap extends BaseMap<any, any> {
+export class ApplicableFacilityAttributesMap extends BaseMap<any, ApplicableFacilityAttributesDTO> {
   public async one(entity: any): Promise<any> {
     return {
       [propertyMetadata.year.fieldLabels.value]: Number(entity.pyd_op_year),
