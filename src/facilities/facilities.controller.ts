@@ -43,6 +43,7 @@ export class FacilitiesController {
   })
   @BadRequestResponse()
   @NotFoundResponse()
+  @ApiExtraModels(FacilityDTO)
   getFacilities(
     @Query(ValidationPipe) facilityParamsDTO: FacilityParamsDTO,
     @Req() req: Request,
@@ -93,6 +94,7 @@ export class FacilitiesController {
     required: true,
     explode: false,
   })
+  @ApiExtraModels(ApplicableFacilityAttributesDTO)
   getApplicableFacilityAttributes(
     @Query()
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
@@ -108,6 +110,7 @@ export class FacilitiesController {
   })
   @BadRequestResponse()
   @NotFoundResponse()
+  @ApiExtraModels(FacilityDTO)
   getFacilityById(@Param('id', ParseIntPipe) id: number): Promise<FacilityDTO> {
     return this.service.getFacilityById(id);
   }

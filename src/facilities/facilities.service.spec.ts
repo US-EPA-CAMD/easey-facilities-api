@@ -32,14 +32,14 @@ const mockRequest = (url: string) => {
 
 const mockPlant = (
   id: number,
-  name: string,
-  orisCode: number,
+  facilityName: string,
+  facilityId: number,
   state: string,
 ) => {
   const plant = new Plant();
   plant.id = id;
-  plant.name = name;
-  plant.orisCode = orisCode;
+  plant.facilityName = facilityName;
+  plant.facilityId = facilityId;
   plant.state = state;
   return plant;
 };
@@ -59,7 +59,7 @@ const mockMap = () => ({
 describe('-- Facilities Service --', () => {
   let facilitiesRepositoryMock: MockType<Repository<Plant>>;
   let facilitiesService: FacilitiesService;
-  let facilityMap = new FacilityMap();
+  const facilityMap = new FacilityMap();
   let programYearDimRepository;
   let applicableFacilityAttributesMap;
   let facilityUnitAttributesRepository;
@@ -156,9 +156,8 @@ describe('-- Facilities Service --', () => {
       const paramsDto: FacilityParamsDTO = {
         page: page,
         perPage: perPage,
-        orderBy: undefined,
         state: undefined,
-        region: undefined,
+        epaRegion: undefined,
       };
       const plants = plantList.slice(start, end);
       const facilities = await facilityMap.many(plants);
@@ -183,9 +182,8 @@ describe('-- Facilities Service --', () => {
       const paramsDto: FacilityParamsDTO = {
         page: page,
         perPage: perPage,
-        orderBy: undefined,
         state: undefined,
-        region: undefined,
+        epaRegion: undefined,
       };
       const plants = plantList.slice(start, end);
       const facilities = await facilityMap.many(plants);
@@ -210,9 +208,8 @@ describe('-- Facilities Service --', () => {
       const paramsDto: FacilityParamsDTO = {
         page: page,
         perPage: perPage,
-        orderBy: undefined,
         state: undefined,
-        region: undefined,
+        epaRegion: undefined,
       };
       const plants = plantList.slice(start, end);
       const facilities = await facilityMap.many(plants);
@@ -237,9 +234,8 @@ describe('-- Facilities Service --', () => {
       const paramsDto: FacilityParamsDTO = {
         page: page,
         perPage: perPage,
-        orderBy: undefined,
         state: undefined,
-        region: undefined,
+        epaRegion: undefined,
       };
       const plants = plantList.slice(start, end);
       const facilities = await facilityMap.many(plants);
@@ -256,9 +252,8 @@ describe('-- Facilities Service --', () => {
       const paramsDto: FacilityParamsDTO = {
         page: undefined,
         perPage: undefined,
-        orderBy: undefined,
         state: 'TX',
-        region: undefined,
+        epaRegion: undefined,
       };
       const plants = plantList.filter(p => (p.state = paramsDto.state));
       totalCount = plants.length;
@@ -329,14 +324,14 @@ describe('-- Facilities Service --', () => {
         page: undefined,
         perPage: undefined,
         state: [State.TX],
-        orisCode: [3],
+        facilityId: [3],
         unitType: [UnitType.BUBBLING_FLUIDIZED, UnitType.ARCH_FIRE_BOILER],
         unitFuelType: [UnitFuelType.COAL, UnitFuelType.DIESEL_OIL],
         controlTechnologies: [
           ControlTechnology.ADDITIVES_TO_ENHANCE,
           ControlTechnology.OTHER,
         ],
-        program: [Program.ARP, Program.RGGI],
+        programCodeInfo: [Program.ARP, Program.RGGI],
         sourceCategory: [SourceCategory.AUTOMOTIVE_STAMPINGS],
       };
       const req: any = mockRequest(

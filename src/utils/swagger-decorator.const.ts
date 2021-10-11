@@ -11,16 +11,15 @@ export const NotFoundResponse = () =>
     description: 'Resource Not Found',
   });
 
-  export function ApiQueryAttributesMultiSelect() {
-    return applyDecorators(
-      ApiQuery({style: 'pipeDelimited', name: 'year', required: true, explode: false,}),
-      ApiQuery({style: 'pipeDelimited', name: 'state', required: false, explode: false,}),
-      ApiQuery({style: 'pipeDelimited', name: 'orisCode', required: false, explode: false,}),
-      ApiQuery({style: 'pipeDelimited', name: 'unitType', required: false, explode: false,}),
-      ApiQuery({style: 'pipeDelimited', name: 'controlTechnologies', required: false, explode: false,}),
-      ApiQuery({style: 'pipeDelimited', name: 'unitFuelType', required: false, explode: false,}),
-      ApiQuery({style: 'pipeDelimited', name: 'program', required: false, explode: false,}),
-      ApiQuery({style: 'pipeDelimited', name: 'sourceCategory', required: false, explode: false,}),
-
-    );
-  }
+export function ApiQueryAttributesMultiSelect() {
+  return applyDecorators(
+    ApiQuery({style: 'pipeDelimited', name: 'year', required: true, explode: false,}),
+    ApiQuery({style: 'pipeDelimited', name: 'state', required: false, explode: false,}),
+    ApiQuery({style: 'pipeDelimited', name: 'facilityId', required: false, explode: false,}),
+    ApiQuery({style: 'pipeDelimited', name: 'unitType', required: false, explode: false,}),
+    ApiQuery({style: 'pipeDelimited', name: 'controlTechnologies', required: false, explode: false,}),
+    ApiQuery({style: 'pipeDelimited', name: 'unitFuelType', required: false, explode: false,}),
+    ApiQuery({style: 'pipeDelimited', name: 'programCodeInfo', required: false, explode: false,}),
+    ApiQuery({style: 'pipeDelimited', name: 'sourceCategory', required: false, explode: false,}),
+  );
+}

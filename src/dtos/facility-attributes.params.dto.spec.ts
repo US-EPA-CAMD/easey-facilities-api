@@ -17,22 +17,22 @@ describe('-- Facility Attributes Params DTO --', () => {
     class MyClass {
       constructor(
         year: string,
-        orisCode: string,
+        facilityId: string,
         controlTech: string,
         unitType: string,
         unitFuel: string,
         sourceCategory: string,
         state: string,
-        program: string,
+        programCodeInfo: string,
       ) {
         this.year = year;
-        this.orisCode = orisCode;
+        this.facilityId = facilityId;
         this.controlTech = controlTech;
         this.unitType = unitType;
         this.unitFuel = unitFuel;
         this.sourceCategory = sourceCategory;
         this.state = state;
-        this.program = program;
+        this.programCodeInfo = programCodeInfo;
       }
 
       @IsInDateRange([new Date(1995, 0), new Date()], true, true, true)
@@ -41,7 +41,7 @@ describe('-- Facility Attributes Params DTO --', () => {
       year: string;
 
       @IsOrisCode()
-      orisCode: string;
+      facilityId: string;
 
       @IsControlTechnology()
       controlTech: string;
@@ -59,7 +59,7 @@ describe('-- Facility Attributes Params DTO --', () => {
       state: string;
 
       @IsEmissionsProgram()
-      program: string;
+      programCodeInfo: string;
     }
 
     /**
@@ -82,10 +82,9 @@ describe('-- Facility Attributes Params DTO --', () => {
         this.sandbox.restore();
       }
     }
-    let mock: Mock;
     const fakeManager = createStubInstance(typeorm.EntityManager);
     fakeManager.findOne.resolves(['value']);
-    mock = new Mock('getManager', fakeManager);
+    const mock: Mock = new Mock('getManager', fakeManager);
 
     it('should pass all validation pipes', async () => {
       const results = await validate(
@@ -97,7 +96,7 @@ describe('-- Facility Attributes Params DTO --', () => {
           'unitFuel',
           'sourceCategory',
           'state',
-          'program',
+          'programCodeInfo',
         ),
       );
       expect(results.length).toBe(0);

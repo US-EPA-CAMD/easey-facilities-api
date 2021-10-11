@@ -23,19 +23,19 @@ const mockQueryBuilder = () => ({
   take: jest.fn(),
 });
 
-let filters: FacilityAttributesParamsDTO = {
+const filters: FacilityAttributesParamsDTO = {
   page: undefined,
   perPage: undefined,
   year: [2019],
   state: [State.TX],
-  orisCode: [3],
+  facilityId: [3],
   unitType: [UnitType.BUBBLING_FLUIDIZED, UnitType.ARCH_FIRE_BOILER],
   unitFuelType: [UnitFuelType.COAL, UnitFuelType.DIESEL_OIL],
   controlTechnologies: [
     ControlTechnology.ADDITIVES_TO_ENHANCE,
     ControlTechnology.OTHER,
   ],
-  program: [Program.ARP, Program.RGGI],
+  programCodeInfo: [Program.ARP, Program.RGGI],
   sourceCategory: [SourceCategory.AUTOMOTIVE_STAMPINGS],
 };
 
@@ -92,7 +92,7 @@ describe('FacilityUnitAttributesRepository', () => {
         .fn()
         .mockReturnValue('paginated results');
 
-      let paginatedFilters = filters;
+      const paginatedFilters = filters;
       paginatedFilters.page = 1;
       paginatedFilters.perPage = 10;
 
