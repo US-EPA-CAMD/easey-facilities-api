@@ -19,7 +19,7 @@ export class ProgramYearDim extends BaseEntity {
   @PrimaryColumn({
     name: 'op_year',
   })
-  opYear: number;
+  year: number;
 
   @PrimaryColumn({
     name: 'prg_code',
@@ -42,7 +42,7 @@ export class ProgramYearDim extends BaseEntity {
     },
     {
       name: 'op_year',
-      referencedColumnName: 'opYear',
+      referencedColumnName: 'year',
     },
   ])
   unitFact: UnitFact;

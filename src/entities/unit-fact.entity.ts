@@ -21,7 +21,7 @@ export class UnitFact extends BaseEntity {
   @PrimaryColumn({
     name: 'op_year',
   })
-  opYear: number;
+  year: number;
 
   @Column({
     name: 'orispl_code',
@@ -156,7 +156,7 @@ export class UnitFact extends BaseEntity {
     },
     {
       name: 'op_year',
-      referencedColumnName: 'opYear',
+      referencedColumnName: 'year',
     },
   ])
   ownerDisplayFact: OwnerDisplayFact;

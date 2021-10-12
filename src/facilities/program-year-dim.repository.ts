@@ -40,7 +40,7 @@ export class ProgramYearDimRepository extends Repository<ProgramYearDim> {
   ): Promise<any> {
     const query = this.createQueryBuilder('pyd')
       .select([
-        'pyd.opYear',
+        'pyd.year',
         'pyd.programCode',
         'uf.facilityId',
         'uf.state',
@@ -51,23 +51,23 @@ export class ProgramYearDimRepository extends Repository<ProgramYearDim> {
       .innerJoin(
         isArchived ? AnnualUnitDataArch : AnnualUnitData,
         'aud',
-        'pyd.opYear = aud.opYear AND pyd.id = aud.id',
+        'pyd.year = aud.year AND pyd.id = aud.id',
       )
-      .innerJoin(UnitFact, 'uf', 'aud.opYear = uf.opYear AND aud.id = uf.id')
+      .innerJoin(UnitFact, 'uf', 'aud.year = uf.year AND aud.id = uf.id')
       .innerJoin(
         UnitTypeYearDim,
         'utyd',
-        'uf.opYear = utyd.opYear AND uf.id = utyd.id',
+        'uf.year = utyd.year AND uf.id = utyd.id',
       )
       .innerJoin(
         FuelYearDim,
         'fyd',
-        'utyd.opYear = fyd.opYear AND utyd.id = fyd.id',
+        'utyd.year = fyd.year AND utyd.id = fyd.id',
       )
       .innerJoin(
         ControlYearDim,
         'cyd',
-        'fyd.opYear = cyd.opYear AND fyd.id = cyd.id',
+        'fyd.year = cyd.year AND fyd.id = cyd.id',
       )
       .distinctOn([
         'pyd.op_year',
@@ -80,7 +80,7 @@ export class ProgramYearDimRepository extends Repository<ProgramYearDim> {
       ]);
 
     if (!isUnion) {
-      query.andWhere(`pyd.opYear IN (:...years)`, {
+      query.andWhere(`pyd.year IN (:...years)`, {
         years: yearArray,
       });
     }

@@ -39,16 +39,16 @@ export class FacilitiesService {
     const { state, page, perPage } = facilityParamsDTO;
 
     const findOpts: FindManyOptions = {
-      select: ['id', 'orisCode', 'name', 'state'],
+      select: ['id', 'facilityId', 'facilityName', 'state'],
       order: {
         id: 'ASC',
       },
     };
 
     if (state) {
-      findOpts.where = { orisCode: Not(IsNull()), state: state };
+      findOpts.where = { facilityId: Not(IsNull()), state: state };
     } else {
-      findOpts.where = { orisCode: Not(IsNull()) };
+      findOpts.where = { facilityId: Not(IsNull()) };
     }
 
     if (page && perPage) {

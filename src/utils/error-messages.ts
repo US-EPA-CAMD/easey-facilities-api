@@ -61,7 +61,7 @@ export class ErrorMessages {
     const mdm = `${ApiConfigService.getMdm()}`;
 
     switch (parameter) {
-      case 'orisCode':
+      case 'facilityId':
         return `${ApiConfigService.getFacApi()}facilities`;
       case 'unitType':
         return `${mdm}unit-types`;

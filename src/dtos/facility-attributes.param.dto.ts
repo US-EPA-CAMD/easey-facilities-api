@@ -1,6 +1,7 @@
 import { IsDefined, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { propertyMetadata } from '@us-epa-camd/easey-constants';
 
 import { ErrorMessages } from '../utils/error-messages';
 import { State } from '../enums/state.enum';
@@ -20,12 +21,22 @@ import { IsInDateRange } from '../pipes/is-in-date-range.pipe';
 import { IsSourceCategory } from '../pipes/is-source-category.pipe';
 
 export class FacilityAttributesParamsDTO {
+  @ApiProperty({
+    description: propertyMetadata.page.description,
+  })
   @IsOptional()
   page?: number;
 
+  @ApiProperty({
+    description: propertyMetadata.perPage.description,
+  })
   @IsOptional()
   perPage?: number;
 
+  @ApiProperty({
+    isArray: true,
+    description: propertyMetadata.year.description,
+  })
   @IsDefined({ message: ErrorMessages.RequiredProperty() })
   @IsYearFormat({
     each: true,
@@ -42,14 +53,22 @@ export class FacilityAttributesParamsDTO {
   @Transform((value: string) => value.split('|').map(item => item.trim()))
   year: number[];
 
+  @ApiProperty({
+    isArray: true,
+    description: propertyMetadata.facilityId.description,
+  })
   @IsOptional()
   @IsOrisCode({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'orisCode'),
+    message: ErrorMessages.UnitCharacteristics(true, 'facilityId'),
   })
   @Transform((value: string) => value.split('|').map(item => item.trim()))
-  orisCode?: number[];
+  facilityId?: number[];
 
+  @ApiProperty({
+    enum: State,
+    description: propertyMetadata.state.description,
+  })
   @IsOptional()
   @IsStateCode({
     each: true,
@@ -58,6 +77,10 @@ export class FacilityAttributesParamsDTO {
   @Transform((value: string) => value.split('|').map(item => item.trim()))
   state?: State[];
 
+  @ApiProperty({
+    enum: UnitType,
+    description: propertyMetadata.unitType.description,
+  })
   @IsOptional()
   @IsUnitType({
     each: true,
@@ -66,6 +89,10 @@ export class FacilityAttributesParamsDTO {
   @Transform((value: string) => value.split('|').map(item => item.trim()))
   unitType?: UnitType[];
 
+  @ApiProperty({
+    enum: UnitFuelType,
+    description: propertyMetadata.unitFuelType.description,
+  })
   @IsOptional()
   @IsUnitFuelType({
     each: true,
@@ -74,6 +101,10 @@ export class FacilityAttributesParamsDTO {
   @Transform((value: string) => value.split('|').map(item => item.trim()))
   unitFuelType?: UnitFuelType[];
 
+  @ApiProperty({
+    enum: ControlTechnology,
+    description: propertyMetadata.controlTechnologies.description,
+  })
   @IsOptional()
   @IsControlTechnology({
     each: true,
@@ -82,23 +113,31 @@ export class FacilityAttributesParamsDTO {
   @Transform((value: string) => value.split('|').map(item => item.trim()))
   controlTechnologies?: ControlTechnology[];
 
+  @ApiProperty({
+    enum: SourceCategory,
+    description: propertyMetadata.sourceCategory.description,
+  })
   @IsOptional()
   @IsSourceCategory({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'sourceCategories')
+    message: ErrorMessages.UnitCharacteristics(true, 'sourceCategories'),
   })
   @Transform((value: string) => value.split('|').map(item => item.trim()))
   sourceCategory?: SourceCategory[];
 
+  @ApiProperty({
+    enum: Program,
+    description: propertyMetadata.programCodeInfo.description,
+  })
   @IsOptional()
   @IsEmissionsProgram({
     each: true,
     message:
-      ErrorMessages.UnitCharacteristics(true, 'program') +
+      ErrorMessages.UnitCharacteristics(true, 'programCodeInfo') +
       '?emissionsUIFilter=true',
   })
   @Transform((value: string) => value.split('|').map(item => item.trim()))
-  program?: Program[];
+  programCodeInfo?: Program[];
 
   @ApiProperty({
     description:

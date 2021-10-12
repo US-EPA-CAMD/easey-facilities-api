@@ -57,9 +57,9 @@ export class FacilityUnitAttributesRepository extends Repository<
       });
     }
 
-    if (facilityAttributesParamsDTO.orisCode) {
-      query.andWhere(`fua.facilityId IN (:...orisCodes)`, {
-        orisCodes: facilityAttributesParamsDTO.orisCode,
+    if (facilityAttributesParamsDTO.facilityId) {
+      query.andWhere(`fua.facilityId IN (:...facilityIds)`, {
+        facilityIds: facilityAttributesParamsDTO.facilityId,
       });
     }
 
@@ -145,12 +145,16 @@ export class FacilityUnitAttributesRepository extends Repository<
       query.andWhere(string);
     }
 
-    if (facilityAttributesParamsDTO.program) {
+    if (facilityAttributesParamsDTO.programCodeInfo) {
       let string = '(';
 
-      for (let i = 0; i < facilityAttributesParamsDTO.program.length; i++) {
+      for (
+        let i = 0;
+        i < facilityAttributesParamsDTO.programCodeInfo.length;
+        i++
+      ) {
         const regex = Regex.commaDelimited(
-          facilityAttributesParamsDTO.program[i].toUpperCase(),
+          facilityAttributesParamsDTO.programCodeInfo[i].toUpperCase(),
         );
 
         if (i === 0) {

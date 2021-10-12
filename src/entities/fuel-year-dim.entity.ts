@@ -10,7 +10,7 @@ export class FuelYearDim extends BaseEntity {
   @PrimaryColumn({
     name: 'op_year',
   })
-  opYear: number;
+  year: number;
 
   @PrimaryColumn({
     name: 'fuel_yr_dim',

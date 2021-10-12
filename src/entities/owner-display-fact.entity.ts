@@ -11,7 +11,7 @@ export class OwnerDisplayFact extends BaseEntity {
   @PrimaryColumn({
     name: 'op_year',
   })
-  opYear: number;
+  year: number;
 
   @Column({
     name: 'own_display',

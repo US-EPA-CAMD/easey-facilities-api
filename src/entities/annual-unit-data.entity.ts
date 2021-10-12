@@ -10,5 +10,5 @@ export class AnnualUnitData extends BaseEntity {
   @PrimaryColumn({
     name: 'op_year',
   })
-  opYear: number;
+  year: number;
 }

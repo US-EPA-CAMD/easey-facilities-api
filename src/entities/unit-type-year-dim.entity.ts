@@ -10,7 +10,7 @@ export class UnitTypeYearDim extends BaseEntity {
   @PrimaryColumn({
     name: 'op_year',
   })
-  opYear: number;
+  year: number;
 
   @PrimaryColumn({
     name: 'unit_type',

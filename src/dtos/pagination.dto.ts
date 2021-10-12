@@ -1,12 +1,17 @@
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
+import { propertyMetadata } from '@us-epa-camd/easey-constants';
 
 export class PaginationDTO {
   @IsOptional()
-  page?: number;
+  @ApiPropertyOptional({
+    description: propertyMetadata.page.description,
+  })
+  page: number;
 
   @IsOptional()
-  perPage?: number;
-
-  @IsOptional()
-  orderBy?: string;
+  @ApiPropertyOptional({
+    description: propertyMetadata.perPage.description,
+  })
+  perPage: number;
 }
