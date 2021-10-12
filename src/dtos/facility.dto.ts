@@ -4,7 +4,7 @@ import { propertyMetadata } from '@us-epa-camd/easey-constants';
 import { LinkDTO } from './link.dto';
 
 export class FacilityDTO {
-  id: number;
+  facilityRecordId: number;
 
   @ApiProperty({
     description: propertyMetadata.facilityId.description,
