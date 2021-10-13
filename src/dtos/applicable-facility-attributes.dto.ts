@@ -50,4 +50,11 @@ export class ApplicableFacilityAttributesDTO {
     name: propertyMetadata.controlCode.fieldLabels.value,
   })
   controlCode: string;
+
+  @ApiProperty({
+    description: propertyMetadata.sourceCategoryDescription.description,
+    example: propertyMetadata.sourceCategoryDescription.example,
+    name: propertyMetadata.sourceCategoryDescription.fieldLabels.value,
+  })
+  sourceCategoryDescription: string;
 }
