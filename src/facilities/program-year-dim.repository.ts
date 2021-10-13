@@ -47,6 +47,7 @@ export class ProgramYearDimRepository extends Repository<ProgramYearDim> {
         'utyd.unitType',
         'fyd.fuelCode',
         'cyd.controlCode',
+        'uf.sourceCategory',
       ])
       .innerJoin(
         isArchived ? AnnualUnitDataArch : AnnualUnitData,
@@ -77,6 +78,7 @@ export class ProgramYearDimRepository extends Repository<ProgramYearDim> {
         'utyd.unit_type',
         'fyd.fuel_code',
         'cyd.control_code',
+        'uf.source_cat',
       ]);
 
     if (!isUnion) {

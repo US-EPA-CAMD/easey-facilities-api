@@ -5,7 +5,10 @@ import { BaseMap } from './base.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 
 @Injectable()
-export class ApplicableFacilityAttributesMap extends BaseMap<any, ApplicableFacilityAttributesDTO> {
+export class ApplicableFacilityAttributesMap extends BaseMap<
+  any,
+  ApplicableFacilityAttributesDTO
+> {
   public async one(entity: any): Promise<any> {
     return {
       [propertyMetadata.year.fieldLabels.value]: Number(entity.pyd_op_year),
@@ -17,6 +20,7 @@ export class ApplicableFacilityAttributesMap extends BaseMap<any, ApplicableFaci
       [propertyMetadata.unitTypeCode.fieldLabels.value]: entity.utyd_unit_type,
       [propertyMetadata.fuelTypeCode.fieldLabels.value]: entity.fyd_fuel_code,
       [propertyMetadata.controlCode.fieldLabels.value]: entity.cyd_control_code,
+      [propertyMetadata.sourceCategoryDescription.fieldLabels.value]: entity.uf_source_cat,
     };
   }
 }
