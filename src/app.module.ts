@@ -9,20 +9,21 @@ import appConfig from './config/app.config';
 import { TypeOrmConfigService } from './config/typeorm.config';
 
 import { FacilitiesModule } from './facilities/facilities.module';
+import { LoggerModule } from '@us-epa-camd/easey-common/logger';
+import { CorsOptionsModule } from '@us-epa-camd/easey-common/cors-options';
 
 @Module({
   imports: [
     RouterModule.forRoutes(routes),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [
-        dbConfig,
-        appConfig,
-      ],
+      load: [dbConfig, appConfig],
     }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
     }),
+    LoggerModule,
+    CorsOptionsModule,
     FacilitiesModule,
   ],
 })
