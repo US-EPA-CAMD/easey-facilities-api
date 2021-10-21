@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { CorsOptionsService } from '@us-epa-camd/easey-common/cors-options';
+import * as helmet from 'helmet';
 
 import { AppModule } from './app.module';
 
@@ -29,6 +30,7 @@ async function bootstrap() {
     };
   }
 
+  app.use(helmet());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.setGlobalPrefix(appPath);
   app.enableCors(async (req, callback) => {
