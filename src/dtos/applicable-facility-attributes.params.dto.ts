@@ -1,7 +1,7 @@
 import { IsDefined } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { propertyMetadata } from '@us-epa-camd/easey-constants';
+import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
 
 import { IsInYearRange } from '../pipes/is-in-year-range.pipe';
 import { ErrorMessages } from '../utils/error-messages';
@@ -25,6 +25,6 @@ export class ApplicableFacilityAttributesParamsDTO {
     ),
   })
   @IsDefined({ message: ErrorMessages.RequiredProperty() })
-  @Transform((value: string) => value.split('|').map(item => item.trim()))
+  @Transform(({ value }) => value.split('|').map((item: string) => Number(item.trim())))
   year: number[];
 }

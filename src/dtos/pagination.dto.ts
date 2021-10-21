@@ -1,6 +1,6 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
-import { propertyMetadata } from '@us-epa-camd/easey-constants';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
 
 export class PaginationDTO {
   @IsOptional()
