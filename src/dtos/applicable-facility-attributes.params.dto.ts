@@ -25,6 +25,6 @@ export class ApplicableFacilityAttributesParamsDTO {
     ),
   })
   @IsDefined({ message: ErrorMessages.RequiredProperty() })
-  @Transform(({ value }) => value.split('|').map((item: string) => Number(item.trim())))
+  @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   year: number[];
 }
