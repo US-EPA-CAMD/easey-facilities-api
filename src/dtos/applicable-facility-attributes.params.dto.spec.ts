@@ -2,8 +2,7 @@ import { IsDefined, validate } from 'class-validator';
 import * as typeorm from 'typeorm';
 import { createSandbox, SinonSandbox, createStubInstance } from 'sinon';
 
-import { IsYearFormat } from '../pipes/is-year-format.pipe';
-import { IsInYearRange } from '../pipes/is-in-year-range.pipe';
+import { IsYearFormat, IsInYearRange } from '@us-epa-camd/easey-common/pipes';
 
 describe('-- Applicable Facility Attributes Params DTO --', () => {
   describe('getApplicableFacilityAtrributes with query parameters', () => {

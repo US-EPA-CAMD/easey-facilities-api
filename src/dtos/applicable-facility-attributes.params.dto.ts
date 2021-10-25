@@ -1,11 +1,12 @@
 import { IsDefined } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
+import {
+  propertyMetadata,
+  ErrorMessages,
+} from '@us-epa-camd/easey-common/constants';
 
-import { IsInYearRange } from '../pipes/is-in-year-range.pipe';
-import { ErrorMessages } from '../utils/error-messages';
-import { IsYearFormat } from '../pipes/is-year-format.pipe';
+import { IsYearFormat, IsInYearRange } from '@us-epa-camd/easey-common/pipes';
 
 export class ApplicableFacilityAttributesParamsDTO {
   @ApiProperty({

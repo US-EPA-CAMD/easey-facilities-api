@@ -1,24 +1,28 @@
 import { IsDefined, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
 
-import { ErrorMessages } from '../utils/error-messages';
-import { State } from '../enums/state.enum';
-import { UnitType } from '../enums/unit-type.enum';
-import { UnitFuelType } from '../enums/unit-fuel-type.enum';
-import { ControlTechnology } from '../enums/control-technology.enum';
-import { Program } from '../enums/program.enum';
-import { SourceCategory } from '../enums/source-category.enum';
+import {
+  propertyMetadata,
+  ErrorMessages,
+} from '@us-epa-camd/easey-common/constants';
+import {
+  State,
+  UnitType,
+  UnitFuelType,
+  ControlTechnology,
+  Program,
+  SourceCategory,
+} from '@us-epa-camd/easey-common/enums';
+import { IsOrisCode, IsYearFormat } from '@us-epa-camd/easey-common/pipes';
+
 import { IsStateCode } from '../pipes/is-state-code.pipe';
-import { IsOrisCode } from '../pipes/is-oris-code.pipe';
 import { IsUnitType } from '../pipes/is-unit-type.pipe';
 import { IsUnitFuelType } from '../pipes/is-unit-fuel-type.pipe';
 import { IsControlTechnology } from '../pipes/is-control-technology.pipe';
 import { IsEmissionsProgram } from '../pipes/is-emissions-program.pipe';
-import { IsYearFormat } from '../pipes/is-year-format.pipe';
-import { IsInDateRange } from '../pipes/is-in-date-range.pipe';
 import { IsSourceCategory } from '../pipes/is-source-category.pipe';
+import { IsInDateRange } from '../pipes/is-in-date-range.pipe';
 
 export class FacilityAttributesParamsDTO {
   @ApiProperty({

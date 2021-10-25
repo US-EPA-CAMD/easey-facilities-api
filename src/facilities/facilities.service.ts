@@ -2,11 +2,13 @@ import { Request } from 'express';
 import { Not, IsNull, FindManyOptions } from 'typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Logger } from '@us-epa-camd/easey-common/logger';
+
+import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesRepository } from './facilities.repository';
-import { ResponseHeaders } from './../utils/response.headers';
 import { FacilityMap } from '../maps/facility.map';
 import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
@@ -30,6 +32,7 @@ export class FacilitiesService {
     @InjectRepository(FacilityUnitAttributesRepository)
     private readonly facilityUnitAttributesRepository: FacilityUnitAttributesRepository,
     private readonly facilityAttributesMap: FacilityAttributesMap,
+    private Logger: Logger,
   ) {}
 
   async getFacilities(
@@ -68,7 +71,9 @@ export class FacilitiesService {
     const facility = await this.facilitiesRepository.findOne(id);
 
     if (facility === undefined) {
-      throw new NotFoundException(`Facility with Id ${id} does not exist`);
+      this.Logger.error(NotFoundException, 'Facility id does not exist', {
+        id: id,
+      });
     }
 
     return this.facilityMap.one(facility);

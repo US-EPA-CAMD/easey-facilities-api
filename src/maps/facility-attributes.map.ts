@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
-import { BaseMap } from '@us-epa-camd/easey-common/maps/base.map';
+import { BaseMap } from '@us-epa-camd/easey-common/maps';
 
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
