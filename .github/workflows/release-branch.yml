@@ -95,7 +95,7 @@ jobs:
           repository: US-EPA-CAMD/devops
           path: devops
       - name: Configure Env Vars
-        run: devops/scripts/environment-variables-noTag.sh TEST
+        run: devops/scripts/environment-variables-noTag.sh BETA
         env:
           ENV_VAR_PREFIX: EASEY
       - name: Install cf cli
