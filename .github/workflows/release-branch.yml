@@ -43,7 +43,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_STORAGE_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_STORAGE_SECRET_ACCESS_KEY }}
-  TestDeploynent:
+  Test-Deployment:
     needs: Build-Test-Package
     runs-on: ubuntu-latest
     environment:
@@ -78,7 +78,7 @@ jobs:
       - name: Deployment
         run: |
           devops/scripts/deploy.sh
-  BetaDeploynent:
+  Beta-Deployment:
     needs: Build-Test-Package
     runs-on: ubuntu-latest
     environment:
@@ -113,7 +113,7 @@ jobs:
       - name: Deployment
         run: |
           devops/scripts/deploy.sh
-  StageDeployment:
+  Stage-Deployment:
     needs: TestDeploynent
     runs-on: ubuntu-latest
     environment:
