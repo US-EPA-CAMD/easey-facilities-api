@@ -1,3 +1,6 @@
+# never include npm's package-lock.json when using yarn
+package-lock.json
+
 # dependencies
 /node_modules
 
@@ -6,10 +9,11 @@
 
 # misc
 .DS_Store
-#.env.local
-#.env.development.local
-#.env.test.local
-#.env.production.local
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 npm-debug.log*
 
