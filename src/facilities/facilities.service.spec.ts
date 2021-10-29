@@ -1,6 +1,15 @@
 import { Repository } from 'typeorm';
 import { Test } from '@nestjs/testing';
 
+import {
+  State,
+  UnitType,
+  UnitFuelType,
+  ControlTechnology,
+  Program,
+  SourceCategory,
+} from '@us-epa-camd/easey-common/enums';
+
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesRepository } from './facilities.repository';
 import { FacilitiesService } from './facilities.service';
@@ -14,12 +23,7 @@ import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
-import { State } from '../enums/state.enum';
-import { UnitType } from '../enums/unit-type.enum';
-import { UnitFuelType } from '../enums/unit-fuel-type.enum';
-import { ControlTechnology } from '../enums/control-technology.enum';
-import { Program } from '../enums/program.enum';
-import { SourceCategory } from '../enums/source-category.enum';
+import { LoggerModule } from '@us-epa-camd/easey-common/logger';
 
 const mockRequest = (url: string) => {
   return {
@@ -68,6 +72,7 @@ describe('-- Facilities Service --', () => {
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
+      imports: [LoggerModule],
       providers: [
         FacilityMap,
         FacilityAttributesMap,
@@ -293,7 +298,7 @@ describe('-- Facilities Service --', () => {
         )
         .catch(error => {
           expect(error.status).toBe(404);
-          expect(error.message).toBe('Facility with Id -1 does not exist');
+          expect(error.message).toBe('Facility id does not exist');
           done();
         });
     });

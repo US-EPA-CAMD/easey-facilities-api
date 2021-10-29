@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
-import { BaseMap } from '@us-epa-camd/easey-common/maps/base.map';
+import { BaseMap } from '@us-epa-camd/easey-common/maps';
 
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 
@@ -20,7 +20,8 @@ export class ApplicableFacilityAttributesMap extends BaseMap<
       [propertyMetadata.unitTypeCode.fieldLabels.value]: entity.utyd_unit_type,
       [propertyMetadata.fuelTypeCode.fieldLabels.value]: entity.fyd_fuel_code,
       [propertyMetadata.controlCode.fieldLabels.value]: entity.cyd_control_code,
-      [propertyMetadata.sourceCategoryDescription.fieldLabels.value]: entity.uf_source_cat,
+      [propertyMetadata.sourceCategoryDescription.fieldLabels.value]:
+        entity.uf_source_cat,
     };
   }
 }

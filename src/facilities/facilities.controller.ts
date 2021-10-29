@@ -16,6 +16,7 @@ import {
   ValidationPipe,
   UseInterceptors,
 } from '@nestjs/common';
+import { Json2CsvInterceptor } from '@us-epa-camd/easey-common/interceptors';
 
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
@@ -29,7 +30,6 @@ import {
   NotFoundResponse,
 } from '../utils/swagger-decorator.const';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
-import { Json2CsvInterceptor } from '../interceptors/json2csv.interceptor';
 
 @ApiTags('Facilities')
 @Controller()

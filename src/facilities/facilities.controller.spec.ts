@@ -11,6 +11,7 @@ import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-att
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
+import { LoggerModule } from '@us-epa-camd/easey-common/logger';
 
 const mockRequest = (url: string) => {
   return {
@@ -28,6 +29,7 @@ describe('-- Facilities Controller --', () => {
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
+      imports: [LoggerModule],
       controllers: [FacilitiesController],
       providers: [
         FacilityMap,

@@ -2,9 +2,9 @@ import { IsDefined, validate } from 'class-validator';
 import * as typeorm from 'typeorm';
 import { createSandbox, SinonSandbox, createStubInstance } from 'sinon';
 
-import { IsYearFormat } from '../pipes/is-year-format.pipe';
+import { IsYearFormat, IsOrisCode } from '@us-epa-camd/easey-common/pipes';
+
 import { IsInDateRange } from '../pipes/is-in-date-range.pipe';
-import { IsOrisCode } from '../pipes/is-oris-code.pipe';
 import { IsControlTechnology } from '../pipes/is-control-technology.pipe';
 import { IsUnitType } from '../pipes/is-unit-type.pipe';
 import { IsUnitFuelType } from '../pipes/is-unit-fuel-type.pipe';

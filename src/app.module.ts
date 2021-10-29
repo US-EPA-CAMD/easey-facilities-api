@@ -17,10 +17,7 @@ import { FacilitiesModule } from './facilities/facilities.module';
     RouterModule.forRoutes(routes),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [
-        dbConfig,
-        appConfig,
-      ],
+      load: [dbConfig, appConfig],
     }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,

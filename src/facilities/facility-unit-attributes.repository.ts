@@ -1,10 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Request } from 'express';
+import { ResponseHeaders, Regex } from '@us-epa-camd/easey-common/utilities';
 
 import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
 import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
-import { Regex } from '../utils/regex';
-import { ResponseHeaders } from '../utils/response.headers';
 
 @EntityRepository(FacilityUnitAttributes)
 export class FacilityUnitAttributesRepository extends Repository<

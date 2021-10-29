@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
-import { BaseMap } from '@us-epa-camd/easey-common/maps/base.map';
+import { BaseMap } from '@us-epa-camd/easey-common/maps';
 
 import { Plant } from '../entities/plant.entity';
 import { FacilityDTO } from '../dtos/facility.dto';
