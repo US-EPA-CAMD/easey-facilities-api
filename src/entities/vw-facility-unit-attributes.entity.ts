@@ -1,7 +1,7 @@
 import { ViewColumn, ViewEntity } from 'typeorm';
 
 @ViewEntity({
-  name: 'camddmw.vw_facility_unit_attributes'
+  name: 'camddmw.vw_facility_unit_attributes',
 })
 export class FacilityUnitAttributes {
   @ViewColumn({ name: 'unit_id' })
@@ -12,9 +12,6 @@ export class FacilityUnitAttributes {
 
   @ViewColumn({ name: 'prg_code' })
   programCodeInfo: string;
-
-  @ViewColumn({ name: 'report_freq' })
-  reportingFrequency: string;
 
   @ViewColumn({ name: 'state' })
   state: string;
@@ -99,4 +96,10 @@ export class FacilityUnitAttributes {
 
   @ViewColumn({ name: 'generator_id' })
   generatorId: string;
+
+  @ViewColumn({ name: 'arp_nameplate_capacity' })
+  arpNameplateCapacity: number;
+
+  @ViewColumn({ name: 'other_nameplate_capacity' })
+  otherNameplateCapacity: number;
 }
