@@ -10,7 +10,7 @@ export class FacilityUnitAttributes {
   @ViewColumn({ name: 'op_year' })
   year: number;
 
-  @ViewColumn({ name: 'prg_code' })
+  @ViewColumn({ name: 'prg_code_info' })
   programCodeInfo: string;
 
   @ViewColumn({ name: 'state' })
