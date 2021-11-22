@@ -11,6 +11,7 @@ export class FacilityAttributesMap extends BaseMap<
   FacilityAttributesDTO
 > {
   public async one(entity: any): Promise<any> {
+    let associatedGeneratorsAndNameplateCapacityStr = '';
     const array = [entity.ownDisplay, entity.oprDisplay];
     const ownOprList = array
       .filter(e => e)
@@ -19,6 +20,35 @@ export class FacilityAttributesMap extends BaseMap<
       .split('),');
     const ownOprUniqueList = [...new Set(ownOprList)];
     const ownerOperator = ownOprUniqueList.join('),');
+
+    const generatorIdArr = entity.generatorId?.split(', ');
+    const arpNameplateCapacityArr = entity.arpNameplateCapacity?.split(', ');
+    const otherNameplateCapacityArr = entity.otherNameplateCapacity?.split(
+      ', ',
+    );
+
+    for (let index = 0; index < generatorIdArr.length; index++) {
+      associatedGeneratorsAndNameplateCapacityStr += generatorIdArr[index];
+      if (
+        arpNameplateCapacityArr &&
+        arpNameplateCapacityArr[index] !== 'null'
+      ) {
+        associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
+          arpNameplateCapacityArr[index],
+        )})`;
+      } else if (
+        otherNameplateCapacityArr &&
+        otherNameplateCapacityArr[index] !== 'null'
+      ) {
+        associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
+          otherNameplateCapacityArr[index],
+        )})`;
+      }
+      if (generatorIdArr.length > 1 && index < generatorIdArr.length - 1) {
+        associatedGeneratorsAndNameplateCapacityStr += ', ';
+      }
+    }
+
     return {
       [propertyMetadata.state.fieldLabels.value]: entity.state,
       [propertyMetadata.facilityName.fieldLabels.value]: entity.facilityName,
@@ -71,9 +101,8 @@ export class FacilityAttributesMap extends BaseMap<
         .value]: entity.maxHourlyHIRate
         ? Number(entity.maxHourlyHIRate)
         : entity.maxHourlyHIRate,
-      [propertyMetadata.generatorId.fieldLabels.value]: entity.generatorId,
-      [propertyMetadata.reportingFrequency.fieldLabels.value]:
-        entity.reportingFrequency,
+      [propertyMetadata.associatedGeneratorsAndNameplateCapacity.fieldLabels
+        .value]: associatedGeneratorsAndNameplateCapacityStr,
     };
   }
 }

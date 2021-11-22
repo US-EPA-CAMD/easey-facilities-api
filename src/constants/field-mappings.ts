@@ -29,8 +29,7 @@ const attributes = [
   { ...propertyMetadata.commercialOperationDate.fieldLabels },
   { ...propertyMetadata.operatingStatus.fieldLabels },
   { ...propertyMetadata.maxHourlyHIRate.fieldLabels },
-  { ...propertyMetadata.generatorId.fieldLabels },
-  { ...propertyMetadata.reportingFrequency.fieldLabels },
+  { ...propertyMetadata.associatedGeneratorsAndNameplateCapacity.fieldLabels },
 ];
 
 export const fieldMappings = {

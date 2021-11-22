@@ -19,7 +19,6 @@ export class FacilityUnitAttributesRepository extends Repository<
       'fua.id',
       'fua.year',
       'fua.programCodeInfo',
-      'fua.reportingFrequency',
       'fua.state',
       'fua.facilityName',
       'fua.facilityId',
@@ -48,6 +47,8 @@ export class FacilityUnitAttributesRepository extends Repository<
       'fua.ownDisplay',
       'fua.oprDisplay',
       'fua.generatorId',
+      'fua.arpNameplateCapacity',
+      'fua.otherNameplateCapacity',
     ]);
 
     if (facilityAttributesParamsDTO.year) {

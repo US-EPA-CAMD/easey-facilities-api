@@ -199,16 +199,12 @@ export class FacilityAttributesDTO {
   maxHourlyHIRate?: number;
 
   @ApiProperty({
-    description: propertyMetadata.generatorId.description,
-    example: propertyMetadata.generatorId.example,
-    name: propertyMetadata.generatorId.fieldLabels.value,
+    description:
+      propertyMetadata.associatedGeneratorsAndNameplateCapacity.description,
+    example: propertyMetadata.associatedGeneratorsAndNameplateCapacity.example,
+    name:
+      propertyMetadata.associatedGeneratorsAndNameplateCapacity.fieldLabels
+        .value,
   })
-  generatorId: string;
-
-  @ApiProperty({
-    description: propertyMetadata.reportingFrequency.description,
-    example: propertyMetadata.reportingFrequency.example,
-    name: propertyMetadata.reportingFrequency.fieldLabels.value,
-  })
-  reportingFrequency: string;
+  associatedGeneratorsAndNamePlateCapacity: string;
 }
