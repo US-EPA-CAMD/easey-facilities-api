@@ -4,7 +4,6 @@ import { createSandbox, SinonSandbox, createStubInstance } from 'sinon';
 
 import { IsYearFormat, IsOrisCode } from '@us-epa-camd/easey-common/pipes';
 
-import { IsInDateRange } from '../pipes/is-in-date-range.pipe';
 import { IsControlTechnology } from '../pipes/is-control-technology.pipe';
 import { IsUnitType } from '../pipes/is-unit-type.pipe';
 import { IsUnitFuelType } from '../pipes/is-unit-fuel-type.pipe';
@@ -35,7 +34,6 @@ describe('-- Facility Attributes Params DTO --', () => {
         this.programCodeInfo = programCodeInfo;
       }
 
-      @IsInDateRange([new Date(1995, 0), new Date()], true, true, true)
       @IsYearFormat()
       @IsDefined()
       year: string;

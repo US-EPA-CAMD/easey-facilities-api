@@ -1,6 +1,6 @@
 import { IsDefined, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 import {
   propertyMetadata,
@@ -14,7 +14,7 @@ import {
   Program,
   SourceCategory,
 } from '@us-epa-camd/easey-common/enums';
-import { IsOrisCode, IsYearFormat } from '@us-epa-camd/easey-common/pipes';
+import { IsInDateRange, IsOrisCode, IsYearFormat } from '@us-epa-camd/easey-common/pipes';
 
 import { IsStateCode } from '../pipes/is-state-code.pipe';
 import { IsUnitType } from '../pipes/is-unit-type.pipe';
@@ -22,9 +22,11 @@ import { IsUnitFuelType } from '../pipes/is-unit-fuel-type.pipe';
 import { IsControlTechnology } from '../pipes/is-control-technology.pipe';
 import { IsEmissionsProgram } from '../pipes/is-emissions-program.pipe';
 import { IsSourceCategory } from '../pipes/is-source-category.pipe';
-import { IsInDateRange } from '../pipes/is-in-date-range.pipe';
 
 export class FacilityAttributesParamsDTO {
+  @ApiHideProperty()
+  currentDate: Date = this.getCurrentDate;
+
   @ApiProperty({
     description: propertyMetadata.page.description,
   })
@@ -46,12 +48,12 @@ export class FacilityAttributesParamsDTO {
     each: true,
     message: ErrorMessages.MultipleFormat('year', 'YYYY format'),
   })
-  @IsInDateRange([new Date(1995, 0), new Date()], true, true, true, {
+  @IsInDateRange([new Date(1995, 0), 'currentDate'], true, true, true, {
     each: true,
     message: ErrorMessages.DateRange(
       'year',
       true,
-      'a year between 1995 and this year',
+      '1980, 1985, 1990, or to a year between 1995 and this year',
     ),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
@@ -148,4 +150,8 @@ export class FacilityAttributesParamsDTO {
       'Attaches a file with data in the format specified by the Accept header',
   })
   attachFile?: boolean;
+
+  private get getCurrentDate(): Date {
+    return new Date();
+  }
 }

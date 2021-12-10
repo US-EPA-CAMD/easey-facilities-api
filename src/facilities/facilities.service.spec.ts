@@ -307,9 +307,9 @@ describe('-- Facilities Service --', () => {
   describe('* getApplicableFacilityAtrributes', () => {
     it('should return a list of Applicable Facilities Attributes', async () => {
       const expectedResult: ApplicableFacilityAttributesDTO[] = [];
-      const params: ApplicableFacilityAttributesParamsDTO = {
-        year: [2016, 2017],
-      };
+      const params: ApplicableFacilityAttributesParamsDTO = new ApplicableFacilityAttributesParamsDTO();
+      params.year = [2016, 2017];
+
       programYearDimRepository.getApplicableFacilityAttributes.mockResolvedValue(
         'entities',
       );
@@ -324,21 +324,24 @@ describe('-- Facilities Service --', () => {
   describe('* getAllFacilityAtrributes', () => {
     it('should return a list of All Facilities Attributes', async () => {
       const expectedResult: FacilityAttributesDTO[] = [];
-      const params: FacilityAttributesParamsDTO = {
-        year: [2016, 2017],
-        page: undefined,
-        perPage: undefined,
-        state: [State.TX],
-        facilityId: [3],
-        unitType: [UnitType.BUBBLING_FLUIDIZED, UnitType.ARCH_FIRE_BOILER],
-        unitFuelType: [UnitFuelType.COAL, UnitFuelType.DIESEL_OIL],
-        controlTechnologies: [
-          ControlTechnology.ADDITIVES_TO_ENHANCE,
-          ControlTechnology.OTHER,
-        ],
-        programCodeInfo: [Program.ARP, Program.RGGI],
-        sourceCategory: [SourceCategory.AUTOMOTIVE_STAMPINGS],
-      };
+      const params: FacilityAttributesParamsDTO = new FacilityAttributesParamsDTO();
+      params.page = undefined;
+      params.perPage = undefined;
+      params.year = [2019];
+      params.state = [State.TX];
+      params.facilityId = [3];
+      params.unitType = [
+        UnitType.BUBBLING_FLUIDIZED,
+        UnitType.ARCH_FIRE_BOILER,
+      ];
+      params.unitFuelType = [UnitFuelType.COAL, UnitFuelType.DIESEL_OIL];
+      params.controlTechnologies = [
+        ControlTechnology.ADDITIVES_TO_ENHANCE,
+        ControlTechnology.OTHER,
+      ];
+      params.programCodeInfo = [Program.ARP, Program.RGGI];
+      params.sourceCategory = [SourceCategory.AUTOMOTIVE_STAMPINGS];
+
       const req: any = mockRequest(
         `/facilities/attributes?page=${params.page}&perPage=${params.perPage}`,
       );

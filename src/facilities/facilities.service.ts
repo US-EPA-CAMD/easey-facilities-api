@@ -71,7 +71,7 @@ export class FacilitiesService {
     const facility = await this.facilitiesRepository.findOne(id);
 
     if (facility === undefined) {
-      this.Logger.error(NotFoundException, 'Facility id does not exist', {
+      this.Logger.error(NotFoundException, 'Facility id does not exist', true, {
         id: id,
       });
     }
