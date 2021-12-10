@@ -1,14 +1,16 @@
 import { IsDefined } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   propertyMetadata,
   ErrorMessages,
 } from '@us-epa-camd/easey-common/constants';
-
-import { IsYearFormat, IsInYearRange } from '@us-epa-camd/easey-common/pipes';
+import { IsInDateRange, IsYearFormat } from '@us-epa-camd/easey-common/pipes';
 
 export class ApplicableFacilityAttributesParamsDTO {
+  @ApiHideProperty()
+  currentDate: Date = this.getCurrentDate;
+
   @ApiProperty({
     isArray: true,
     description: propertyMetadata.year.description,
@@ -17,7 +19,7 @@ export class ApplicableFacilityAttributesParamsDTO {
     each: true,
     message: ErrorMessages.MultipleFormat('year', 'YYYY format'),
   })
-  @IsInYearRange([new Date(1995, 0), new Date()], {
+  @IsInDateRange([new Date(1995, 0), 'currentDate'], true, true, true, {
     each: true,
     message: ErrorMessages.DateRange(
       'year',
@@ -28,4 +30,8 @@ export class ApplicableFacilityAttributesParamsDTO {
   @IsDefined({ message: ErrorMessages.RequiredProperty() })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   year: number[];
+
+  private get getCurrentDate(): Date {
+    return new Date();
+  }
 }
