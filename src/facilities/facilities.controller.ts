@@ -5,6 +5,7 @@ import {
   ApiQuery,
   getSchemaPath,
   ApiExtraModels,
+  ApiSecurity
 } from '@nestjs/swagger';
 import {
   Req,
@@ -31,8 +32,9 @@ import {
 } from '../utils/swagger-decorator.const';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 
-@ApiTags('Facilities')
 @Controller()
+@ApiSecurity('APIKey')
+@ApiTags('Facilities')
 @UseInterceptors(Json2CsvInterceptor)
 export class FacilitiesController {
   constructor(private readonly service: FacilitiesService) {}

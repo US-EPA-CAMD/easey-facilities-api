@@ -35,11 +35,11 @@ Please reach out to an EPA tech lead (see Mike Heese or Jason Whitehead) to get 
 
 2. Target the development org (you will need to be granted permission to access this):
 ```bash
-cf target -o epa-easey -s dev
+$ cf target -o epa-easey -s dev
 ```
 3. Open SSH tunnel
 ```bash
-cf ssh facilities-api -L <LOCAL_PORT>:<DB_HOST>:5432
+$ cf ssh facilities-api -L <LOCAL_PORT>:<DB_HOST>:5432
 ```
 4. Keep the SSH tunnel open while running the application
 
@@ -52,22 +52,22 @@ cf ssh facilities-api -L <LOCAL_PORT>:<DB_HOST>:5432
 
     ```shell
     # If using SSH
-    git clone git@github.com:US-EPA-CAMD/easey-facilities-api.git
+    $ git clone git@github.com:US-EPA-CAMD/easey-facilities-api.git
     
     # If using HTTPS
-    git clone https://github.com/US-EPA-CAMD/easey-facilities-api.git
+    $ git clone https://github.com/US-EPA-CAMD/easey-facilities-api.git
     ```
 
 3. Navigate to the root project directory
 
     ```
-    cd easey-facilities-api
+    $ cd easey-facilities-api
     ```
 
 4. Install dependencies 
     
     ```
-    npm install
+    $ yarn install
     ```
 ### Run the appication 
 
@@ -75,7 +75,7 @@ From within the `easey-facilities-api` project directory, you can run:
 
 ```bash
 # Runs the api in the development mode
-npm run start:dev
+$ yarn start:dev
 ```
 
 Open [http://localhost:8080/api/facility-mgmt/swagger/](http://localhost:8080/api/facility-mgmt/swagger/) to view swagger documentation.
@@ -86,20 +86,20 @@ You will also see any lint errors in the console.
 
 ```bash
 # for production mode
-npm run start
+$ yarn start
 ```
 
 ### Run the tests
 
 ```bash
 # unit tests
-$ npm run test
+$ yarn test
 
 # e2e tests
-$ npm run test:e2e
+$ yarn test:e2e
 
 # test coverage
-$ npm run test:cov
+$ yarn test:cov
 ```
 ## API Endpoints
 
