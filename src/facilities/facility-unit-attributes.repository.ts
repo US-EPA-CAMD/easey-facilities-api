@@ -19,7 +19,7 @@ export class FacilityUnitAttributesRepository extends Repository<
       'fua.id',
       'fua.year',
       'fua.programCodeInfo',
-      'fua.state',
+      'fua.stateCode',
       'fua.facilityName',
       'fua.facilityId',
       'fua.unitId',
@@ -63,9 +63,9 @@ export class FacilityUnitAttributesRepository extends Repository<
       });
     }
 
-    if (facilityAttributesParamsDTO.state) {
-      query.andWhere(`fua.state IN (:...states)`, {
-        states: facilityAttributesParamsDTO.state.map(states => {
+    if (facilityAttributesParamsDTO.stateCode) {
+      query.andWhere(`fua.stateCode IN (:...states)`, {
+        states: facilityAttributesParamsDTO.stateCode.map(states => {
           return states.toUpperCase();
         }),
       });

@@ -39,17 +39,17 @@ export class FacilitiesService {
     facilityParamsDTO: FacilityParamsDTO,
     req: Request,
   ): Promise<FacilityDTO[]> {
-    const { state, page, perPage } = facilityParamsDTO;
+    const { stateCode, page, perPage } = facilityParamsDTO;
 
     const findOpts: FindManyOptions = {
-      select: ['id', 'facilityId', 'facilityName', 'state'],
+      select: ['id', 'facilityId', 'facilityName', 'stateCode'],
       order: {
         id: 'ASC',
       },
     };
 
-    if (state) {
-      findOpts.where = { facilityId: Not(IsNull()), state: state };
+    if (stateCode) {
+      findOpts.where = { facilityId: Not(IsNull()), stateCode: stateCode };
     } else {
       findOpts.where = { facilityId: Not(IsNull()) };
     }

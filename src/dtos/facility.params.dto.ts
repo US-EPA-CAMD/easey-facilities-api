@@ -8,10 +8,10 @@ import { ApiProperty } from '@nestjs/swagger';
 export class FacilityParamsDTO extends PaginationDTO {
   @ApiProperty({
     enum: State,
-    description: propertyMetadata.state.description,
+    description: propertyMetadata.stateCode.description,
   })
   @IsOptional()
-  state?: string;
+  stateCode?: string;
 
   @ApiProperty({
     description: propertyMetadata.epaRegion.description,

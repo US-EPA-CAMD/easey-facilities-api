@@ -38,13 +38,13 @@ const mockPlant = (
   id: number,
   facilityName: string,
   facilityId: number,
-  state: string,
+  stateCode: string,
 ) => {
   const plant = new Plant();
   plant.id = id;
   plant.facilityName = facilityName;
   plant.facilityId = facilityId;
-  plant.state = state;
+  plant.stateCode = stateCode;
   return plant;
 };
 
@@ -161,7 +161,7 @@ describe('-- Facilities Service --', () => {
       const paramsDto: FacilityParamsDTO = {
         page: page,
         perPage: perPage,
-        state: undefined,
+        stateCode: undefined,
         epaRegion: undefined,
       };
       const plants = plantList.slice(start, end);
@@ -187,7 +187,7 @@ describe('-- Facilities Service --', () => {
       const paramsDto: FacilityParamsDTO = {
         page: page,
         perPage: perPage,
-        state: undefined,
+        stateCode: undefined,
         epaRegion: undefined,
       };
       const plants = plantList.slice(start, end);
@@ -213,7 +213,7 @@ describe('-- Facilities Service --', () => {
       const paramsDto: FacilityParamsDTO = {
         page: page,
         perPage: perPage,
-        state: undefined,
+        stateCode: undefined,
         epaRegion: undefined,
       };
       const plants = plantList.slice(start, end);
@@ -239,7 +239,7 @@ describe('-- Facilities Service --', () => {
       const paramsDto: FacilityParamsDTO = {
         page: page,
         perPage: perPage,
-        state: undefined,
+        stateCode: undefined,
         epaRegion: undefined,
       };
       const plants = plantList.slice(start, end);
@@ -257,10 +257,10 @@ describe('-- Facilities Service --', () => {
       const paramsDto: FacilityParamsDTO = {
         page: undefined,
         perPage: undefined,
-        state: 'TX',
+        stateCode: 'TX',
         epaRegion: undefined,
       };
-      const plants = plantList.filter(p => (p.state = paramsDto.state));
+      const plants = plantList.filter(p => (p.stateCode = paramsDto.stateCode));
       totalCount = plants.length;
       const facilities = await facilityMap.many(plants);
       facilitiesRepositoryMock.findAndCount.mockReturnValue([
@@ -328,7 +328,7 @@ describe('-- Facilities Service --', () => {
       params.page = undefined;
       params.perPage = undefined;
       params.year = [2019];
-      params.state = [State.TX];
+      params.stateCode = [State.TX];
       params.facilityId = [3];
       params.unitType = [
         UnitType.BUBBLING_FLUIDIZED,

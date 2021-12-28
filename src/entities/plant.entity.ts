@@ -2,7 +2,7 @@ import { BaseEntity, Entity, Column, PrimaryColumn, Unique } from 'typeorm';
 
 @Entity({ name: 'camd.plant' })
 @Unique('uq_plant_oris_code', ['facilityId'])
-@Unique('uq_plant_name_state', ['facilityName', 'state'])
+@Unique('uq_plant_name_state', ['facilityName', 'stateCode'])
 export class Plant extends BaseEntity {
   @PrimaryColumn({
     name: 'fac_id',
@@ -19,8 +19,8 @@ export class Plant extends BaseEntity {
   })
   facilityName: string;
 
-  @Column()
-  state: string;
+  @Column({ name: 'state' })
+  stateCode: string;
 
   @Column({
     name: 'epa_region',
