@@ -36,7 +36,7 @@ export class FacilitiesService {
     @InjectRepository(FacilityUnitAttributesRepository)
     private readonly facilityUnitAttributesRepository: FacilityUnitAttributesRepository,
     private readonly facilityAttributesMap: FacilityAttributesMap,
-    private logger: Logger,
+    private readonly logger: Logger,
   ) {}
 
   async getFacilities(
