@@ -50,7 +50,7 @@ export class FacilityAttributesMap extends BaseMap<
     }
 
     return {
-      [propertyMetadata.state.fieldLabels.value]: entity.state,
+      [propertyMetadata.stateCode.fieldLabels.value]: entity.stateCode,
       [propertyMetadata.facilityName.fieldLabels.value]: entity.facilityName,
       [propertyMetadata.facilityId.fieldLabels.value]: entity.facilityId
         ? Number(entity.facilityId)

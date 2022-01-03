@@ -14,7 +14,7 @@ export class FacilityUnitAttributes {
   programCodeInfo: string;
 
   @ViewColumn({ name: 'state' })
-  state: string;
+  stateCode: string;
 
   @ViewColumn({ name: 'orispl_code' })
   facilityId: number;

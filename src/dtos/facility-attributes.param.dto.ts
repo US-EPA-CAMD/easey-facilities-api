@@ -14,7 +14,11 @@ import {
   Program,
   SourceCategory,
 } from '@us-epa-camd/easey-common/enums';
-import { IsInDateRange, IsOrisCode, IsYearFormat } from '@us-epa-camd/easey-common/pipes';
+import {
+  IsInDateRange,
+  IsOrisCode,
+  IsYearFormat,
+} from '@us-epa-camd/easey-common/pipes';
 
 import { IsStateCode } from '../pipes/is-state-code.pipe';
 import { IsUnitType } from '../pipes/is-unit-type.pipe';
@@ -73,15 +77,15 @@ export class FacilityAttributesParamsDTO {
 
   @ApiProperty({
     enum: State,
-    description: propertyMetadata.state.description,
+    description: propertyMetadata.stateCode.description,
   })
   @IsOptional()
   @IsStateCode({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'state'),
+    message: ErrorMessages.UnitCharacteristics(true, 'stateCode'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
-  state?: State[];
+  stateCode?: State[];
 
   @ApiProperty({
     enum: UnitType,

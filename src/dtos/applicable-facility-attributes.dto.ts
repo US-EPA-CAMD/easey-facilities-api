@@ -24,11 +24,11 @@ export class ApplicableFacilityAttributesDTO {
   facilityId: number;
 
   @ApiProperty({
-    description: propertyMetadata.state.description,
-    example: propertyMetadata.state.example,
-    name: propertyMetadata.state.fieldLabels.value,
+    description: propertyMetadata.stateCode.description,
+    example: propertyMetadata.stateCode.example,
+    name: propertyMetadata.stateCode.fieldLabels.value,
   })
-  state: string;
+  stateCode: string;
 
   @ApiProperty({
     description: propertyMetadata.unitTypeCode.description,

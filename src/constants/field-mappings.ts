@@ -1,7 +1,7 @@
 import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
 
 const attributes = [
-  { ...propertyMetadata.state.fieldLabels },
+  { ...propertyMetadata.stateCode.fieldLabels },
   { ...propertyMetadata.facilityName.fieldLabels },
   { ...propertyMetadata.facilityId.fieldLabels },
   { ...propertyMetadata.unitId.fieldLabels },
