@@ -287,19 +287,14 @@ describe('-- Facilities Service --', () => {
       );
     });
 
-    it('should throw NotFoundException if facility not found', async done => {
+    it('should throw NotFoundException if facility not found', async () => {
       facilitiesRepositoryMock.findOne.mockReturnValue(undefined);
       await facilitiesService
         .getFacilityById(-1)
-        .then(() =>
-          done.fail(
-            'Facilities service should return NotFoundException error of 404 but did not',
-          ),
-        )
+        .then()
         .catch(error => {
           expect(error.status).toBe(404);
           expect(error.message).toBe('Facility id does not exist');
-          done();
         });
     });
   });
