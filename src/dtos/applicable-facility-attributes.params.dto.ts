@@ -24,7 +24,7 @@ export class ApplicableFacilityAttributesParamsDTO {
     message: ErrorMessages.DateRange(
       'year',
       true,
-      '1980, 1985, 1990, or to a year between 1995 and this year',
+      `1980, 1985, 1990, or to a year between 1995 and the quarter ending on ${ErrorMessages.ReportingQuarter()}`,
     ),
   })
   @IsDefined({ message: ErrorMessages.RequiredProperty() })
