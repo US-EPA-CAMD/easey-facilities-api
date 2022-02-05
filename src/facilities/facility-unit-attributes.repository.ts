@@ -190,4 +190,11 @@ export class FacilityUnitAttributesRepository extends Repository<
     }
     return query.getMany();
   }
+
+  async lastArchivedYear(): Promise<number> {
+    const result = await this.query('SELECT MIN(op_year) AS "year" FROM camddmw.hour_unit_data;');
+    const lastArchivedYear = result[0].year-1;
+    console.log('Last Year Archived', lastArchivedYear);
+    return lastArchivedYear;
+  }
 }
