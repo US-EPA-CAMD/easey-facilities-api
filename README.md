@@ -12,7 +12,7 @@ Follow these [instructions](https://github.com/US-EPA-CAMD/devops/blob/master/GE
 
 ## API Endpoints
 
-Please refer to the Facilities Management API Swagger Documentation for descriptions of the endpoints.
+Please refer to the Facilities Management API Swagger Documentation for descriptions of the endpoints.<br>
 [Dev Environment](https://api.epa.gov/easey/dev/facilities-mgmt/swagger/) | [Test Environment](https://api.epa.gov/easey/test/facilities-mgmt/swagger/) | [Beta Environment](https://api.epa.gov/easey/beta/facilities-mgmt/swagger/) | [Staging Environment](https://api.epa.gov/easey/staging/facilities-mgmt/swagger/)
 
 ## License & Contributing
