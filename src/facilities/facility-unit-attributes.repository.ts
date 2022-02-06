@@ -192,9 +192,7 @@ export class FacilityUnitAttributesRepository extends Repository<
   }
 
   async lastArchivedYear(): Promise<number> {
-    const result = await this.query('SELECT MIN(op_year) AS "year" FROM camddmw.hour_unit_data;');
-    const lastArchivedYear = result[0].year-1;
-    console.log('Last Year Archived', lastArchivedYear);
-    return lastArchivedYear;
+    const result = await this.query('SELECT MAX(op_year) AS "year" FROM camddmw_arch.hour_unit_data_a;');
+    return result[0].year;
   }
 }
