@@ -2,6 +2,8 @@ import { IsDefined, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
+import { PAGINATION_MAX_PER_PAGE } from '../config/app.config';
+
 import {
   propertyMetadata,
   ErrorMessages,
@@ -18,6 +20,8 @@ import {
   IsInDateRange,
   IsOrisCode,
   IsYearFormat,
+  Min,
+  IsInRange,
 } from '@us-epa-camd/easey-common/pipes';
 
 import { IsStateCode } from '../pipes/is-state-code.pipe';
@@ -30,18 +34,6 @@ import { IsSourceCategory } from '../pipes/is-source-category.pipe';
 export class FacilityAttributesParamsDTO {
   @ApiHideProperty()
   currentDate: Date = this.getCurrentDate;
-
-  @ApiProperty({
-    description: propertyMetadata.page.description,
-  })
-  @IsOptional()
-  page?: number;
-
-  @ApiProperty({
-    description: propertyMetadata.perPage.description,
-  })
-  @IsOptional()
-  perPage?: number;
 
   @ApiProperty({
     isArray: true,
@@ -158,4 +150,24 @@ export class FacilityAttributesParamsDTO {
   private get getCurrentDate(): Date {
     return new Date();
   }
+}
+
+export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesParamsDTO {
+  @Min(1, {
+    message: ErrorMessages.GreaterThanOrEqual('page', 1),
+  })
+  @ApiProperty({
+    description: propertyMetadata.page.description,
+  })
+  @IsDefined()
+  page?: number;
+
+  @IsInRange(1, PAGINATION_MAX_PER_PAGE, {
+    message: ErrorMessages.Between('page', 1, PAGINATION_MAX_PER_PAGE),
+  })
+  @ApiProperty({
+    description: propertyMetadata.perPage.description,
+  })
+  @IsDefined()
+  perPage?: number;
 }

@@ -25,11 +25,15 @@ import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
 
-const mockRequest = (url: string) => {
+const mockRequest = (url?: string, page?: number, perPage?: number) => {
   return {
     url,
     res: {
       setHeader: jest.fn(),
+    },
+    query: {
+      page,
+      perPage,
     },
   };
 };

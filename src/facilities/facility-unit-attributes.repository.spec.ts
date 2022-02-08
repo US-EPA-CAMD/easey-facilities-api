@@ -24,6 +24,7 @@ const mockQueryBuilder = () => ({
   getCount: jest.fn(),
   skip: jest.fn(),
   take: jest.fn(),
+  stream: jest.fn(),
 });
 
 const filters: FacilityAttributesParamsDTO = new FacilityAttributesParamsDTO();
@@ -71,6 +72,17 @@ describe('FacilityUnitAttributesRepository', () => {
     queryBuilder.take.mockReturnValue('mockPagination');
     queryBuilder.getCount.mockReturnValue('mockCount');
     queryBuilder.getMany.mockReturnValue('mockFacilityAttributes');
+    queryBuilder.stream.mockReturnValue('mockStream');
+  });
+
+  describe('streamFacilityUnitAttributes', () => {
+    it('streams all facility unit attributes', async () => {
+      const result = await facilityUnitAttributesRepository.streamAllAccountAttributes(
+        new FacilityAttributesParamsDTO,
+      );
+
+      expect(result).toEqual('mockStream');
+    });
   });
 
   describe('getAllFacilityAttributes', () => {

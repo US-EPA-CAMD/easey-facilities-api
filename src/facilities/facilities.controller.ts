@@ -16,6 +16,7 @@ import {
   ParseIntPipe,
   ValidationPipe,
   UseInterceptors,
+  StreamableFile,
 } from '@nestjs/common';
 import { Json2CsvInterceptor } from '@us-epa-camd/easey-common/interceptors';
 
@@ -38,6 +39,31 @@ import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 @UseInterceptors(Json2CsvInterceptor)
 export class FacilitiesController {
   constructor(private readonly service: FacilitiesService) {}
+
+  @Get('/attributes/stream')
+  @ApiOkResponse({
+    description: 'Streams a list of Facilities',
+    content: {
+      'application/json': {
+        schema: {
+          $ref: getSchemaPath(FacilityAttributesDTO),
+        },
+      },
+      'text/csv': {
+        schema: {
+          type: 'string',
+        },
+      },
+    },
+  })
+  @BadRequestResponse()
+  @NotFoundResponse()
+  streamAttributesUnitFacilities(
+    @Req() req: Request,
+    @Query() params: FacilityAttributesParamsDTO,
+  ): Promise<StreamableFile> {
+    return this.service.streamFacilitiesUnitAttributes(req, params)
+  }
 
   @Get()
   @ApiOkResponse({

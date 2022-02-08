@@ -112,7 +112,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.ownerOperatorInfo.example,
     name: propertyMetadata.ownerOperatorInfo.fieldLabels.value,
   })
-  ownerOperator: string;
+  ownerOperatorInfo: string;
 
   @ApiProperty({
     description: propertyMetadata.so2Phase.description,

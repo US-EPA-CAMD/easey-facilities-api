@@ -12,6 +12,7 @@ import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
+import { StreamableFile } from '@nestjs/common';
 
 const mockRequest = (url: string) => {
   return {
@@ -21,6 +22,25 @@ const mockRequest = (url: string) => {
     },
   };
 };
+
+describe('* getFacilitiesStream', () => {
+  const req: any = mockRequest('');
+  req.res.setHeader.mockReturnValue();
+
+  it('should call the service and return facilites ', async () => {
+    const expectedResults: StreamableFile = undefined;
+    const paramsDTO = new FacilityAttributesParamsDTO();
+    jest
+      .spyOn(facilitiesService, 'streamFacilities')
+      .mockResolvedValue(expectedResults);
+    expect(
+      await facilitiesController.streamFacilities(
+        req,
+        paramsDTO,
+      ),
+    ).toBo(expectedResults);
+  });
+});
 
 describe('-- Facilities Controller --', () => {
   let facilitiesController: FacilitiesController;

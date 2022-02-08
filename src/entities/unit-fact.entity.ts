@@ -8,6 +8,8 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 
+import { NumericColumnTransformer } from '@us-epa-camd/easey-common/transforms';
+
 import { OwnerDisplayFact } from './owner-display-fact.entity';
 import { ProgramYearDim } from './program-year-dim.entity';
 
@@ -15,16 +17,19 @@ import { ProgramYearDim } from './program-year-dim.entity';
 export class UnitFact extends BaseEntity {
   @PrimaryColumn({
     name: 'unit_id',
+    transformer: new NumericColumnTransformer(),
   })
   id: number;
 
   @PrimaryColumn({
     name: 'op_year',
+    transformer: new NumericColumnTransformer(),
   })
   year: number;
 
   @Column({
     name: 'orispl_code',
+    transformer: new NumericColumnTransformer(),
   })
   facilityId: number;
 
@@ -53,6 +58,7 @@ export class UnitFact extends BaseEntity {
 
   @Column({
     name: 'epa_region',
+    transformer: new NumericColumnTransformer(),
   })
   epaRegion: number;
 
@@ -142,6 +148,7 @@ export class UnitFact extends BaseEntity {
 
   @Column({
     name: 'capacity_input',
+    transformer: new NumericColumnTransformer(),
   })
   maxHourlyHIRate: number;
 

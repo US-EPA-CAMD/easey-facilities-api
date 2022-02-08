@@ -4,9 +4,14 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  StreamableFile,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Logger } from '@us-epa-camd/easey-common/logger';
+import { v4 as uuid } from 'uuid';
+import { Transform } from 'stream';
+import { plainToClass } from 'class-transformer';
+import { PlainToCSV, PlainToJSON } from '@us-epa-camd/easey-common/transforms';
 
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 
@@ -91,6 +96,100 @@ export class FacilitiesService {
     }
 
     return this.facilityMap.one(facility);
+  }
+
+  async streamFacilitiesUnitAttributes(
+    req: Request,
+    facilityAttributesParamsDTO: FacilityAttributesParamsDTO,
+  ): Promise<StreamableFile> {
+    const stream = await this.facilityUnitAttributesRepository.streamAllFacilityUnitAttributes(
+      facilityAttributesParamsDTO,
+    );
+    req.res.setHeader(
+      'X-Field-Mappings',
+      JSON.stringify(fieldMappings.facilities.attributes),
+    );
+    const toDto = new Transform({
+      objectMode:true,
+      transform(data, _enc, callback) {
+        delete data.id;
+
+        const commercialOperationDate = new Date(data.commercialOperationDate);
+        data.commercialOperationDate = commercialOperationDate.toISOString().split('T')[0];
+
+        let associatedGeneratorsAndNameplateCapacityStr = '';
+        const array = [data.ownDisplay, data.oprDisplay];
+        const ownOprList = array
+          .filter(e => e)
+          .join(',')
+          .slice(0, -1)
+          .split('),');
+        const ownOprUniqueList = [...new Set(ownOprList)];
+        const ownerOperator = ownOprUniqueList.join('),');
+
+        const generatorIdArr = data.generatorId?.split(', ');
+        const arpNameplateCapacityArr = data.arpNameplateCapacity?.split(', ');
+        const otherNameplateCapacityArr = data.otherNameplateCapacity?.split(
+          ', ',
+        );
+
+        for (let index = 0; index < generatorIdArr.length; index++) {
+          associatedGeneratorsAndNameplateCapacityStr += generatorIdArr[index];
+          if (
+            arpNameplateCapacityArr &&
+            arpNameplateCapacityArr[index] !== 'null'
+          ) {
+            associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
+              arpNameplateCapacityArr[index],
+            )})`;
+          } else if (
+            otherNameplateCapacityArr &&
+            otherNameplateCapacityArr[index] !== 'null'
+          ) {
+            associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
+              otherNameplateCapacityArr[index],
+            )})`;
+          }
+          if (generatorIdArr.length > 1 && index < generatorIdArr.length - 1) {
+            associatedGeneratorsAndNameplateCapacityStr += ', ';
+          }
+        }   
+        delete data.oprDisplay;
+        // delete data.ownDisplay;
+        delete data.generatorId;
+        delete data.arpNameplateCapacity;
+        delete data.otherNameplateCapacity;
+
+
+        data.ownerOperatorInfo = ownerOperator.length > 0 ? `${ownerOperator})` : null;
+        data.associatedGeneratorsAndNamePlateCapacity = associatedGeneratorsAndNameplateCapacityStr;
+
+        const dto = plainToClass(FacilityAttributesDTO, data, {
+          enableImplicitConversion: true,
+        });
+
+
+        // const commercialOperationDate = new Date(dto.commercialOperationDate);
+        // dto.commercialOperationDate = commercialOperationDate.toISOString().split('T')[0];
+
+
+        callback(null, dto);
+      },
+    });
+
+    if (req.headers.accept === 'text/csv') {
+      const toCSV = new PlainToCSV(fieldMappings.facilities.attributes);
+      return new StreamableFile(stream.pipe(toDto).pipe(toCSV), {
+        type: req.headers.accept,
+        disposition: `attachment; filename="facilities-attributes-${uuid()}.csv"`,
+      });
+    }
+
+    const objToString = new PlainToJSON();
+    return new StreamableFile(stream.pipe(toDto).pipe(objToString), {
+      type: req.headers.accept,
+      disposition: `attachment; filename="facilities-attributes-${uuid()}.json`,
+    });
   }
 
   async getAllFacilityAttributes(
