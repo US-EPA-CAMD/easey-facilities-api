@@ -36,7 +36,6 @@ import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 @Controller()
 @ApiSecurity('APIKey')
 @ApiTags('Facilities')
-@UseInterceptors(Json2CsvInterceptor)
 export class FacilitiesController {
   constructor(private readonly service: FacilitiesService) {}
 
@@ -80,6 +79,7 @@ export class FacilitiesController {
   }
 
   @Get('/attributes')
+  @UseInterceptors(Json2CsvInterceptor)
   @ApiOkResponse({
     description: 'Retrieves Facility Unit Attributes',
     content: {
