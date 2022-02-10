@@ -5,6 +5,7 @@ import { FacilitiesController } from './facilities.controller';
 import { FacilitiesService } from './facilities.service';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityMap } from './../maps/facility.map';
+import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
@@ -22,25 +23,6 @@ const mockRequest = (url: string) => {
     },
   };
 };
-
-describe('* getFacilitiesStream', () => {
-  const req: any = mockRequest('');
-  req.res.setHeader.mockReturnValue();
-
-  it('should call the service and return facilites ', async () => {
-    const expectedResults: StreamableFile = undefined;
-    const paramsDTO = new FacilityAttributesParamsDTO();
-    jest
-      .spyOn(facilitiesService, 'streamFacilities')
-      .mockResolvedValue(expectedResults);
-    expect(
-      await facilitiesController.streamFacilities(
-        req,
-        paramsDTO,
-      ),
-    ).toBo(expectedResults);
-  });
-});
 
 describe('-- Facilities Controller --', () => {
   let facilitiesController: FacilitiesController;
@@ -117,6 +99,22 @@ describe('-- Facilities Controller --', () => {
       expect(
         await facilitiesController.getAllFacilityAttributes(null, req),
       ).toBe(expectedResult);
+    });
+  });
+
+  describe('* getFacilitiesStream', () => {
+    it('should call the service and return facilites ', async () => {
+      const expectedResults: StreamableFile = undefined;
+      const paramsDTO = new FacilityAttributesParamsDTO();
+      jest
+        .spyOn(facilitiesService, 'streamFacilitiesUnitAttributes')
+        .mockResolvedValue(expectedResults);
+      expect(
+        await facilitiesController.streamFacilitiesUnitAttributes(
+          req,
+          paramsDTO,
+        ),
+      ).toBe(expectedResults);
     });
   });
 });

@@ -26,7 +26,7 @@ import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesService } from './facilities.service';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
-import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import {
   ApiQueryAttributesMultiSelect,
   BadRequestResponse,
@@ -67,6 +67,9 @@ export class FacilitiesController {
       'text/csv': {
         schema: {
           type: 'string',
+          example: fieldMappings.facilities.attributes
+            .map(i => i.label)
+            .join(','),
         },
       },
     },
@@ -77,16 +80,17 @@ export class FacilitiesController {
   @ApiExtraModels(FacilityAttributesDTO)
   getAllFacilityAttributes(
     @Query()
-    facilityattributesParamsDTO: FacilityAttributesParamsDTO,
+    paginiatedFacilityattributesParamsDTO: PaginatedFacilityAttributesParamsDTO,
     @Req() req: Request,
   ): Promise<FacilityAttributesDTO[]> {
     return this.service.getAllFacilityAttributes(
-      facilityattributesParamsDTO,
+      paginiatedFacilityattributesParamsDTO,
       req,
     );
   }
 
   @Get('/attributes/stream')
+  @UseInterceptors(Json2CsvInterceptor)
   @ApiOkResponse({
     description: 'Streams a list of Facilities',
     content: {
@@ -109,11 +113,14 @@ export class FacilitiesController {
   @NotFoundResponse()
   @ApiQueryAttributesMultiSelect()
   @ApiExtraModels(FacilityAttributesDTO)
-  streamAttributesUnitFacilities(
+  streamFacilitiesUnitAttributes(
     @Req() req: Request,
-    @Query() params: FacilityAttributesParamsDTO,
+    @Query() facilityAttributesParamsDTO: FacilityAttributesParamsDTO,
   ): Promise<StreamableFile> {
-    return this.service.streamFacilitiesUnitAttributes(req, params)
+    return this.service.streamFacilitiesUnitAttributes(
+      req, 
+      facilityAttributesParamsDTO
+    );
   }
 
   @Get('/attributes/applicable')

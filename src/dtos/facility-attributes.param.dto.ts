@@ -154,7 +154,7 @@ export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesPara
     description: propertyMetadata.page.description,
   })
   @IsDefined()
-  page?: number;
+  page: number;
 
   @IsInRange(1, PAGINATION_MAX_PER_PAGE, {
     message: ErrorMessages.Between('perPage', 1, PAGINATION_MAX_PER_PAGE),
@@ -163,5 +163,5 @@ export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesPara
     description: propertyMetadata.perPage.description,
   })
   @IsDefined()
-  perPage?: number;
+  perPage: number;
 }

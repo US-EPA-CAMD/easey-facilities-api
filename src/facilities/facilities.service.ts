@@ -118,7 +118,7 @@ export class FacilitiesService {
         data.commercialOperationDate = commercialOperationDate.toISOString().split('T')[0];
 
         let associatedGeneratorsAndNameplateCapacityStr = '';
-        const array = [data.ownDisplay, data.oprDisplay];
+        const array = [data.ownerOperator, data.oprDisplay];
         const ownOprList = array
           .filter(e => e)
           .join(',')
@@ -127,7 +127,7 @@ export class FacilitiesService {
         const ownOprUniqueList = [...new Set(ownOprList)];
         const ownerOperator = ownOprUniqueList.join('),');
 
-        const generatorIdArr = data.associatedGeneratorsAndNamePlateCapacity?.split(', ');
+        const generatorIdArr = data.associatedGeneratorsAndNameplateCapacity?.split(', ');
         const arpNameplateCapacityArr = data.arpNameplateCapacity?.split(', ');
         const otherNameplateCapacityArr = data.otherNameplateCapacity?.split(
           ', ',
@@ -160,8 +160,8 @@ export class FacilitiesService {
         delete data.otherNameplateCapacity;
 
 
-        data.ownerOperatorInfo = ownerOperator.length > 0 ? `${ownerOperator})` : null;
-        data.associatedGeneratorsAndNamePlateCapacity = associatedGeneratorsAndNameplateCapacityStr;
+        data.ownerOperator = ownerOperator.length > 0 ? `${ownerOperator})` : null;
+        data.associatedGeneratorsAndNameplateCapacity = associatedGeneratorsAndNameplateCapacityStr;
 
         const dto = plainToClass(FacilityAttributesDTO, data, {
           enableImplicitConversion: true,

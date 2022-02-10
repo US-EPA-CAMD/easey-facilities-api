@@ -9,7 +9,7 @@ import { ReadStream } from 'fs';
 @EntityRepository(FacilityUnitAttributes)
 export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAttributes> {
 
-  streamAllFacilityUnitAttributes(
+  async streamAllFacilityUnitAttributes(
     params: FacilityAttributesParamsDTO,
   ): Promise<ReadStream> {
     return this.buildQuery(params, true).stream();
@@ -197,10 +197,10 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
     return columns.map(col => {
       if (isStreamed) {
         if (col === 'fua.ownDisplay') {
-          return `${col} AS "ownerOperatorInfo"`;
+          return `${col} AS "ownerOperator"`;
         }
         if (col === 'fua.generatorId') {
-          return `${col} AS "associatedGeneratorsAndNamePlateCapacity"`;
+          return `${col} AS "associatedGeneratorsAndNameplateCapacity"`;
         }
         return `${col} AS "${col.split('.')[1]}"`;
       } else {

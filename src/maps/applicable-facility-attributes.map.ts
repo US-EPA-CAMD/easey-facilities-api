@@ -11,14 +11,17 @@ export class ApplicableFacilityAttributesMap extends BaseMap<
 > {
   public async one(entity: any): Promise<any> {
     return {
-      year: entity.pyd_op_year,
-      programCode: entity.pyd_prg_code,
-      facilityId: entity.uf_orispl_code,
-      stateCode: entity.uf_state,
-      unitTypeCode: entity.utyd_unit_type,
-      fuelTypeCode: entity.fyd_fuel_code,
-      controlCode: entity.cyd_control_code,
-      sourceCategoryDescription: entity.uf_source_cat,
+      [propertyMetadata.year.fieldLabels.value]: Number(entity.pyd_op_year),
+      [propertyMetadata.programCode.fieldLabels.value]: entity.pyd_prg_code,
+      [propertyMetadata.facilityId.fieldLabels.value]: Number(
+        entity.uf_orispl_code,
+      ),
+      [propertyMetadata.stateCode.fieldLabels.value]: entity.uf_state,
+      [propertyMetadata.unitTypeCode.fieldLabels.value]: entity.utyd_unit_type,
+      [propertyMetadata.fuelTypeCode.fieldLabels.value]: entity.fyd_fuel_code,
+      [propertyMetadata.controlCode.fieldLabels.value]: entity.cyd_control_code,
+      [propertyMetadata.sourceCategoryDescription.fieldLabels.value]:
+        entity.uf_source_cat,
     };
   }
 }

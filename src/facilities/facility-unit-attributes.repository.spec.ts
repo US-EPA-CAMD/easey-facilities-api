@@ -11,7 +11,7 @@ import {
 } from '@us-epa-camd/easey-common/enums';
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 
-import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
 
@@ -27,7 +27,7 @@ const mockQueryBuilder = () => ({
   stream: jest.fn(),
 });
 
-const filters: FacilityAttributesParamsDTO = new FacilityAttributesParamsDTO();
+const filters: PaginatedFacilityAttributesParamsDTO = new PaginatedFacilityAttributesParamsDTO();
 filters.page = undefined;
 filters.perPage = undefined;
 filters.year = [2019];
@@ -77,7 +77,7 @@ describe('FacilityUnitAttributesRepository', () => {
 
   describe('streamFacilityUnitAttributes', () => {
     it('streams all facility unit attributes', async () => {
-      const result = await facilityUnitAttributesRepository.streamAllAccountAttributes(
+      const result = await facilityUnitAttributesRepository.streamAllFacilityUnitAttributes(
         new FacilityAttributesParamsDTO,
       );
 
@@ -88,7 +88,7 @@ describe('FacilityUnitAttributesRepository', () => {
   describe('getAllFacilityAttributes', () => {
     it('calls createQueryBuilder and gets all facility attributes from the repository', async () => {
       // branch coverage
-      const emptyFilters: FacilityAttributesParamsDTO = new FacilityAttributesParamsDTO();
+      const emptyFilters: PaginatedFacilityAttributesParamsDTO = new PaginatedFacilityAttributesParamsDTO();
       let result = await facilityUnitAttributesRepository.getAllFacilityAttributes(
         emptyFilters,
       );
