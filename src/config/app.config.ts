@@ -4,7 +4,7 @@ const path = process.env.EASEY_FACILITIES_API_PATH || 'facilities-mgmt';
 const host = process.env.EASEY_FACILITIES_API_HOST || 'localhost';
 const port = process.env.EASEY_FACILITIES_API_PORT || 8020;
 
-export const PAGINATION_MAX_PER_PAGE = +process.env.EASEY_ACCOUNT_API_PAGINATION_MAX_PER_PAGE || 25000;
+export const PAGINATION_MAX_PER_PAGE = +process.env.EASEY_FACILITY_API_PAGINATION_MAX_PER_PAGE || 25000;
 
 let uri = `https://${host}/${path}`;
 
@@ -27,4 +27,5 @@ export default registerAs('app', () => ({
   enableGlobalValidationPipes: process.env.EASEY_FACILITIES_API_ENABLE_GLOBAL_VALIDATION_PIPE || true,
   version: process.env.EASEY_FACILITIES_API_VERSION || 'v0.0.0',
   published: process.env.EASEY_FACILITIES_API_PUBLISHED || 'local',
+  perPageLimit: PAGINATION_MAX_PER_PAGE,
 }));

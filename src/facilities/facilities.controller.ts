@@ -20,6 +20,7 @@ import {
 } from '@nestjs/common';
 import { Json2CsvInterceptor } from '@us-epa-camd/easey-common/interceptors';
 
+import { fieldMappings } from '../constants/field-mappings';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesService } from './facilities.service';
@@ -38,31 +39,6 @@ import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 @ApiTags('Facilities')
 export class FacilitiesController {
   constructor(private readonly service: FacilitiesService) {}
-
-  @Get('/attributes/stream')
-  @ApiOkResponse({
-    description: 'Streams a list of Facilities',
-    content: {
-      'application/json': {
-        schema: {
-          $ref: getSchemaPath(FacilityAttributesDTO),
-        },
-      },
-      'text/csv': {
-        schema: {
-          type: 'string',
-        },
-      },
-    },
-  })
-  @BadRequestResponse()
-  @NotFoundResponse()
-  streamAttributesUnitFacilities(
-    @Req() req: Request,
-    @Query() params: FacilityAttributesParamsDTO,
-  ): Promise<StreamableFile> {
-    return this.service.streamFacilitiesUnitAttributes(req, params)
-  }
 
   @Get()
   @ApiOkResponse({
@@ -108,6 +84,36 @@ export class FacilitiesController {
       facilityattributesParamsDTO,
       req,
     );
+  }
+
+  @Get('/attributes/stream')
+  @ApiOkResponse({
+    description: 'Streams a list of Facilities',
+    content: {
+      'application/json': {
+        schema: {
+          $ref: getSchemaPath(FacilityAttributesDTO),
+        },
+      },
+      'text/csv': {
+        schema: {
+          type: 'string',
+          example: fieldMappings.facilities.attributes
+            .map(i => i.label)
+            .join(','),
+        },
+      },
+    },
+  })
+  @BadRequestResponse()
+  @NotFoundResponse()
+  @ApiQueryAttributesMultiSelect()
+  @ApiExtraModels(FacilityAttributesDTO)
+  streamAttributesUnitFacilities(
+    @Req() req: Request,
+    @Query() params: FacilityAttributesParamsDTO,
+  ): Promise<StreamableFile> {
+    return this.service.streamFacilitiesUnitAttributes(req, params)
   }
 
   @Get('/attributes/applicable')

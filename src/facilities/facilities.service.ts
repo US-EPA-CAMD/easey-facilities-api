@@ -23,7 +23,7 @@ import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
-import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { fieldMappings } from '../constants/field-mappings';
@@ -127,7 +127,7 @@ export class FacilitiesService {
         const ownOprUniqueList = [...new Set(ownOprList)];
         const ownerOperator = ownOprUniqueList.join('),');
 
-        const generatorIdArr = data.generatorId?.split(', ');
+        const generatorIdArr = data.associatedGeneratorsAndNamePlateCapacity?.split(', ');
         const arpNameplateCapacityArr = data.arpNameplateCapacity?.split(', ');
         const otherNameplateCapacityArr = data.otherNameplateCapacity?.split(
           ', ',
@@ -155,8 +155,7 @@ export class FacilitiesService {
           }
         }   
         delete data.oprDisplay;
-        // delete data.ownDisplay;
-        delete data.generatorId;
+        // delete data.generatorId;
         delete data.arpNameplateCapacity;
         delete data.otherNameplateCapacity;
 
@@ -167,11 +166,6 @@ export class FacilitiesService {
         const dto = plainToClass(FacilityAttributesDTO, data, {
           enableImplicitConversion: true,
         });
-
-
-        // const commercialOperationDate = new Date(dto.commercialOperationDate);
-        // dto.commercialOperationDate = commercialOperationDate.toISOString().split('T')[0];
-
 
         callback(null, dto);
       },
@@ -193,14 +187,14 @@ export class FacilitiesService {
   }
 
   async getAllFacilityAttributes(
-    facilityAttributesParamsDTO: FacilityAttributesParamsDTO,
+    paginatedFacilityAttributesParamsDTO: PaginatedFacilityAttributesParamsDTO,
     req: Request,
   ): Promise<FacilityAttributesDTO[]> {
     this.logger.info('Getting all facility attributes');
     let query;
     try {
       query = await this.facilityUnitAttributesRepository.getAllFacilityAttributes(
-        facilityAttributesParamsDTO,
+        paginatedFacilityAttributesParamsDTO,
         req,
       );
     } catch (e) {

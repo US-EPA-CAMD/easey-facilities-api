@@ -1,4 +1,4 @@
-import { IsDefined, IsOptional } from 'class-validator';
+import { IsOptional } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { propertyMetadata, ErrorMessages } from '@us-epa-camd/easey-common/constants';
 import { Min, IsInRange } from '@us-epa-camd/easey-common/pipes';
@@ -16,7 +16,7 @@ export class PaginationDTO {
   page: number;
 
   @IsInRange(1, PAGINATION_MAX_PER_PAGE, {
-    message: ErrorMessages.Between('page', 1, PAGINATION_MAX_PER_PAGE),
+    message: ErrorMessages.Between('perPage', 1, PAGINATION_MAX_PER_PAGE),
   })
   @IsOptional()
   @ApiPropertyOptional({

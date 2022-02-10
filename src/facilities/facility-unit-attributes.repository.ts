@@ -196,17 +196,17 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
 
     return columns.map(col => {
       if (isStreamed) {
-        if (col === 'fua.ownDisplay')
+        if (col === 'fua.ownDisplay') {
           return `${col} AS "ownerOperatorInfo"`;
+        }
+        if (col === 'fua.generatorId') {
+          return `${col} AS "associatedGeneratorsAndNamePlateCapacity"`;
+        }
         return `${col} AS "${col.split('.')[1]}"`;
       } else {
         return col;
       }
     });
-    // if (isStreamed) {
-    //   newColumns.splice(newColumns.indexOf(`fua.ownerOperatorInfo AS "ownerOperatorInfo"`), 1, 
-    //     `fua.ownerOperatorInfo as "ownDisplay"`);
-    // }
   }
 
   async getAllFacilityAttributes(

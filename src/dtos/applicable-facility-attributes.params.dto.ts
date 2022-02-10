@@ -1,12 +1,11 @@
-import { IsDefined, IsOptional } from 'class-validator';
+import { IsDefined } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   propertyMetadata,
   ErrorMessages,
 } from '@us-epa-camd/easey-common/constants';
-import { IsInDateRange, IsYearFormat, Min, IsInRange } from '@us-epa-camd/easey-common/pipes';
-import { PAGINATION_MAX_PER_PAGE } from '../config/app.config';
+import { IsInDateRange, IsYearFormat } from '@us-epa-camd/easey-common/pipes';
 
 export class ApplicableFacilityAttributesParamsDTO {
   @ApiHideProperty()
@@ -32,26 +31,7 @@ export class ApplicableFacilityAttributesParamsDTO {
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   year: number[];
 
-  @ApiProperty({
-    description: propertyMetadata.page.description,
-  })
-  @IsOptional()
-  @Min(1, {
-    message: ErrorMessages.GreaterThanOrEqual('page', 1),
-  })
-  page: number;
-
-  @ApiProperty({
-    description: propertyMetadata.perPage.description,
-  })
-  @IsOptional()
-  @IsInRange(1, PAGINATION_MAX_PER_PAGE, {
-    message: ErrorMessages.Between('perPage', 1, PAGINATION_MAX_PER_PAGE),
-  })
-  perPage: number;
-
   private get getCurrentDate(): Date {
     return new Date();
   }
-
 }

@@ -65,7 +65,7 @@ export class FacilityAttributesMap extends BaseMap<
       sourceCategory: entity.sourceCategory,
       latitude: entity.latitude,
       longitude: entity.longitude,
-      ownerOperatorInfo: ownerOperator.length > 0 ? `${ownerOperator})` : null,
+      ownerOperator: ownerOperator.length > 0 ? `${ownerOperator})` : null,
       so2Phase: entity.so2Phase,
       noxPhase: entity.noxPhase,
       unitType: entity.unitType,

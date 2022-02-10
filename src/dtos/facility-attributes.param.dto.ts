@@ -141,12 +141,6 @@ export class FacilityAttributesParamsDTO {
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   programCodeInfo?: Program[];
 
-  @ApiProperty({
-    description:
-      'Attaches a file with data in the format specified by the Accept header',
-  })
-  attachFile?: boolean;
-
   private get getCurrentDate(): Date {
     return new Date();
   }
@@ -163,7 +157,7 @@ export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesPara
   page?: number;
 
   @IsInRange(1, PAGINATION_MAX_PER_PAGE, {
-    message: ErrorMessages.Between('page', 1, PAGINATION_MAX_PER_PAGE),
+    message: ErrorMessages.Between('perPage', 1, PAGINATION_MAX_PER_PAGE),
   })
   @ApiProperty({
     description: propertyMetadata.perPage.description,
