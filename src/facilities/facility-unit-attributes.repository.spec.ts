@@ -118,4 +118,16 @@ describe('FacilityUnitAttributesRepository', () => {
       expect(paginatedResult).toEqual('mockFacilityAttributes');
     });
   });
+
+  describe('lastArchivedYear', () => {
+    it('returns the last archived year', async () => {
+      const archivedYear = [ { year: 2016 } ];
+      facilityUnitAttributesRepository.query = jest
+      .fn()
+      .mockReturnValue(archivedYear);
+      const year = await facilityUnitAttributesRepository.lastArchivedYear();
+      expect(facilityUnitAttributesRepository.query).toHaveBeenCalled();
+      expect(year).toEqual(2016);
+    });
+  });
 });

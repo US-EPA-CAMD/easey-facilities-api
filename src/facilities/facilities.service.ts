@@ -214,34 +214,31 @@ export class FacilitiesService {
   async getApplicableFacilityAttributes(
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
   ): Promise<ApplicableFacilityAttributesDTO[]> {
-    const archivedYear = new Date().getFullYear() - 4;
-    const yearData = applicableFacilityAttributesParamsDTO.year.map(
-      el => Number(el) >= archivedYear,
-    );
-    let isArchived = false;
     let isUnion = false;
+    let isArchived = false;
 
-    if (yearData.includes(false)) {
-      isArchived = true;
-      if (yearData.includes(true)) {
-        isUnion = true;
-      }
-    }
+    const archivedYear = await this.facilityUnitAttributesRepository.lastArchivedYear();
+    const archivedYears = applicableFacilityAttributesParamsDTO.year.map(
+      el => Number(el) <= archivedYear,
+    );
 
-    this.logger.info('Getting all applicable facility attributes');
+    isArchived = archivedYears.includes(true);
+    this.logger.info(`Query params ${isArchived ? 'contains' : 'do not contain'} archived years`);
+    isUnion = isArchived && archivedYears.includes(false);
+    this.logger.info(`Query params ${isUnion ? 'contains' : 'do not contain'} archived & non-archived years`);    
 
     let query;
     try {
+      this.logger.info('Getting all applicable facility attributes');
       query = await this.programYearRepository.getApplicableFacilityAttributes(
         applicableFacilityAttributesParamsDTO,
         isArchived,
         isUnion,
       );
+      this.logger.info('Got all applicable facility attributes');      
     } catch (e) {
       this.logger.error(InternalServerErrorException, e.message, true);
     }
-
-    this.logger.info('Got all applicable facility attributes');
 
     return this.applicableFacilityAttributesMap.many(query);
   }

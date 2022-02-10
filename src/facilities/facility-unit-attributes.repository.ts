@@ -224,4 +224,9 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
 
     return query.getMany();
   }
+
+  async lastArchivedYear(): Promise<number> {
+    const result = await this.query('SELECT MAX(op_year) AS "year" FROM camddmw_arch.hour_unit_data_a;');
+    return result[0].year;
+  }
 }

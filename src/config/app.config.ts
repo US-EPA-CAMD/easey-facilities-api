@@ -1,5 +1,7 @@
 import { registerAs } from '@nestjs/config';
 
+require('dotenv').config();
+
 const path = process.env.EASEY_FACILITIES_API_PATH || 'facilities-mgmt';
 const host = process.env.EASEY_FACILITIES_API_HOST || 'localhost';
 const port = process.env.EASEY_FACILITIES_API_PORT || 8020;

@@ -58,6 +58,7 @@ const mockPyd = () => ({
 
 const mockFua = () => ({
   getAllFacilityAttributes: jest.fn(),
+  lastArchivedYear: jest.fn(),
 });
 
 const mockMap = () => ({
@@ -149,7 +150,6 @@ describe('-- Facilities Service --', () => {
         paramsDto,
         undefined,
       );
-      //expect(facilitiesRepositoryMock.findAndCount).toHaveBeenCalled();
       expect(results).toStrictEqual(facilities);
     });
 
@@ -175,7 +175,6 @@ describe('-- Facilities Service --', () => {
         totalCount,
       ]);
       const results = await facilitiesService.getFacilities(paramsDto, req);
-      //expect(facilitiesRepositoryMock.findAndCount).toHaveBeenCalled();
       expect(results).toStrictEqual(facilities);
     });
 
@@ -201,7 +200,6 @@ describe('-- Facilities Service --', () => {
         totalCount,
       ]);
       const results = await facilitiesService.getFacilities(paramsDto, req);
-      //expect(facilitiesRepositoryMock.findAndCount).toHaveBeenCalled();
       expect(results).toStrictEqual(facilities);
     });
 
@@ -227,7 +225,6 @@ describe('-- Facilities Service --', () => {
         totalCount,
       ]);
       const results = await facilitiesService.getFacilities(paramsDto, req);
-      //expect(facilitiesRepositoryMock.findAndCount).toHaveBeenCalled();
       expect(results).toStrictEqual(facilities);
     });
 
@@ -253,7 +250,6 @@ describe('-- Facilities Service --', () => {
         totalCount,
       ]);
       const results = await facilitiesService.getFacilities(paramsDto, req);
-      //expect(facilitiesRepositoryMock.findAndCount).toHaveBeenCalled();
       expect(results).toStrictEqual(facilities);
     });
 
@@ -275,7 +271,6 @@ describe('-- Facilities Service --', () => {
         paramsDto,
         undefined,
       );
-      //expect(facilitiesRepositoryMock.findAndCount).toHaveBeenCalled();
       expect(results).toStrictEqual(facilities);
     });
   });
@@ -308,6 +303,8 @@ describe('-- Facilities Service --', () => {
       const expectedResult: ApplicableFacilityAttributesDTO[] = [];
       const params: ApplicableFacilityAttributesParamsDTO = new ApplicableFacilityAttributesParamsDTO();
       params.year = [2016, 2017];
+
+      facilityUnitAttributesRepository.lastArchivedYear.mockResolvedValue([true, false]);
 
       programYearDimRepository.getApplicableFacilityAttributes.mockResolvedValue(
         'entities',
