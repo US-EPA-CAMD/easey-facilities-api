@@ -90,7 +90,6 @@ export class FacilitiesController {
   }
 
   @Get('/attributes/stream')
-  @UseInterceptors(Json2CsvInterceptor)
   @ApiOkResponse({
     description: 'Streams a list of Facilities',
     content: {
