@@ -1,5 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
+import { NumericColumnTransformer } from '@us-epa-camd/easey-common/transforms';
+
 @Entity({ name: 'camdmd.program_code' })
 export class ProgramCode extends BaseEntity {
   @PrimaryColumn({
@@ -14,6 +16,7 @@ export class ProgramCode extends BaseEntity {
 
   @Column({
     name: 'emissions_ui_filter',
+    transformer: new NumericColumnTransformer(),
   })
   emissionsUIFilter: number;
 }
