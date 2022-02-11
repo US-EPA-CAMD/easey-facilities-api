@@ -27,8 +27,7 @@
     "up": "yarn --ignore-engines && yarn start:dev"
   },
   "resolutions": {
-    "ansi-regex": "^5.0.1",
-    "shelljs": "^0.8.5"
+    "ansi-regex": "^5.0.1"
   },
   "dependencies": {
     "@nestjs/common": "^8.1.1",
