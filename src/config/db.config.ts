@@ -1,6 +1,5 @@
-import { registerAs } from '@nestjs/config';
-
 require('dotenv').config();
+import { registerAs } from '@nestjs/config';
 
 let pgHost = process.env.EASEY_DB_HOST || 'database';
 let pgPort = process.env.EASEY_DB_PORT || 5432;
