@@ -22,14 +22,18 @@ import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facili
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
-import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
 
-const mockRequest = (url: string) => {
+const mockRequest = (url?: string, page?: number, perPage?: number) => {
   return {
     url,
     res: {
       setHeader: jest.fn(),
+    },
+    query: {
+      page,
+      perPage,
     },
   };
 };
@@ -316,7 +320,7 @@ describe('-- Facilities Service --', () => {
   describe('* getAllFacilityAtrributes', () => {
     it('should return a list of All Facilities Attributes', async () => {
       const expectedResult: FacilityAttributesDTO[] = [];
-      const params: FacilityAttributesParamsDTO = new FacilityAttributesParamsDTO();
+      const params: PaginatedFacilityAttributesParamsDTO = new PaginatedFacilityAttributesParamsDTO();
       params.page = undefined;
       params.perPage = undefined;
       params.year = [2019];

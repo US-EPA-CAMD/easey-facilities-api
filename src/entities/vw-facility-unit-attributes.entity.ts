@@ -1,105 +1,107 @@
-import { ViewColumn, ViewEntity } from 'typeorm';
+import { Column, ViewEntity } from 'typeorm';
+
+import { NumericColumnTransformer } from '@us-epa-camd/easey-common/transforms';
 
 @ViewEntity({
   name: 'camddmw.vw_facility_unit_attributes',
 })
 export class FacilityUnitAttributes {
-  @ViewColumn({ name: 'unit_id' })
+  @Column({ name: 'unit_id' })
   id: string;
 
-  @ViewColumn({ name: 'op_year' })
+  @Column({ name: 'op_year', transformer: new NumericColumnTransformer() })
   year: number;
 
-  @ViewColumn({ name: 'prg_code_info' })
+  @Column({ name: 'prg_code_info' })
   programCodeInfo: string;
 
-  @ViewColumn({ name: 'state' })
+  @Column({ name: 'state' })
   stateCode: string;
 
-  @ViewColumn({ name: 'orispl_code' })
+  @Column({ name: 'orispl_code', transformer: new NumericColumnTransformer() })
   facilityId: number;
 
-  @ViewColumn({ name: 'facility_name' })
+  @Column({ name: 'facility_name' })
   facilityName: string;
 
-  @ViewColumn({ name: 'unitid' })
+  @Column({ name: 'unitid' })
   unitId: string;
 
-  @ViewColumn({ name: 'assoc_stacks' })
+  @Column({ name: 'assoc_stacks' })
   associatedStacks: string;
 
-  @ViewColumn({ name: 'epa_region' })
+  @Column({ name: 'epa_region', transformer: new NumericColumnTransformer() })
   epaRegion: number;
 
-  @ViewColumn({ name: 'nerc_region' })
+  @Column({ name: 'nerc_region' })
   nercRegion: string;
 
-  @ViewColumn({ name: 'county' })
+  @Column({ name: 'county' })
   county: string;
 
-  @ViewColumn({ name: 'county_code' })
+  @Column({ name: 'county_code' })
   countyCode: string;
 
-  @ViewColumn({ name: 'fips_code' })
+  @Column({ name: 'fips_code' })
   fipsCode: string;
 
-  @ViewColumn({ name: 'source_cat' })
+  @Column({ name: 'source_cat' })
   sourceCategory: string;
 
-  @ViewColumn({ name: 'latitude' })
+  @Column({ name: 'latitude', scale: 2, precision: 4, transformer: new NumericColumnTransformer() })
   latitude: number;
 
-  @ViewColumn({ name: 'longitude' })
+  @Column({ name: 'longitude', scale: 2, precision: 4, transformer: new NumericColumnTransformer() })
   longitude: number;
 
-  @ViewColumn({ name: 'so2_phase' })
+  @Column({ name: 'so2_phase' })
   so2Phase: string;
 
-  @ViewColumn({ name: 'nox_phase' })
+  @Column({ name: 'nox_phase' })
   noxPhase: string;
 
-  @ViewColumn({ name: 'unit_type_info' })
+  @Column({ name: 'unit_type_info' })
   unitType: string;
 
-  @ViewColumn({ name: 'primary_fuel_info' })
+  @Column({ name: 'primary_fuel_info' })
   primaryFuelInfo: string;
 
-  @ViewColumn({ name: 'secondary_fuel_info' })
+  @Column({ name: 'secondary_fuel_info' })
   secondaryFuelInfo: string;
 
-  @ViewColumn({ name: 'so2_control_info' })
+  @Column({ name: 'so2_control_info' })
   so2ControlInfo: string;
 
-  @ViewColumn({ name: 'nox_control_info' })
+  @Column({ name: 'nox_control_info' })
   noxControlInfo: string;
 
-  @ViewColumn({ name: 'part_control_info' })
+  @Column({ name: 'part_control_info' })
   pmControlInfo: string;
 
-  @ViewColumn({ name: 'hg_control_info' })
+  @Column({ name: 'hg_control_info' })
   hgControlInfo: string;
 
-  @ViewColumn({ name: 'comr_op_date' })
+  @Column({ name: 'comr_op_date', type: 'date' })
   commercialOperationDate: Date;
 
-  @ViewColumn({ name: 'op_status_info' })
+  @Column({ name: 'op_status_info' })
   operatingStatus: string;
 
-  @ViewColumn({ name: 'capacity_input' })
+  @Column({ name: 'capacity_input', scale: 4, precision: 1, transformer: new NumericColumnTransformer() })
   maxHourlyHIRate: number;
 
-  @ViewColumn({ name: 'own_display' })
+  @Column({ name: 'own_display' })
   ownDisplay: string;
 
-  @ViewColumn({ name: 'opr_display' })
+  @Column({ name: 'opr_display' })
   oprDisplay: string;
 
-  @ViewColumn({ name: 'generator_id' })
+  @Column({ name: 'generator_id' })
   generatorId: string;
 
-  @ViewColumn({ name: 'arp_nameplate_capacity' })
+  @Column({ name: 'arp_nameplate_capacity', scale: 3, precision: 1 })
   arpNameplateCapacity: number;
 
-  @ViewColumn({ name: 'other_nameplate_capacity' })
+  @Column({ name: 'other_nameplate_capacity', scale: 3, precision: 1 })
   otherNameplateCapacity: number;
 }

@@ -16,15 +16,17 @@ import {
   ParseIntPipe,
   ValidationPipe,
   UseInterceptors,
+  StreamableFile,
 } from '@nestjs/common';
 import { Json2CsvInterceptor } from '@us-epa-camd/easey-common/interceptors';
 
+import { fieldMappings } from '../constants/field-mappings';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesService } from './facilities.service';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
-import { FacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import {
   ApiQueryAttributesMultiSelect,
   BadRequestResponse,
@@ -35,7 +37,6 @@ import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 @Controller()
 @ApiSecurity('APIKey')
 @ApiTags('Facilities')
-@UseInterceptors(Json2CsvInterceptor)
 export class FacilitiesController {
   constructor(private readonly service: FacilitiesService) {}
 
@@ -54,6 +55,7 @@ export class FacilitiesController {
   }
 
   @Get('/attributes')
+  @UseInterceptors(Json2CsvInterceptor)
   @ApiOkResponse({
     description: 'Retrieves Facility Unit Attributes',
     content: {
@@ -65,6 +67,9 @@ export class FacilitiesController {
       'text/csv': {
         schema: {
           type: 'string',
+          example: fieldMappings.facilities.attributes
+            .map(i => i.label)
+            .join(','),
         },
       },
     },
@@ -75,12 +80,45 @@ export class FacilitiesController {
   @ApiExtraModels(FacilityAttributesDTO)
   getAllFacilityAttributes(
     @Query()
-    facilityattributesParamsDTO: FacilityAttributesParamsDTO,
+    paginiatedFacilityattributesParamsDTO: PaginatedFacilityAttributesParamsDTO,
     @Req() req: Request,
   ): Promise<FacilityAttributesDTO[]> {
     return this.service.getAllFacilityAttributes(
-      facilityattributesParamsDTO,
+      paginiatedFacilityattributesParamsDTO,
       req,
+    );
+  }
+
+  @Get('/attributes/stream')
+  @ApiOkResponse({
+    description: 'Streams a list of Facilities',
+    content: {
+      'application/json': {
+        schema: {
+          $ref: getSchemaPath(FacilityAttributesDTO),
+        },
+      },
+      'text/csv': {
+        schema: {
+          type: 'string',
+          example: fieldMappings.facilities.attributes
+            .map(i => i.label)
+            .join(','),
+        },
+      },
+    },
+  })
+  @BadRequestResponse()
+  @NotFoundResponse()
+  @ApiQueryAttributesMultiSelect()
+  @ApiExtraModels(FacilityAttributesDTO)
+  streamFacilitiesUnitAttributes(
+    @Req() req: Request,
+    @Query() facilityAttributesParamsDTO: FacilityAttributesParamsDTO,
+  ): Promise<StreamableFile> {
+    return this.service.streamFacilitiesUnitAttributes(
+      req, 
+      facilityAttributesParamsDTO
     );
   }
 

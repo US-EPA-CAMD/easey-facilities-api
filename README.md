@@ -20,11 +20,11 @@ Follow these [instructions](https://github.com/US-EPA-CAMD/devops/blob/master/GE
 2. Clone the repository using one of the following git cli commands or using your favorit Git management software<br>
     **Using SSH**
     ```
-    $ git clone git@github.com:US-EPA-CAMD/easey-emissions-api.git
+    $ git clone git@github.com:US-EPA-CAMD/easey-facilities-api.git
     ```
     **Using HTTPS**
     ```
-    $ git clone https://github.com/US-EPA-CAMD/easey-emissions-api.git
+    $ git clone https://github.com/US-EPA-CAMD/easey-facilities-api.git
     ```
 3. Navigate to the projects root directory
     ```

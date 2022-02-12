@@ -32,10 +32,10 @@ export class FacilityMap extends BaseMap<Plant, FacilityDTO> {
 
     return {
       facilityRecordId: entity.id,
-      [propertyMetadata.facilityId.fieldLabels.value]: entity.facilityId,
-      [propertyMetadata.facilityName.fieldLabels.value]: entity.facilityName,
-      [propertyMetadata.stateCode.fieldLabels.value]: entity.stateCode,
-      [propertyMetadata.epaRegion.fieldLabels.value]: entity.epaRegion,
+      facilityId: entity.facilityId,
+      facilityName: entity.facilityName,
+      stateCode: entity.stateCode,
+      epaRegion: entity.epaRegion,
       links: [self, units, stacks, owners, contacts],
     };
   }

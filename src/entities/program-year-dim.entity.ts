@@ -7,17 +7,21 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 
+import { NumericColumnTransformer } from '@us-epa-camd/easey-common/transforms';
+
 import { UnitFact } from './unit-fact.entity';
 
 @Entity({ name: 'camddmw.program_year_dim' })
 export class ProgramYearDim extends BaseEntity {
   @PrimaryColumn({
     name: 'unit_id',
+    transformer: new NumericColumnTransformer(),
   })
   id: number;
 
   @PrimaryColumn({
     name: 'op_year',
+    transformer: new NumericColumnTransformer(),
   })
   year: number;
 
