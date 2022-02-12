@@ -3,13 +3,13 @@ import { RouterModule } from 'nest-router';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import routes from './routes';
-import dbConfig from './config/db.config';
-import appConfig from './config/app.config';
-import { TypeOrmConfigService } from './config/typeorm.config';
-
+import { dbConfig } from '@us-epa-camd/easey-common/config';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
 import { CorsOptionsModule } from '@us-epa-camd/easey-common/cors-options';
+
+import routes from './routes';
+import appConfig from './config/app.config';
+import { TypeOrmConfigService } from './config/typeorm.config';
 import { FacilitiesModule } from './facilities/facilities.module';
 
 @Module({
