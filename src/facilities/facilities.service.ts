@@ -15,6 +15,7 @@ import { Logger } from '@us-epa-camd/easey-common/logger';
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 import { PlainToCSV, PlainToJSON } from '@us-epa-camd/easey-common/transforms';
 
+import { Plant } from '../entities/plant.entity';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesRepository } from './facilities.repository';
@@ -28,7 +29,6 @@ import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { fieldMappings } from '../constants/field-mappings';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
-import { Plant } from 'src/entities/plant.entity';
 
 @Injectable()
 export class FacilitiesService {
