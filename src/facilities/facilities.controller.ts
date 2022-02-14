@@ -117,7 +117,7 @@ export class FacilitiesController {
     @Query() facilityAttributesParamsDTO: FacilityAttributesParamsDTO,
   ): Promise<StreamableFile> {
     return this.service.streamFacilitiesUnitAttributes(
-      req, 
+      req,
       facilityAttributesParamsDTO
     );
   }

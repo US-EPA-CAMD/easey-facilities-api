@@ -17,9 +17,9 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
 
   private buildQuery(
     params: FacilityAttributesParamsDTO,
-    isStreamed: boolean = false,
+    isStreamed?: boolean,
   ): SelectQueryBuilder<FacilityUnitAttributes> {
-    let query = this.createQueryBuilder('fua')
+    const query = this.createQueryBuilder('fua')
       .select(this.getColumns(isStreamed))
 
     if (params.unitFuelType) {
