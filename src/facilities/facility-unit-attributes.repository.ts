@@ -17,7 +17,7 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
 
   private buildQuery(
     params: FacilityAttributesParamsDTO,
-    isStreamed?: boolean,
+    isStreamed = false,
   ): SelectQueryBuilder<FacilityUnitAttributes> {
     const query = this.createQueryBuilder('fua')
       .select(this.getColumns(isStreamed))
@@ -219,7 +219,7 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
     if (page && perPage) {
       query.skip((page - 1) * perPage).take(perPage);
       const totalCount = await query.getCount();
-      ResponseHeaders.setPagination(page, perPage, totalCount, req);
+      ResponseHeaders.setPagination(req, totalCount);
     }
 
     return query.getMany();

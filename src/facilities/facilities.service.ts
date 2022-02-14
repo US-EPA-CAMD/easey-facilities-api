@@ -28,6 +28,7 @@ import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { fieldMappings } from '../constants/field-mappings';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
+import { Plant } from 'src/entities/plant.entity';
 
 @Injectable()
 export class FacilitiesService {
@@ -48,8 +49,8 @@ export class FacilitiesService {
     facilityParamsDTO: FacilityParamsDTO,
     req: Request,
   ): Promise<FacilityDTO[]> {
-    let results;
-    let totalCount;
+    let results: Plant[];
+    let totalCount: number;
 
     try {
       this.logger.info('Getting facilities');
@@ -77,7 +78,7 @@ export class FacilitiesService {
         findOpts,
       );
 
-      ResponseHeaders.setPagination(page, perPage, totalCount, req);
+      ResponseHeaders.setPagination(req, totalCount);
       this.logger.info('Got facilities');
     } catch (e) {
       this.logger.error(InternalServerErrorException, e.message, true);
