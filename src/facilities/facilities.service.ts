@@ -7,14 +7,15 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Logger } from '@us-epa-camd/easey-common/logger';
 import { v4 as uuid } from 'uuid';
 import { Transform } from 'stream';
 import { plainToClass } from 'class-transformer';
+
+import { Logger } from '@us-epa-camd/easey-common/logger';
+import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 import { PlainToCSV, PlainToJSON } from '@us-epa-camd/easey-common/transforms';
 
-import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
-
+import { Plant } from '../entities/plant.entity';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesRepository } from './facilities.repository';
@@ -48,8 +49,8 @@ export class FacilitiesService {
     facilityParamsDTO: FacilityParamsDTO,
     req: Request,
   ): Promise<FacilityDTO[]> {
-    let results;
-    let totalCount;
+    let results: Plant[];
+    let totalCount: number;
 
     try {
       this.logger.info('Getting facilities');
@@ -77,7 +78,7 @@ export class FacilitiesService {
         findOpts,
       );
 
-      ResponseHeaders.setPagination(page, perPage, totalCount, req);
+      ResponseHeaders.setPagination(req, page, perPage, totalCount);
       this.logger.info('Got facilities');
     } catch (e) {
       this.logger.error(InternalServerErrorException, e.message, true);
@@ -153,12 +154,11 @@ export class FacilitiesService {
           if (generatorIdArr.length > 1 && index < generatorIdArr.length - 1) {
             associatedGeneratorsAndNameplateCapacityStr += ', ';
           }
-        }   
+        }
+
         delete data.oprDisplay;
-        // delete data.generatorId;
         delete data.arpNameplateCapacity;
         delete data.otherNameplateCapacity;
-
 
         data.ownerOperator = ownerOperator.length > 0 ? `${ownerOperator})` : null;
         data.associatedGeneratorsAndNameplateCapacity = associatedGeneratorsAndNameplateCapacityStr;
@@ -225,7 +225,7 @@ export class FacilitiesService {
     isArchived = archivedYears.includes(true);
     this.logger.info(`Query params ${isArchived ? 'contains' : 'do not contain'} archived years`);
     isUnion = isArchived && archivedYears.includes(false);
-    this.logger.info(`Query params ${isUnion ? 'contains' : 'do not contain'} archived & non-archived years`);    
+    this.logger.info(`Query params ${isUnion ? 'contains' : 'do not contain'} archived & non-archived years`);
 
     let query;
     try {
@@ -235,7 +235,7 @@ export class FacilitiesService {
         isArchived,
         isUnion,
       );
-      this.logger.info('Got all applicable facility attributes');      
+      this.logger.info('Got all applicable facility attributes');
     } catch (e) {
       this.logger.error(InternalServerErrorException, e.message, true);
     }

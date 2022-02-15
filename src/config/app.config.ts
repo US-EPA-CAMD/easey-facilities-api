@@ -11,7 +11,7 @@ export const PAGINATION_MAX_PER_PAGE =
 
 let uri = `https://${host}/${path}`;
 
-if (host == 'localhost') {
+if (host === 'localhost') {
   uri = `http://localhost:${port}/${path}`;
 }
 

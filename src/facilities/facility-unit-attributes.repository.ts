@@ -1,10 +1,10 @@
-import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
+import { ReadStream } from 'fs';
 import { Request } from 'express';
+import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { ResponseHeaders, Regex } from '@us-epa-camd/easey-common/utilities';
 
 import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
 import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
-import { ReadStream } from 'fs';
 
 @EntityRepository(FacilityUnitAttributes)
 export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAttributes> {
@@ -17,9 +17,9 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
 
   private buildQuery(
     params: FacilityAttributesParamsDTO,
-    isStreamed: boolean = false,
+    isStreamed = false,
   ): SelectQueryBuilder<FacilityUnitAttributes> {
-    let query = this.createQueryBuilder('fua')
+    const query = this.createQueryBuilder('fua')
       .select(this.getColumns(isStreamed))
 
     if (params.unitFuelType) {
@@ -219,7 +219,7 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
     if (page && perPage) {
       query.skip((page - 1) * perPage).take(perPage);
       const totalCount = await query.getCount();
-      ResponseHeaders.setPagination(page, perPage, totalCount, req);
+      ResponseHeaders.setPagination(req, page, perPage, totalCount);
     }
 
     return query.getMany();
