@@ -78,7 +78,7 @@ export class FacilitiesService {
         findOpts,
       );
 
-      ResponseHeaders.setPagination(req, totalCount);
+      ResponseHeaders.setPagination(req, page, perPage, totalCount);
       this.logger.info('Got facilities');
     } catch (e) {
       this.logger.error(InternalServerErrorException, e.message, true);
