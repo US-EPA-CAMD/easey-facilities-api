@@ -5,7 +5,7 @@ import { FacilitiesController } from './facilities.controller';
 import { FacilitiesService } from './facilities.service';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityMap } from './../maps/facility.map';
-import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import { StreamFacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
@@ -105,7 +105,7 @@ describe('-- Facilities Controller --', () => {
   describe('* getFacilitiesStream', () => {
     it('should call the service and return facilites ', async () => {
       const expectedResults: StreamableFile = undefined;
-      const paramsDTO = new FacilityAttributesParamsDTO();
+      const paramsDTO = new StreamFacilityAttributesParamsDTO();
       jest
         .spyOn(facilitiesService, 'streamFacilitiesUnitAttributes')
         .mockResolvedValue(expectedResults);

@@ -15,6 +15,7 @@ import {
   ControlTechnology,
   Program,
   SourceCategory,
+  ExcludeFacilityAttributes
 } from '@us-epa-camd/easey-common/enums';
 import {
   IsInDateRange,
@@ -22,6 +23,8 @@ import {
   IsYearFormat,
   Min,
   IsInRange,
+  IsInEnum,
+  IsInResponse
 } from '@us-epa-camd/easey-common/pipes';
 
 import { IsStateCode } from '../pipes/is-state-code.pipe';
@@ -30,6 +33,7 @@ import { IsUnitFuelType } from '../pipes/is-unit-fuel-type.pipe';
 import { IsControlTechnology } from '../pipes/is-control-technology.pipe';
 import { IsEmissionsProgram } from '../pipes/is-emissions-program.pipe';
 import { IsSourceCategory } from '../pipes/is-source-category.pipe';
+import { fieldMappings } from '../constants/field-mappings';
 
 export class FacilityAttributesParamsDTO {
   @ApiHideProperty()
@@ -144,6 +148,24 @@ export class FacilityAttributesParamsDTO {
   private get getCurrentDate(): Date {
     return new Date();
   }
+}
+
+export class StreamFacilityAttributesParamsDTO extends FacilityAttributesParamsDTO {
+  @ApiProperty({
+    enum: ExcludeFacilityAttributes,
+    description: propertyMetadata.exclude.description,
+  })
+  @IsOptional()
+  @IsInEnum(ExcludeFacilityAttributes, {
+    each: true,
+    message: ErrorMessages.RemovableParameter(),
+  })
+  @IsInResponse(fieldMappings.facilities.attributes, {
+    each: true,
+    message: ErrorMessages.ValidParameter(),
+  })
+  @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
+  exclude?: ExcludeFacilityAttributes[];
 }
 
 export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesParamsDTO {

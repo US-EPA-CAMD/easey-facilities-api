@@ -23,3 +23,9 @@ export function ApiQueryAttributesMultiSelect() {
     ApiQuery({style: 'pipeDelimited', name: 'sourceCategory', required: false, explode: false,}),
   );
 }
+
+export function ExcludeQuery() {
+  return applyDecorators(
+    ApiQuery({style: 'pipeDelimited', name: 'exclude', required: false, explode: false,})
+  );
+}
