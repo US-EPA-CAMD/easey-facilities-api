@@ -32,7 +32,7 @@ import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { fieldMappings } from '../constants/field-mappings';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
-import { exclude, excludeFacilityAttributes } from 'src/utils/exclude.helper';
+import { exclude, ExcludeFacilityAttributes } from '../utils/exclude.helper';
 
 @Injectable()
 export class FacilitiesService {
@@ -110,10 +110,12 @@ export class FacilitiesService {
     const stream = await this.facilityUnitAttributesRepository.streamAllFacilityUnitAttributes(
       streamFacilityAttributesParamsDTO,
     );
+
     req.res.setHeader(
       'X-Field-Mappings',
       JSON.stringify(fieldMappings.facilities.attributes),
     );
+    
     const toDto = new Transform({
       objectMode: true,
       transform(data, _enc, callback) {
@@ -122,7 +124,7 @@ export class FacilitiesService {
         data = exclude(
           data,
           streamFacilityAttributesParamsDTO,
-          excludeFacilityAttributes,
+          ExcludeFacilityAttributes,
         );
 
         if (data.commercialOperationDate) {
@@ -201,7 +203,7 @@ export class FacilitiesService {
     if (req.headers.accept === 'text/csv') {
       const fieldMappingsList = streamFacilityAttributesParamsDTO.exclude
         ? fieldMappings.facilities.attributes.filter(
-            item =>
+            (item: any) =>
               !streamFacilityAttributesParamsDTO.exclude.includes(item.value),
           )
         : fieldMappings.facilities.attributes;

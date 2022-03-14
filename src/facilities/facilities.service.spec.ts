@@ -22,7 +22,7 @@ import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facili
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
-import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import { StreamFacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
 
 const mockRequest = (url?: string, page?: number, perPage?: number) => {
