@@ -11,7 +11,10 @@ import {
 } from '@us-epa-camd/easey-common/enums';
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 
-import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import {
+  StreamFacilityAttributesParamsDTO,
+  PaginatedFacilityAttributesParamsDTO,
+} from '../dtos/facility-attributes.param.dto';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
 
@@ -77,8 +80,25 @@ describe('FacilityUnitAttributesRepository', () => {
 
   describe('streamFacilityUnitAttributes', () => {
     it('streams all facility unit attributes', async () => {
+      let streamFilters = new StreamFacilityAttributesParamsDTO();
+      streamFilters.year = [2019];
+      streamFilters.stateCode = [State.TX];
+      streamFilters.facilityId = [3];
+      streamFilters.unitType = [
+        UnitType.BUBBLING_FLUIDIZED,
+        UnitType.ARCH_FIRE_BOILER,
+      ];
+      streamFilters.unitFuelType = [UnitFuelType.COAL, UnitFuelType.DIESEL_OIL];
+      streamFilters.controlTechnologies = [
+        ControlTechnology.ADDITIVES_TO_ENHANCE,
+        ControlTechnology.OTHER,
+      ];
+      streamFilters.programCodeInfo = [Program.ARP, Program.RGGI];
+      streamFilters.sourceCategory = [SourceCategory.AUTOMOTIVE_STAMPINGS]
+      streamFilters.exclude = ['associatedStacks'];
+
       const result = await facilityUnitAttributesRepository.streamAllFacilityUnitAttributes(
-        new FacilityAttributesParamsDTO,
+        new StreamFacilityAttributesParamsDTO(),
       );
 
       expect(result).toEqual('mockStream');
@@ -121,10 +141,10 @@ describe('FacilityUnitAttributesRepository', () => {
 
   describe('lastArchivedYear', () => {
     it('returns the last archived year', async () => {
-      const archivedYear = [ { year: 2016 } ];
+      const archivedYear = [{ year: 2016 }];
       facilityUnitAttributesRepository.query = jest
-      .fn()
-      .mockReturnValue(archivedYear);
+        .fn()
+        .mockReturnValue(archivedYear);
       const year = await facilityUnitAttributesRepository.lastArchivedYear();
       expect(facilityUnitAttributesRepository.query).toHaveBeenCalled();
       expect(year).toEqual(2016);

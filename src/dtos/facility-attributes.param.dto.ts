@@ -22,6 +22,8 @@ import {
   IsYearFormat,
   Min,
   IsInRange,
+  IsInEnum,
+  IsInResponse
 } from '@us-epa-camd/easey-common/pipes';
 
 import { IsStateCode } from '../pipes/is-state-code.pipe';
@@ -30,8 +32,10 @@ import { IsUnitFuelType } from '../pipes/is-unit-fuel-type.pipe';
 import { IsControlTechnology } from '../pipes/is-control-technology.pipe';
 import { IsEmissionsProgram } from '../pipes/is-emissions-program.pipe';
 import { IsSourceCategory } from '../pipes/is-source-category.pipe';
+import { excludeFacilityAttributes } from '../utils/exclude.helper';
+import { fieldMappings } from '../constants/field-mappings';
 
-export class FacilityAttributesParamsDTO {
+export class StreamFacilityAttributesParamsDTO {
   @ApiHideProperty()
   currentDate: Date = this.getCurrentDate;
 
@@ -144,9 +148,25 @@ export class FacilityAttributesParamsDTO {
   private get getCurrentDate(): Date {
     return new Date();
   }
+
+  @ApiProperty({
+    enum: excludeFacilityAttributes,
+    description: propertyMetadata.exclude.description,
+  })
+  @IsOptional()
+  @IsInEnum(excludeFacilityAttributes, {
+    each: true,
+    message: ErrorMessages.RemovableParameter(),
+  })
+  @IsInResponse(fieldMappings.facilities.attributes, {
+    each: true,
+    message: ErrorMessages.ValidParameter(),
+  })
+  @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
+  exclude?: string[];
 }
 
-export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesParamsDTO {
+export class PaginatedFacilityAttributesParamsDTO extends StreamFacilityAttributesParamsDTO {
   @Min(1, {
     message: ErrorMessages.GreaterThanOrEqual('page', 1),
   })

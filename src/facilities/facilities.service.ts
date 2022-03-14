@@ -24,11 +24,15 @@ import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
-import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import {
+  StreamFacilityAttributesParamsDTO,
+  PaginatedFacilityAttributesParamsDTO,
+} from '../dtos/facility-attributes.param.dto';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { fieldMappings } from '../constants/field-mappings';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
+import { exclude, excludeFacilityAttributes } from 'src/utils/exclude.helper';
 
 @Injectable()
 export class FacilitiesService {
@@ -101,67 +105,90 @@ export class FacilitiesService {
 
   async streamFacilitiesUnitAttributes(
     req: Request,
-    facilityAttributesParamsDTO: FacilityAttributesParamsDTO,
+    streamFacilityAttributesParamsDTO: StreamFacilityAttributesParamsDTO,
   ): Promise<StreamableFile> {
     const stream = await this.facilityUnitAttributesRepository.streamAllFacilityUnitAttributes(
-      facilityAttributesParamsDTO,
+      streamFacilityAttributesParamsDTO,
     );
     req.res.setHeader(
       'X-Field-Mappings',
       JSON.stringify(fieldMappings.facilities.attributes),
     );
     const toDto = new Transform({
-      objectMode:true,
+      objectMode: true,
       transform(data, _enc, callback) {
         delete data.id;
 
-        const commercialOperationDate = new Date(data.commercialOperationDate);
-        data.commercialOperationDate = commercialOperationDate.toISOString().split('T')[0];
-
-        let associatedGeneratorsAndNameplateCapacityStr = '';
-        const array = [data.ownerOperator, data.oprDisplay];
-        const ownOprList = array
-          .filter(e => e)
-          .join(',')
-          .slice(0, -1)
-          .split('),');
-        const ownOprUniqueList = [...new Set(ownOprList)];
-        const ownerOperator = ownOprUniqueList.join('),');
-
-        const generatorIdArr = data.associatedGeneratorsAndNameplateCapacity?.split(', ');
-        const arpNameplateCapacityArr = data.arpNameplateCapacity?.split(', ');
-        const otherNameplateCapacityArr = data.otherNameplateCapacity?.split(
-          ', ',
+        data = exclude(
+          data,
+          streamFacilityAttributesParamsDTO,
+          excludeFacilityAttributes,
         );
 
-        for (let index = 0; index < generatorIdArr.length; index++) {
-          associatedGeneratorsAndNameplateCapacityStr += generatorIdArr[index];
-          if (
-            arpNameplateCapacityArr &&
-            arpNameplateCapacityArr[index] !== 'null'
-          ) {
-            associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
-              arpNameplateCapacityArr[index],
-            )})`;
-          } else if (
-            otherNameplateCapacityArr &&
-            otherNameplateCapacityArr[index] !== 'null'
-          ) {
-            associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
-              otherNameplateCapacityArr[index],
-            )})`;
-          }
-          if (generatorIdArr.length > 1 && index < generatorIdArr.length - 1) {
-            associatedGeneratorsAndNameplateCapacityStr += ', ';
-          }
+        if (data.commercialOperationDate) {
+          const commercialOperationDate = new Date(
+            data.commercialOperationDate,
+          );
+          data.commercialOperationDate = commercialOperationDate
+            .toISOString()
+            .split('T')[0];
         }
 
-        delete data.oprDisplay;
-        delete data.arpNameplateCapacity;
-        delete data.otherNameplateCapacity;
+        if (data.associatedGeneratorsAndNameplateCapacity) {
+          let associatedGeneratorsAndNameplateCapacityStr = '';
+          const array = [data.ownerOperator, data.oprDisplay];
+          const ownOprList = array
+            .filter(e => e)
+            .join(',')
+            .slice(0, -1)
+            .split('),');
+          const ownOprUniqueList = [...new Set(ownOprList)];
+          const ownerOperator = ownOprUniqueList.join('),');
 
-        data.ownerOperator = ownerOperator.length > 0 ? `${ownerOperator})` : null;
-        data.associatedGeneratorsAndNameplateCapacity = associatedGeneratorsAndNameplateCapacityStr;
+          const generatorIdArr = data.associatedGeneratorsAndNameplateCapacity?.split(
+            ', ',
+          );
+          const arpNameplateCapacityArr = data.arpNameplateCapacity?.split(
+            ', ',
+          );
+          const otherNameplateCapacityArr = data.otherNameplateCapacity?.split(
+            ', ',
+          );
+
+          for (let index = 0; index < generatorIdArr.length; index++) {
+            associatedGeneratorsAndNameplateCapacityStr +=
+              generatorIdArr[index];
+            if (
+              arpNameplateCapacityArr &&
+              arpNameplateCapacityArr[index] !== 'null'
+            ) {
+              associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
+                arpNameplateCapacityArr[index],
+              )})`;
+            } else if (
+              otherNameplateCapacityArr &&
+              otherNameplateCapacityArr[index] !== 'null'
+            ) {
+              associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
+                otherNameplateCapacityArr[index],
+              )})`;
+            }
+            if (
+              generatorIdArr.length > 1 &&
+              index < generatorIdArr.length - 1
+            ) {
+              associatedGeneratorsAndNameplateCapacityStr += ', ';
+            }
+          }
+
+          delete data.oprDisplay;
+          delete data.arpNameplateCapacity;
+          delete data.otherNameplateCapacity;
+
+          data.ownerOperator =
+            ownerOperator.length > 0 ? `${ownerOperator})` : null;
+          data.associatedGeneratorsAndNameplateCapacity = associatedGeneratorsAndNameplateCapacityStr;
+        }
 
         const dto = plainToClass(FacilityAttributesDTO, data, {
           enableImplicitConversion: true,
@@ -172,7 +199,14 @@ export class FacilitiesService {
     });
 
     if (req.headers.accept === 'text/csv') {
-      const toCSV = new PlainToCSV(fieldMappings.facilities.attributes);
+      const fieldMappingsList = streamFacilityAttributesParamsDTO.exclude
+        ? fieldMappings.facilities.attributes.filter(
+            item =>
+              !streamFacilityAttributesParamsDTO.exclude.includes(item.value),
+          )
+        : fieldMappings.facilities.attributes;
+      const toCSV = new PlainToCSV(fieldMappingsList);
+
       return new StreamableFile(stream.pipe(toDto).pipe(toCSV), {
         type: req.headers.accept,
         disposition: `attachment; filename="facilities-attributes-${uuid()}.csv"`,
@@ -223,9 +257,17 @@ export class FacilitiesService {
     );
 
     isArchived = archivedYears.includes(true);
-    this.logger.info(`Query params ${isArchived ? 'contains' : 'do not contain'} archived years`);
+    this.logger.info(
+      `Query params ${
+        isArchived ? 'contains' : 'do not contain'
+      } archived years`,
+    );
     isUnion = isArchived && archivedYears.includes(false);
-    this.logger.info(`Query params ${isUnion ? 'contains' : 'do not contain'} archived & non-archived years`);
+    this.logger.info(
+      `Query params ${
+        isUnion ? 'contains' : 'do not contain'
+      } archived & non-archived years`,
+    );
 
     let query;
     try {

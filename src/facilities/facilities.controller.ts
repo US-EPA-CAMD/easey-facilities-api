@@ -26,11 +26,12 @@ import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesService } from './facilities.service';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
-import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import { StreamFacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import {
   ApiQueryAttributesMultiSelect,
   BadRequestResponse,
   NotFoundResponse,
+  ExcludeQuery,
 } from '../utils/swagger-decorator.const';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 
@@ -112,13 +113,14 @@ export class FacilitiesController {
   @NotFoundResponse()
   @ApiQueryAttributesMultiSelect()
   @ApiExtraModels(FacilityAttributesDTO)
+  @ExcludeQuery()
   streamFacilitiesUnitAttributes(
     @Req() req: Request,
-    @Query() facilityAttributesParamsDTO: FacilityAttributesParamsDTO,
+    @Query() streamFacilityAttributesParamsDTO: StreamFacilityAttributesParamsDTO,
   ): Promise<StreamableFile> {
     return this.service.streamFacilitiesUnitAttributes(
       req,
-      facilityAttributesParamsDTO
+      streamFacilityAttributesParamsDTO
     );
   }
 

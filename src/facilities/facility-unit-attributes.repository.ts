@@ -4,32 +4,33 @@ import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { ResponseHeaders, Regex } from '@us-epa-camd/easey-common/utilities';
 
 import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
-import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import {
+  StreamFacilityAttributesParamsDTO,
+  PaginatedFacilityAttributesParamsDTO,
+} from '../dtos/facility-attributes.param.dto';
 
 @EntityRepository(FacilityUnitAttributes)
-export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAttributes> {
-
+export class FacilityUnitAttributesRepository extends Repository<
+  FacilityUnitAttributes
+> {
   async streamAllFacilityUnitAttributes(
-    params: FacilityAttributesParamsDTO,
+    params: StreamFacilityAttributesParamsDTO,
   ): Promise<ReadStream> {
     return this.buildQuery(params, true).stream();
   }
 
   private buildQuery(
-    params: FacilityAttributesParamsDTO,
+    params: StreamFacilityAttributesParamsDTO,
     isStreamed = false,
   ): SelectQueryBuilder<FacilityUnitAttributes> {
-    const query = this.createQueryBuilder('fua')
-      .select(this.getColumns(isStreamed))
+    const query = this.createQueryBuilder('fua').select(
+      this.getColumns(isStreamed),
+    );
 
     if (params.unitFuelType) {
       let string = '(';
 
-      for (
-        let i = 0;
-        i < params.unitFuelType.length;
-        i++
-      ) {
+      for (let i = 0; i < params.unitFuelType.length; i++) {
         const regex = Regex.commaDelimited(
           params.unitFuelType[i].toUpperCase(),
         );
@@ -50,11 +51,7 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
     if (params.programCodeInfo) {
       let string = '(';
 
-      for (
-        let i = 0;
-        i < params.programCodeInfo.length;
-        i++
-      ) {
+      for (let i = 0; i < params.programCodeInfo.length; i++) {
         const regex = Regex.commaDelimited(
           params.programCodeInfo[i].toUpperCase(),
         );
@@ -72,11 +69,9 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
 
     if (params.sourceCategory) {
       query.andWhere(`UPPER(fua.sourceCategory) IN (:...sourceCategories)`, {
-        sourceCategories: params.sourceCategory.map(
-          sourceCategories => {
-            return sourceCategories.toUpperCase();
-          },
-        ),
+        sourceCategories: params.sourceCategory.map(sourceCategories => {
+          return sourceCategories.toUpperCase();
+        }),
       });
     }
 
@@ -104,9 +99,7 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
       let string = '(';
 
       for (let i = 0; i < params.unitType.length; i++) {
-        const regex = Regex.commaDelimited(
-          params.unitType[i].toUpperCase(),
-        );
+        const regex = Regex.commaDelimited(params.unitType[i].toUpperCase());
 
         if (i === 0) {
           string += `(UPPER(fua.unitType) ~* ${regex}) `;
@@ -122,11 +115,7 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
     if (params.controlTechnologies) {
       let string = '(';
 
-      for (
-        let i = 0;
-        i < params.controlTechnologies.length;
-        i++
-      ) {
+      for (let i = 0; i < params.controlTechnologies.length; i++) {
         const regex = Regex.commaDelimited(
           params.controlTechnologies[i].toUpperCase(),
         );
@@ -192,7 +181,7 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
       'fua.generatorId',
       'fua.arpNameplateCapacity',
       'fua.otherNameplateCapacity',
-    ]
+    ];
 
     return columns.map(col => {
       if (isStreamed) {
@@ -226,7 +215,9 @@ export class FacilityUnitAttributesRepository extends Repository<FacilityUnitAtt
   }
 
   async lastArchivedYear(): Promise<number> {
-    const result = await this.query('SELECT MAX(op_year) AS "year" FROM camddmw_arch.hour_unit_data_a;');
+    const result = await this.query(
+      'SELECT MAX(op_year) AS "year" FROM camddmw_arch.hour_unit_data_a;',
+    );
     return result[0].year;
   }
 }
