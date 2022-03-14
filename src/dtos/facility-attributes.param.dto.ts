@@ -15,6 +15,7 @@ import {
   ControlTechnology,
   Program,
   SourceCategory,
+  ExcludeFacilityAttributes
 } from '@us-epa-camd/easey-common/enums';
 import {
   IsInDateRange,
@@ -32,7 +33,6 @@ import { IsUnitFuelType } from '../pipes/is-unit-fuel-type.pipe';
 import { IsControlTechnology } from '../pipes/is-control-technology.pipe';
 import { IsEmissionsProgram } from '../pipes/is-emissions-program.pipe';
 import { IsSourceCategory } from '../pipes/is-source-category.pipe';
-import { ExcludeFacilityAttributes } from '../utils/exclude.helper';
 import { fieldMappings } from '../constants/field-mappings';
 
 export class StreamFacilityAttributesParamsDTO {

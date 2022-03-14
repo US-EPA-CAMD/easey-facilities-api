@@ -12,8 +12,9 @@ import { Transform } from 'stream';
 import { plainToClass } from 'class-transformer';
 
 import { Logger } from '@us-epa-camd/easey-common/logger';
-import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
+import { exclude, ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 import { PlainToCSV, PlainToJSON } from '@us-epa-camd/easey-common/transforms';
+import { ExcludeFacilityAttributes } from '@us-epa-camd/easey-common/enums';
 
 import { Plant } from '../entities/plant.entity';
 import { FacilityDTO } from '../dtos/facility.dto';
@@ -32,7 +33,6 @@ import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { fieldMappings } from '../constants/field-mappings';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
-import { exclude, ExcludeFacilityAttributes } from '../utils/exclude.helper';
 
 @Injectable()
 export class FacilitiesService {

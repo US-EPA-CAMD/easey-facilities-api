@@ -8,6 +8,7 @@ import {
   ControlTechnology,
   Program,
   SourceCategory,
+  ExcludeFacilityAttributes
 } from '@us-epa-camd/easey-common/enums';
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 
@@ -17,7 +18,6 @@ import {
 } from '../dtos/facility-attributes.param.dto';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
-import { ExcludeFacilityAttributes } from '../utils/exclude.helper';
 
 const mockQueryBuilder = () => ({
   andWhere: jest.fn(),
