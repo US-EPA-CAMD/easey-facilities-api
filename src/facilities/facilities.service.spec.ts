@@ -24,6 +24,8 @@ import { FacilityUnitAttributesRepository } from './facility-unit-attributes.rep
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { StreamFacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
+import { ExcludeFacilityAttributes } from '@us-epa-camd/easey-common/enums';
+import { ReadStream } from 'fs';
 
 const mockRequest = (url?: string, page?: number, perPage?: number) => {
   return {
@@ -35,6 +37,9 @@ const mockRequest = (url?: string, page?: number, perPage?: number) => {
       page,
       perPage,
     },
+    headers: {
+      accept: 'text/csv'
+    }
   };
 };
 
@@ -59,6 +64,7 @@ const mockPyd = () => ({
 const mockFua = () => ({
   getAllFacilityAttributes: jest.fn(),
   lastArchivedYear: jest.fn(),
+  streamAllFacilityUnitAttributes: jest.fn()
 });
 
 const mockMap = () => ({
@@ -349,6 +355,80 @@ describe('-- Facilities Service --', () => {
       expect(
         await facilitiesService.getAllFacilityAttributes(params, req),
       ).toBe(expectedResult);
+    });
+  });
+
+  describe('streamFacilityUnitAttributes', () => {
+    it('streams all facility unit attributes', async () => {
+      let streamFilters = new StreamFacilityAttributesParamsDTO();
+      streamFilters.year = [2019];
+      streamFilters.stateCode = [State.TX];
+      streamFilters.facilityId = [3];
+      streamFilters.unitType = [
+        UnitType.BUBBLING_FLUIDIZED,
+        UnitType.ARCH_FIRE_BOILER,
+      ];
+      streamFilters.unitFuelType = [UnitFuelType.COAL, UnitFuelType.DIESEL_OIL];
+      streamFilters.controlTechnologies = [
+        ControlTechnology.ADDITIVES_TO_ENHANCE,
+        ControlTechnology.OTHER,
+      ];
+      streamFilters.programCodeInfo = [Program.ARP, Program.RGGI];
+      streamFilters.sourceCategory = [SourceCategory.AUTOMOTIVE_STAMPINGS];
+      streamFilters.exclude = [ExcludeFacilityAttributes.ASSOC_STACKS];
+
+      const mockResult: any = {
+        pipe: toDto => {
+          return {
+            pipe: toCSV => {
+              return {
+                stateCode: 'AK',
+                facilityName: 'Barry',
+                facilityId: 3,
+                unitId: '5',
+                associatedStacks: 'CS001',
+                year: 2020,
+                programCodeInfo: 'ARP,CSNOX,CSSO2G2,MATS',
+                epaRegion: 5,
+                nercRegion: 'Mid-Continent Area Power Pool',
+                county: 'Sherburne County',
+                countyCode: 'MN141',
+                fipsCode: '141',
+                sourceCategory: 'Electric Utility',
+                latitude: 45.3792,
+                longitude: -93.8958,
+                ownerOperator:
+                  'Alabama Power Company (Operator), Alabama Power Company (Owner)',
+                so2Phase: 'Phase 2',
+                noxPhase: 'Phase 1 Group 1',
+                unitType: 'Tangentially-fired',
+                primaryFuelInfo: 'Coal',
+                secondaryFuelInfo: 'Diesel Oil',
+                so2ControlInfo: 'Wet Limestone',
+                noxControlInfo:
+                  'Selective Catalytic Reduction, Low NOx Burner Technology w/ Separated OFA',
+                pmControlInfo: 'Electrostatic Precipitator',
+                hgControlInfo:
+                  'Catalyst (gold, palladium, or other) used to oxidize mercury',
+                commercialOperationDate: '1977-04-01',
+                operatingStatus: 'Operating',
+                maxHourlyHIRate: 7969.2,
+                associatedGeneratorsAndNameplateCapacity: 'A1ST (191.8)',
+              };
+            },
+          };
+        },
+      };
+      const req: any = mockRequest(`/facilities/attributes/stream`);
+      req.res.setHeader.mockReturnValue();
+      facilityUnitAttributesRepository.streamAllFacilityUnitAttributes.mockResolvedValue(
+        mockResult
+      );
+
+      const result = await facilitiesService.streamFacilitiesUnitAttributes(
+        req,
+        streamFilters,
+      );
     });
   });
 });

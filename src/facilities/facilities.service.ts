@@ -115,7 +115,7 @@ export class FacilitiesService {
       'X-Field-Mappings',
       JSON.stringify(fieldMappings.facilities.attributes),
     );
-    
+
     const toDto = new Transform({
       objectMode: true,
       transform(data, _enc, callback) {
