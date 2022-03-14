@@ -35,7 +35,7 @@ import { IsEmissionsProgram } from '../pipes/is-emissions-program.pipe';
 import { IsSourceCategory } from '../pipes/is-source-category.pipe';
 import { fieldMappings } from '../constants/field-mappings';
 
-export class StreamFacilityAttributesParamsDTO {
+export class FacilityAttributesParamsDTO {
   @ApiHideProperty()
   currentDate: Date = this.getCurrentDate;
 
@@ -148,7 +148,9 @@ export class StreamFacilityAttributesParamsDTO {
   private get getCurrentDate(): Date {
     return new Date();
   }
+}
 
+export class StreamFacilityAttributesParamsDTO extends FacilityAttributesParamsDTO {
   @ApiProperty({
     enum: ExcludeFacilityAttributes,
     description: propertyMetadata.exclude.description,
@@ -166,7 +168,7 @@ export class StreamFacilityAttributesParamsDTO {
   exclude?: ExcludeFacilityAttributes[];
 }
 
-export class PaginatedFacilityAttributesParamsDTO extends StreamFacilityAttributesParamsDTO {
+export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesParamsDTO {
   @Min(1, {
     message: ErrorMessages.GreaterThanOrEqual('page', 1),
   })
