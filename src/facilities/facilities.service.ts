@@ -183,14 +183,14 @@ export class FacilitiesService {
             }
           }
 
-          delete data.oprDisplay;
-          delete data.arpNameplateCapacity;
-          delete data.otherNameplateCapacity;
-
           data.ownerOperator =
             ownerOperator.length > 0 ? `${ownerOperator})` : null;
           data.associatedGeneratorsAndNameplateCapacity = associatedGeneratorsAndNameplateCapacityStr;
         }
+
+        delete data.oprDisplay;
+        delete data.arpNameplateCapacity;
+        delete data.otherNameplateCapacity;
 
         const dto = plainToClass(FacilityAttributesDTO, data, {
           enableImplicitConversion: true,
