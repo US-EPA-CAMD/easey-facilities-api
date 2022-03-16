@@ -12,8 +12,9 @@ import { Transform } from 'stream';
 import { plainToClass } from 'class-transformer';
 
 import { Logger } from '@us-epa-camd/easey-common/logger';
-import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
+import { exclude, ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 import { PlainToCSV, PlainToJSON } from '@us-epa-camd/easey-common/transforms';
+import { ExcludeFacilityAttributes } from '@us-epa-camd/easey-common/enums';
 
 import { Plant } from '../entities/plant.entity';
 import { FacilityDTO } from '../dtos/facility.dto';
@@ -24,7 +25,10 @@ import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
-import { FacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import {
+  StreamFacilityAttributesParamsDTO,
+  PaginatedFacilityAttributesParamsDTO,
+} from '../dtos/facility-attributes.param.dto';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { fieldMappings } from '../constants/field-mappings';
@@ -101,67 +105,92 @@ export class FacilitiesService {
 
   async streamFacilitiesUnitAttributes(
     req: Request,
-    facilityAttributesParamsDTO: FacilityAttributesParamsDTO,
+    streamFacilityAttributesParamsDTO: StreamFacilityAttributesParamsDTO,
   ): Promise<StreamableFile> {
     const stream = await this.facilityUnitAttributesRepository.streamAllFacilityUnitAttributes(
-      facilityAttributesParamsDTO,
+      streamFacilityAttributesParamsDTO,
     );
+
     req.res.setHeader(
       'X-Field-Mappings',
       JSON.stringify(fieldMappings.facilities.attributes),
     );
+
     const toDto = new Transform({
-      objectMode:true,
+      objectMode: true,
       transform(data, _enc, callback) {
         delete data.id;
 
-        const commercialOperationDate = new Date(data.commercialOperationDate);
-        data.commercialOperationDate = commercialOperationDate.toISOString().split('T')[0];
-
-        let associatedGeneratorsAndNameplateCapacityStr = '';
-        const array = [data.ownerOperator, data.oprDisplay];
-        const ownOprList = array
-          .filter(e => e)
-          .join(',')
-          .slice(0, -1)
-          .split('),');
-        const ownOprUniqueList = [...new Set(ownOprList)];
-        const ownerOperator = ownOprUniqueList.join('),');
-
-        const generatorIdArr = data.associatedGeneratorsAndNameplateCapacity?.split(', ');
-        const arpNameplateCapacityArr = data.arpNameplateCapacity?.split(', ');
-        const otherNameplateCapacityArr = data.otherNameplateCapacity?.split(
-          ', ',
+        data = exclude(
+          data,
+          streamFacilityAttributesParamsDTO,
+          ExcludeFacilityAttributes,
         );
 
-        for (let index = 0; index < generatorIdArr.length; index++) {
-          associatedGeneratorsAndNameplateCapacityStr += generatorIdArr[index];
-          if (
-            arpNameplateCapacityArr &&
-            arpNameplateCapacityArr[index] !== 'null'
-          ) {
-            associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
-              arpNameplateCapacityArr[index],
-            )})`;
-          } else if (
-            otherNameplateCapacityArr &&
-            otherNameplateCapacityArr[index] !== 'null'
-          ) {
-            associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
-              otherNameplateCapacityArr[index],
-            )})`;
+        if (data.commercialOperationDate) {
+          const commercialOperationDate = new Date(
+            data.commercialOperationDate,
+          );
+          data.commercialOperationDate = commercialOperationDate
+            .toISOString()
+            .split('T')[0];
+        }
+
+        if (data.associatedGeneratorsAndNameplateCapacity) {
+          let associatedGeneratorsAndNameplateCapacityStr = '';
+          const array = [data.ownerOperator, data.oprDisplay];
+          const ownOprList = array
+            .filter(e => e)
+            .join(',')
+            .slice(0, -1)
+            .split('),');
+          const ownOprUniqueList = [...new Set(ownOprList)];
+          const ownerOperator = ownOprUniqueList.join('),');
+
+          const generatorIdArr = data.associatedGeneratorsAndNameplateCapacity?.split(
+            ', ',
+          );
+          const arpNameplateCapacityArr = data.arpNameplateCapacity?.split(
+            ', ',
+          );
+          const otherNameplateCapacityArr = data.otherNameplateCapacity?.split(
+            ', ',
+          );
+
+          for (let index = 0; index < generatorIdArr.length; index++) {
+            associatedGeneratorsAndNameplateCapacityStr +=
+              generatorIdArr[index];
+            if (
+              arpNameplateCapacityArr &&
+              arpNameplateCapacityArr[index] !== 'null'
+            ) {
+              associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
+                arpNameplateCapacityArr[index],
+              )})`;
+            } else if (
+              otherNameplateCapacityArr &&
+              otherNameplateCapacityArr[index] !== 'null'
+            ) {
+              associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
+                otherNameplateCapacityArr[index],
+              )})`;
+            }
+            if (
+              generatorIdArr.length > 1 &&
+              index < generatorIdArr.length - 1
+            ) {
+              associatedGeneratorsAndNameplateCapacityStr += ', ';
+            }
           }
-          if (generatorIdArr.length > 1 && index < generatorIdArr.length - 1) {
-            associatedGeneratorsAndNameplateCapacityStr += ', ';
-          }
+
+          data.ownerOperator =
+            ownerOperator.length > 0 ? `${ownerOperator})` : null;
+          data.associatedGeneratorsAndNameplateCapacity = associatedGeneratorsAndNameplateCapacityStr;
         }
 
         delete data.oprDisplay;
         delete data.arpNameplateCapacity;
         delete data.otherNameplateCapacity;
-
-        data.ownerOperator = ownerOperator.length > 0 ? `${ownerOperator})` : null;
-        data.associatedGeneratorsAndNameplateCapacity = associatedGeneratorsAndNameplateCapacityStr;
 
         const dto = plainToClass(FacilityAttributesDTO, data, {
           enableImplicitConversion: true,
@@ -172,7 +201,14 @@ export class FacilitiesService {
     });
 
     if (req.headers.accept === 'text/csv') {
-      const toCSV = new PlainToCSV(fieldMappings.facilities.attributes);
+      const fieldMappingsList = streamFacilityAttributesParamsDTO.exclude
+        ? fieldMappings.facilities.attributes.filter(
+            (item: any) =>
+              !streamFacilityAttributesParamsDTO.exclude.includes(item.value),
+          )
+        : fieldMappings.facilities.attributes;
+      const toCSV = new PlainToCSV(fieldMappingsList);
+
       return new StreamableFile(stream.pipe(toDto).pipe(toCSV), {
         type: req.headers.accept,
         disposition: `attachment; filename="facilities-attributes-${uuid()}.csv"`,
@@ -223,9 +259,17 @@ export class FacilitiesService {
     );
 
     isArchived = archivedYears.includes(true);
-    this.logger.info(`Query params ${isArchived ? 'contains' : 'do not contain'} archived years`);
+    this.logger.info(
+      `Query params ${
+        isArchived ? 'contains' : 'do not contain'
+      } archived years`,
+    );
     isUnion = isArchived && archivedYears.includes(false);
-    this.logger.info(`Query params ${isUnion ? 'contains' : 'do not contain'} archived & non-archived years`);
+    this.logger.info(
+      `Query params ${
+        isUnion ? 'contains' : 'do not contain'
+      } archived & non-archived years`,
+    );
 
     let query;
     try {
