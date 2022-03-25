@@ -3,7 +3,7 @@ import {
   ValidationOptions,
   ValidationArguments,
 } from 'class-validator';
-import { getManager, Raw } from 'typeorm';
+import { getManager, ILike } from 'typeorm';
 import { SourceCategoryCode } from '../entities/source-category-code.entity';
 
 export function IsSourceCategory(validationOptions?: ValidationOptions) {
@@ -18,9 +18,7 @@ export function IsSourceCategory(validationOptions?: ValidationOptions) {
           const manager = getManager();
 
           const found = await manager.findOne(SourceCategoryCode, {
-            sourceCategoryDescription: Raw(
-              alias => `UPPER(${alias}) LIKE '${value.toUpperCase()}'`,
-            ),
+            sourceCategoryDescription: ILike(value),
           });
           return found != null;
         },
