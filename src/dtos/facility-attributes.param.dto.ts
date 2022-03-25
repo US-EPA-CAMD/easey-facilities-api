@@ -1,4 +1,4 @@
-import { IsDefined, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
@@ -15,7 +15,7 @@ import {
   ControlTechnology,
   Program,
   SourceCategory,
-  ExcludeFacilityAttributes
+  ExcludeFacilityAttributes,
 } from '@us-epa-camd/easey-common/enums';
 import {
   IsInDateRange,
@@ -24,7 +24,8 @@ import {
   Min,
   IsInRange,
   IsInEnum,
-  IsInResponse
+  IsInResponse,
+  IsNotEmptyString,
 } from '@us-epa-camd/easey-common/pipes';
 
 import { IsStateCode } from '../pipes/is-state-code.pipe';
@@ -43,7 +44,7 @@ export class FacilityAttributesParamsDTO {
     isArray: true,
     description: propertyMetadata.year.description,
   })
-  @IsDefined({ message: ErrorMessages.RequiredProperty() })
+  @IsNotEmptyString({ message: ErrorMessages.RequiredProperty() })
   @IsYearFormat({
     each: true,
     message: ErrorMessages.MultipleFormat('year', 'YYYY format'),
@@ -175,7 +176,7 @@ export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesPara
   @ApiProperty({
     description: propertyMetadata.page.description,
   })
-  @IsDefined()
+  @IsNotEmpty({ message: ErrorMessages.RequiredProperty() })
   page: number;
 
   @IsInRange(1, PAGINATION_MAX_PER_PAGE, {
@@ -184,6 +185,6 @@ export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesPara
   @ApiProperty({
     description: propertyMetadata.perPage.description,
   })
-  @IsDefined()
+  @IsNotEmpty({ message: ErrorMessages.RequiredProperty() })
   perPage: number;
 }
