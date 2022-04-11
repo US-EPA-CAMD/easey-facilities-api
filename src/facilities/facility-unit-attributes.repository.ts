@@ -13,10 +13,8 @@ import {
 export class FacilityUnitAttributesRepository extends Repository<
   FacilityUnitAttributes
 > {
-  async streamAllFacilityUnitAttributes(
-    params: StreamFacilityAttributesParamsDTO,
-  ): Promise<ReadStream> {
-    return this.buildQuery(params, true).stream();
+  getStreamQuery(params: StreamFacilityAttributesParamsDTO) {
+    return this.buildQuery(params, true).getQueryAndParameters();
   }
 
   private buildQuery(

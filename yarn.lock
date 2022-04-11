@@ -1088,10 +1088,10 @@
     "@typescript-eslint/types" "5.1.0"
     eslint-visitor-keys "^3.0.0"
 
-"@us-epa-camd/easey-common@^4.6.1":
-  version "4.6.1"
-  resolved "https://npm.pkg.github.com/download/@us-epa-camd/easey-common/4.6.1/028b2f9987465756b5cb40a2483d3b3e4f2dbb188dfcd36e64108888acd73acc#cc59a2a8f0bfe1009e77ecac098d2747f68b796a"
-  integrity sha512-ahaklvVeK3JuLF3AbaZ67UyYuz6JwPvbT7wD+pPZ2qKAELA4lfIr/KSzVhrchJSCqV3y0P5mReKzOwz+s/AQ4w==
+"@us-epa-camd/easey-common@^4.8.2":
+  version "4.8.2"
+  resolved "https://npm.pkg.github.com/download/@us-epa-camd/easey-common/4.8.2/b2ccf53b56e34007f5840e949df9d5b2c20f92df503902af0a67a7d2bbcf4b10#61eccbd87b09893721143b06a4c79389530d0d4c"
+  integrity sha512-PYgqS9CxJs351neHda/iodDaUgTPyteUE36Ux8CxmqvDVYQwPKhNpc4NG02b+Xp0FqmuN1rxLaa22y/8iNqoLQ==
   dependencies:
     "@nestjs/axios" "0.0.3"
     "@nestjs/common" "^8.1.1"
@@ -4558,7 +4558,7 @@ pg-protocol@^1.5.0:
   resolved "https://registry.yarnpkg.com/pg-protocol/-/pg-protocol-1.5.0.tgz#b5dd452257314565e2d54ab3c132adc46565a6a0"
   integrity sha512-muRttij7H8TqRNu/DxrAJQITO4Ac7RmX3Klyr/9mJEOBeIpgnF8f9jAfRz5d3XwQZl5qBjF9gLsUtMPJE0vezQ==
 
-pg-query-stream@^4.2.3:
+pg-query-stream@^4.2.1:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/pg-query-stream/-/pg-query-stream-4.2.3.tgz#58a68816939bc740ed0207bd194ffd5e7f6ce2d2"
   integrity sha512-3mrOzffAoGGi2EqsfTdKanKn444ZB+E+Gbz/EJL3rd0thlXD3kb3ZBrwX42bRnQssrEd7/kVFM1FbiIMSQ5ung==
