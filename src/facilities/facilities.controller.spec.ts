@@ -5,7 +5,10 @@ import { FacilitiesController } from './facilities.controller';
 import { FacilitiesService } from './facilities.service';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityMap } from './../maps/facility.map';
-import { StreamFacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import {
+  StreamFacilityAttributesParamsDTO,
+  PaginatedFacilityAttributesParamsDTO,
+} from '../dtos/facility-attributes.param.dto';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
@@ -14,6 +17,7 @@ import { FacilityUnitAttributesRepository } from './facility-unit-attributes.rep
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
 import { StreamableFile } from '@nestjs/common';
+import { StreamModule } from '@us-epa-camd/easey-common/stream';
 
 const mockRequest = (url: string) => {
   return {
@@ -31,7 +35,7 @@ describe('-- Facilities Controller --', () => {
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
-      imports: [LoggerModule],
+      imports: [LoggerModule, StreamModule],
       controllers: [FacilitiesController],
       providers: [
         FacilityMap,

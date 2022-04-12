@@ -33,6 +33,8 @@ import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { fieldMappings } from '../constants/field-mappings';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
+import { ReadStream } from 'fs';
+import { StreamService } from '@us-epa-camd/easey-common/stream';
 
 @Injectable()
 export class FacilitiesService {
@@ -47,6 +49,7 @@ export class FacilitiesService {
     private readonly facilityUnitAttributesRepository: FacilityUnitAttributesRepository,
     private readonly facilityAttributesMap: FacilityAttributesMap,
     private readonly logger: Logger,
+    private readonly streamService: StreamService,
   ) {}
 
   async getFacilities(
@@ -107,9 +110,14 @@ export class FacilitiesService {
     req: Request,
     streamFacilityAttributesParamsDTO: StreamFacilityAttributesParamsDTO,
   ): Promise<StreamableFile> {
-    const stream = await this.facilityUnitAttributesRepository.streamAllFacilityUnitAttributes(
+    const query = this.facilityUnitAttributesRepository.getStreamQuery(
       streamFacilityAttributesParamsDTO,
     );
+    const stream: ReadStream = await this.streamService.getStream(query);
+
+    req.on('close', () => {
+      stream.emit('end');
+    });
 
     req.res.setHeader(
       'X-Field-Mappings',
@@ -218,7 +226,7 @@ export class FacilitiesService {
     const objToString = new PlainToJSON();
     return new StreamableFile(stream.pipe(toDto).pipe(objToString), {
       type: req.headers.accept,
-      disposition: `attachment; filename="facilities-attributes-${uuid()}.json`,
+      disposition: `attachment; filename="facilities-attributes-${uuid()}.json"`,
     });
   }
 

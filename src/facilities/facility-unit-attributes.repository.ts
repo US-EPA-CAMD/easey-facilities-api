@@ -1,4 +1,3 @@
-import { ReadStream } from 'fs';
 import { Request } from 'express';
 import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
 import { ResponseHeaders, Regex } from '@us-epa-camd/easey-common/utilities';
@@ -13,10 +12,8 @@ import {
 export class FacilityUnitAttributesRepository extends Repository<
   FacilityUnitAttributes
 > {
-  async streamAllFacilityUnitAttributes(
-    params: StreamFacilityAttributesParamsDTO,
-  ): Promise<ReadStream> {
-    return this.buildQuery(params, true).stream();
+  getStreamQuery(params: StreamFacilityAttributesParamsDTO) {
+    return this.buildQuery(params, true).getQueryAndParameters();
   }
 
   private buildQuery(
