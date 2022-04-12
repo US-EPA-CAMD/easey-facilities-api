@@ -22,10 +22,14 @@ import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facili
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
-import { StreamFacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import {
+  StreamFacilityAttributesParamsDTO,
+  PaginatedFacilityAttributesParamsDTO,
+} from '../dtos/facility-attributes.param.dto';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
 import { ExcludeFacilityAttributes } from '@us-epa-camd/easey-common/enums';
-import { ReadStream } from 'fs';
+import { StreamService } from '@us-epa-camd/easey-common/stream';
+import { StreamableFile } from '@nestjs/common';
 
 const mockRequest = (url?: string, page?: number, perPage?: number) => {
   return {
@@ -38,10 +42,21 @@ const mockRequest = (url?: string, page?: number, perPage?: number) => {
       perPage,
     },
     headers: {
-      accept: 'text/csv'
-    }
+      accept: 'text/csv',
+    },
+    on: jest.fn(),
   };
 };
+
+const mockStream = {
+  pipe: jest.fn().mockReturnValue({
+    pipe: jest.fn().mockReturnValue(Buffer.from('stream')),
+  }),
+};
+
+jest.mock('uuid', () => {
+  return { v4: jest.fn().mockReturnValue(0) };
+});
 
 const mockPlant = (
   id: number,
@@ -64,12 +79,15 @@ const mockPyd = () => ({
 const mockFua = () => ({
   getAllFacilityAttributes: jest.fn(),
   lastArchivedYear: jest.fn(),
-  streamAllFacilityUnitAttributes: jest.fn()
+  streamAllFacilityUnitAttributes: jest.fn(),
+  getStreamQuery: jest.fn(),
 });
 
 const mockMap = () => ({
   many: jest.fn(),
 });
+
+let req: any;
 
 describe('-- Facilities Service --', () => {
   let facilitiesRepositoryMock: MockType<Repository<Plant>>;
@@ -79,7 +97,6 @@ describe('-- Facilities Service --', () => {
   let applicableFacilityAttributesMap;
   let facilityUnitAttributesRepository;
   let facilityAttributesMap;
-  let req: any;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
@@ -88,6 +105,14 @@ describe('-- Facilities Service --', () => {
         FacilityMap,
         FacilityAttributesMap,
         FacilitiesService,
+        {
+          provide: StreamService,
+          useFactory: () => ({
+            getStream: () => {
+              return mockStream;
+            },
+          }),
+        },
         {
           provide: FacilitiesRepository,
           useFactory: repositoryMockFactory,
@@ -121,6 +146,9 @@ describe('-- Facilities Service --', () => {
     facilityUnitAttributesRepository = module.get(
       FacilityUnitAttributesRepository,
     );
+
+    req = mockRequest();
+    req.res.setHeader.mockReturnValue();
   });
 
   describe('* getFacilities', () => {
@@ -310,7 +338,10 @@ describe('-- Facilities Service --', () => {
       const params: ApplicableFacilityAttributesParamsDTO = new ApplicableFacilityAttributesParamsDTO();
       params.year = [2016, 2017];
 
-      facilityUnitAttributesRepository.lastArchivedYear.mockResolvedValue([true, false]);
+      facilityUnitAttributesRepository.lastArchivedYear.mockResolvedValue([
+        true,
+        false,
+      ]);
 
       programYearDimRepository.getApplicableFacilityAttributes.mockResolvedValue(
         'entities',
@@ -360,74 +391,22 @@ describe('-- Facilities Service --', () => {
 
   describe('streamFacilityUnitAttributes', () => {
     it('streams all facility unit attributes', async () => {
-      let streamFilters = new StreamFacilityAttributesParamsDTO();
-      streamFilters.year = [2019];
-      streamFilters.stateCode = [State.TX];
-      streamFilters.facilityId = [3];
-      streamFilters.unitType = [
-        UnitType.BUBBLING_FLUIDIZED,
-        UnitType.ARCH_FIRE_BOILER,
-      ];
-      streamFilters.unitFuelType = [UnitFuelType.COAL, UnitFuelType.DIESEL_OIL];
-      streamFilters.controlTechnologies = [
-        ControlTechnology.ADDITIVES_TO_ENHANCE,
-        ControlTechnology.OTHER,
-      ];
-      streamFilters.programCodeInfo = [Program.ARP, Program.RGGI];
-      streamFilters.sourceCategory = [SourceCategory.AUTOMOTIVE_STAMPINGS];
-      streamFilters.exclude = [ExcludeFacilityAttributes.ASSOC_STACKS];
+      facilityUnitAttributesRepository.getStreamQuery.mockResolvedValue('');
 
-      const mockResult: any = {
-        pipe: toDto => {
-          return {
-            pipe: toCSV => {
-              return {
-                stateCode: 'AK',
-                facilityName: 'Barry',
-                facilityId: 3,
-                unitId: '5',
-                associatedStacks: 'CS001',
-                year: 2020,
-                programCodeInfo: 'ARP,CSNOX,CSSO2G2,MATS',
-                epaRegion: 5,
-                nercRegion: 'Mid-Continent Area Power Pool',
-                county: 'Sherburne County',
-                countyCode: 'MN141',
-                fipsCode: '141',
-                sourceCategory: 'Electric Utility',
-                latitude: 45.3792,
-                longitude: -93.8958,
-                ownerOperator:
-                  'Alabama Power Company (Operator), Alabama Power Company (Owner)',
-                so2Phase: 'Phase 2',
-                noxPhase: 'Phase 1 Group 1',
-                unitType: 'Tangentially-fired',
-                primaryFuelInfo: 'Coal',
-                secondaryFuelInfo: 'Diesel Oil',
-                so2ControlInfo: 'Wet Limestone',
-                noxControlInfo:
-                  'Selective Catalytic Reduction, Low NOx Burner Technology w/ Separated OFA',
-                pmControlInfo: 'Electrostatic Precipitator',
-                hgControlInfo:
-                  'Catalyst (gold, palladium, or other) used to oxidize mercury',
-                commercialOperationDate: '1977-04-01',
-                operatingStatus: 'Operating',
-                maxHourlyHIRate: 7969.2,
-                associatedGeneratorsAndNameplateCapacity: 'A1ST (191.8)',
-              };
-            },
-          };
-        },
-      };
-      const req: any = mockRequest(`/facilities/attributes/stream`);
-      req.res.setHeader.mockReturnValue();
-      facilityUnitAttributesRepository.streamAllFacilityUnitAttributes.mockResolvedValue(
-        mockResult
+      let filters = new StreamFacilityAttributesParamsDTO();
+
+      req.headers.accept = '';
+
+      let result = await facilitiesService.streamFacilitiesUnitAttributes(
+        req,
+        filters,
       );
 
-      const result = await facilitiesService.streamFacilitiesUnitAttributes(
-        req,
-        streamFilters,
+      expect(result).toEqual(
+        new StreamableFile(Buffer.from('stream'), {
+          type: req.headers.accept,
+          disposition: `attachment; filename="facilities-attributes-${0}.json"`,
+        }),
       );
     });
   });

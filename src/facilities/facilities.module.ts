@@ -9,6 +9,7 @@ import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
+import { StreamModule } from '@us-epa-camd/easey-common/stream';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { FacilityUnitAttributesRepository } from './facility-unit-attributes.rep
       ProgramYearDimRepository,
       FacilityUnitAttributesRepository,
     ]),
+    StreamModule,
   ],
   controllers: [FacilitiesController],
   providers: [

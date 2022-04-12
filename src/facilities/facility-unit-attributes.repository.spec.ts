@@ -8,7 +8,7 @@ import {
   ControlTechnology,
   Program,
   SourceCategory,
-  ExcludeFacilityAttributes
+  ExcludeFacilityAttributes,
 } from '@us-epa-camd/easey-common/enums';
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 
@@ -18,6 +18,7 @@ import {
 } from '../dtos/facility-attributes.param.dto';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
+import { Stream } from 'stream';
 
 const mockQueryBuilder = () => ({
   andWhere: jest.fn(),
@@ -29,6 +30,7 @@ const mockQueryBuilder = () => ({
   skip: jest.fn(),
   take: jest.fn(),
   stream: jest.fn(),
+  getQueryAndParameters: jest.fn(),
 });
 
 const filters: PaginatedFacilityAttributesParamsDTO = new PaginatedFacilityAttributesParamsDTO();
@@ -77,32 +79,16 @@ describe('FacilityUnitAttributesRepository', () => {
     queryBuilder.getCount.mockReturnValue('mockCount');
     queryBuilder.getMany.mockReturnValue('mockFacilityAttributes');
     queryBuilder.stream.mockReturnValue('mockStream');
+    queryBuilder.getQueryAndParameters.mockReturnValue('');
   });
 
   describe('streamFacilityUnitAttributes', () => {
     it('streams all facility unit attributes', async () => {
-      let streamFilters = new StreamFacilityAttributesParamsDTO();
-      streamFilters.year = [2019];
-      streamFilters.stateCode = [State.TX];
-      streamFilters.facilityId = [3];
-      streamFilters.unitType = [
-        UnitType.BUBBLING_FLUIDIZED,
-        UnitType.ARCH_FIRE_BOILER,
-      ];
-      streamFilters.unitFuelType = [UnitFuelType.COAL, UnitFuelType.DIESEL_OIL];
-      streamFilters.controlTechnologies = [
-        ControlTechnology.ADDITIVES_TO_ENHANCE,
-        ControlTechnology.OTHER,
-      ];
-      streamFilters.programCodeInfo = [Program.ARP, Program.RGGI];
-      streamFilters.sourceCategory = [SourceCategory.AUTOMOTIVE_STAMPINGS]
-      streamFilters.exclude = [ExcludeFacilityAttributes.ASSOC_STACKS];
-
-      const result = await facilityUnitAttributesRepository.streamAllFacilityUnitAttributes(
-        streamFilters,
+      const result = await facilityUnitAttributesRepository.getStreamQuery(
+        new StreamFacilityAttributesParamsDTO(),
       );
 
-      expect(result).toEqual('mockStream');
+      expect(result).toEqual('');
     });
   });
 
