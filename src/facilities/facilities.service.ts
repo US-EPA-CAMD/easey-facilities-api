@@ -113,7 +113,7 @@ export class FacilitiesService {
     const query = this.facilityUnitAttributesRepository.getStreamQuery(
       streamFacilityAttributesParamsDTO,
     );
-    let stream: ReadStream = await this.streamService.getStream(query);
+    const stream: ReadStream = await this.streamService.getStream(query);
 
     req.on('close', () => {
       stream.emit('end');
