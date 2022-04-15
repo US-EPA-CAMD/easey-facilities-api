@@ -31,7 +31,11 @@ import {
 } from '../dtos/facility-attributes.param.dto';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
-import { fieldMappings } from '../constants/field-mappings';
+import {
+  excludableColumnHeader,
+  fieldMappingHeader,
+  fieldMappings,
+} from '../constants/field-mappings';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { ReadStream } from 'fs';
 import { StreamService } from '@us-epa-camd/easey-common/stream';
@@ -120,8 +124,8 @@ export class FacilitiesService {
     });
 
     req.res.setHeader(
-      'X-Field-Mappings',
-      JSON.stringify(fieldMappings.facilities.attributes),
+      fieldMappingHeader,
+      JSON.stringify(fieldMappings.facilities.attributes.data),
     );
 
     const toDto = new Transform({
@@ -210,11 +214,11 @@ export class FacilitiesService {
 
     if (req.headers.accept === 'text/csv') {
       const fieldMappingsList = streamFacilityAttributesParamsDTO.exclude
-        ? fieldMappings.facilities.attributes.filter(
+        ? fieldMappings.facilities.attributes.data.filter(
             (item: any) =>
               !streamFacilityAttributesParamsDTO.exclude.includes(item.value),
           )
-        : fieldMappings.facilities.attributes;
+        : fieldMappings.facilities.attributes.data;
       const toCSV = new PlainToCSV(fieldMappingsList);
 
       return new StreamableFile(stream.pipe(toDto).pipe(toCSV), {
@@ -246,8 +250,13 @@ export class FacilitiesService {
     }
 
     req.res.setHeader(
-      'X-Field-Mappings',
-      JSON.stringify(fieldMappings.facilities.attributes),
+      fieldMappingHeader,
+      JSON.stringify(fieldMappings.facilities.attributes.data),
+    );
+
+    req.res.setHeader(
+      excludableColumnHeader,
+      JSON.stringify(fieldMappings.facilities.attributes.excludableColumns),
     );
 
     this.logger.info('Got all facility attributes');

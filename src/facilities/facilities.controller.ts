@@ -5,7 +5,7 @@ import {
   ApiQuery,
   getSchemaPath,
   ApiExtraModels,
-  ApiSecurity
+  ApiSecurity,
 } from '@nestjs/swagger';
 import {
   Req,
@@ -26,7 +26,10 @@ import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesService } from './facilities.service';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
-import { StreamFacilityAttributesParamsDTO, PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import {
+  StreamFacilityAttributesParamsDTO,
+  PaginatedFacilityAttributesParamsDTO,
+} from '../dtos/facility-attributes.param.dto';
 import {
   ApiQueryAttributesMultiSelect,
   BadRequestResponse,
@@ -68,7 +71,7 @@ export class FacilitiesController {
       'text/csv': {
         schema: {
           type: 'string',
-          example: fieldMappings.facilities.attributes
+          example: fieldMappings.facilities.attributes.data
             .map(i => i.label)
             .join(','),
         },
@@ -102,7 +105,7 @@ export class FacilitiesController {
       'text/csv': {
         schema: {
           type: 'string',
-          example: fieldMappings.facilities.attributes
+          example: fieldMappings.facilities.attributes.data
             .map(i => i.label)
             .join(','),
         },
@@ -116,11 +119,12 @@ export class FacilitiesController {
   @ExcludeQuery()
   streamFacilitiesUnitAttributes(
     @Req() req: Request,
-    @Query() streamFacilityAttributesParamsDTO: StreamFacilityAttributesParamsDTO,
+    @Query()
+    streamFacilityAttributesParamsDTO: StreamFacilityAttributesParamsDTO,
   ): Promise<StreamableFile> {
     return this.service.streamFacilitiesUnitAttributes(
       req,
-      streamFacilityAttributesParamsDTO
+      streamFacilityAttributesParamsDTO,
     );
   }
 
