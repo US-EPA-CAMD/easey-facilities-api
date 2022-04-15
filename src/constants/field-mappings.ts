@@ -32,8 +32,40 @@ const attributes = [
   { ...propertyMetadata.associatedGeneratorsAndNameplateCapacity.fieldLabels },
 ];
 
+const excludableColumns = [
+  { ...propertyMetadata.associatedGeneratorsAndNameplateCapacity.fieldLabels },
+  { ...propertyMetadata.associatedStacks.fieldLabels },
+  { ...propertyMetadata.maxHourlyHIRate.fieldLabels },
+  { ...propertyMetadata.commercialOperationDate.fieldLabels },
+  { ...propertyMetadata.county.fieldLabels },
+  { ...propertyMetadata.countyCode.fieldLabels },
+  { ...propertyMetadata.epaRegion.fieldLabels },
+  { ...propertyMetadata.fipsCode.fieldLabels },
+  { ...propertyMetadata.hgControlInfo.fieldLabels },
+  { ...propertyMetadata.latitude.fieldLabels },
+  { ...propertyMetadata.longitude.fieldLabels },
+  { ...propertyMetadata.nercRegion.fieldLabels },
+  { ...propertyMetadata.noxControlInfo.fieldLabels },
+  { ...propertyMetadata.noxPhase.fieldLabels },
+  { ...propertyMetadata.operatingStatus.fieldLabels },
+  { ...propertyMetadata.pmControlInfo.fieldLabels },
+  { ...propertyMetadata.programCodeInfo.fieldLabels },
+  { ...propertyMetadata.primaryFuelInfo.fieldLabels },
+  { ...propertyMetadata.secondaryFuelInfo.fieldLabels },
+  { ...propertyMetadata.so2ControlInfo.fieldLabels },
+  { ...propertyMetadata.so2Phase.fieldLabels },
+  { ...propertyMetadata.sourceCategory.fieldLabels },
+  { ...propertyMetadata.unitType.fieldLabels },
+];
+
 export const fieldMappings = {
   facilities: {
-    attributes: attributes,
+    attributes: {
+      data: attributes,
+      excludableColumns: excludableColumns,
+    },
   },
 };
+
+export const fieldMappingHeader = 'X-Field-Mappings';
+export const excludableColumnHeader = 'X-Excludable-Columns';

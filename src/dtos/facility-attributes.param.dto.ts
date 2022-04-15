@@ -161,7 +161,7 @@ export class StreamFacilityAttributesParamsDTO extends FacilityAttributesParamsD
     each: true,
     message: ErrorMessages.RemovableParameter(),
   })
-  @IsInResponse(fieldMappings.facilities.attributes, {
+  @IsInResponse(fieldMappings.facilities.attributes.data, {
     each: true,
     message: ErrorMessages.ValidParameter(),
   })
