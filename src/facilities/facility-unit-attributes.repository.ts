@@ -1,28 +1,21 @@
-import { ReadStream } from 'fs';
 import { Request } from 'express';
 import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
+
 import { ResponseHeaders, Regex } from '@us-epa-camd/easey-common/utilities';
 
 import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
-import {
-  StreamFacilityAttributesParamsDTO,
-  PaginatedFacilityAttributesParamsDTO,
-} from '../dtos/facility-attributes.param.dto';
+import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 
 @EntityRepository(FacilityUnitAttributes)
 export class FacilityUnitAttributesRepository extends Repository<
   FacilityUnitAttributes
 > {
-  getStreamQuery(params: StreamFacilityAttributesParamsDTO) {
-    return this.buildQuery(params, true).getQueryAndParameters();
-  }
 
   private buildQuery(
-    params: StreamFacilityAttributesParamsDTO,
-    isStreamed = false,
+    params: PaginatedFacilityAttributesParamsDTO,
   ): SelectQueryBuilder<FacilityUnitAttributes> {
     const query = this.createQueryBuilder('fua').select(
-      this.getColumns(isStreamed),
+      this.getColumns(),
     );
 
     if (params.unitFuelType) {
@@ -144,8 +137,8 @@ export class FacilityUnitAttributesRepository extends Repository<
     return query;
   }
 
-  private getColumns(isStreamed: boolean): string[] {
-    const columns = [
+  private getColumns(): string[] {
+    return [
       'fua.id',
       'fua.stateCode',
       'fua.facilityName',
@@ -180,20 +173,6 @@ export class FacilityUnitAttributesRepository extends Repository<
       'fua.arpNameplateCapacity',
       'fua.otherNameplateCapacity',
     ];
-
-    return columns.map(col => {
-      if (isStreamed) {
-        if (col === 'fua.ownDisplay') {
-          return `${col} AS "ownerOperator"`;
-        }
-        if (col === 'fua.generatorId') {
-          return `${col} AS "associatedGeneratorsAndNameplateCapacity"`;
-        }
-        return `${col} AS "${col.split('.')[1]}"`;
-      } else {
-        return col;
-      }
-    });
   }
 
   async getAllFacilityAttributes(
@@ -201,7 +180,7 @@ export class FacilityUnitAttributesRepository extends Repository<
     req: Request,
   ): Promise<FacilityUnitAttributes[]> {
     const { page, perPage } = facilityAttributesParamsDTO;
-    const query = this.buildQuery(facilityAttributesParamsDTO, false);
+    const query = this.buildQuery(facilityAttributesParamsDTO);
 
     if (page && perPage) {
       query.skip((page - 1) * perPage).take(perPage);

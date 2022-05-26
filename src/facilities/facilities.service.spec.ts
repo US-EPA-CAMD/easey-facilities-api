@@ -1,6 +1,8 @@
 import { Repository } from 'typeorm';
 import { Test } from '@nestjs/testing';
 
+import { LoggerModule } from '@us-epa-camd/easey-common/logger';
+
 import {
   State,
   UnitType,
@@ -22,14 +24,7 @@ import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facili
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
-import {
-  StreamFacilityAttributesParamsDTO,
-  PaginatedFacilityAttributesParamsDTO,
-} from '../dtos/facility-attributes.param.dto';
-import { LoggerModule } from '@us-epa-camd/easey-common/logger';
-import { ExcludeFacilityAttributes } from '@us-epa-camd/easey-common/enums';
-import { StreamService } from '@us-epa-camd/easey-common/stream';
-import { StreamableFile } from '@nestjs/common';
+import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 
 const mockRequest = (url?: string, page?: number, perPage?: number) => {
   return {
@@ -47,16 +42,6 @@ const mockRequest = (url?: string, page?: number, perPage?: number) => {
     on: jest.fn(),
   };
 };
-
-const mockStream = {
-  pipe: jest.fn().mockReturnValue({
-    pipe: jest.fn().mockReturnValue(Buffer.from('stream')),
-  }),
-};
-
-jest.mock('uuid', () => {
-  return { v4: jest.fn().mockReturnValue(0) };
-});
 
 const mockPlant = (
   id: number,
@@ -79,8 +64,6 @@ const mockPyd = () => ({
 const mockFua = () => ({
   getAllFacilityAttributes: jest.fn(),
   lastArchivedYear: jest.fn(),
-  streamAllFacilityUnitAttributes: jest.fn(),
-  getStreamQuery: jest.fn(),
 });
 
 const mockMap = () => ({
@@ -105,14 +88,6 @@ describe('-- Facilities Service --', () => {
         FacilityMap,
         FacilityAttributesMap,
         FacilitiesService,
-        {
-          provide: StreamService,
-          useFactory: () => ({
-            getStream: () => {
-              return mockStream;
-            },
-          }),
-        },
         {
           provide: FacilitiesRepository,
           useFactory: repositoryMockFactory,
@@ -386,28 +361,6 @@ describe('-- Facilities Service --', () => {
       expect(
         await facilitiesService.getAllFacilityAttributes(params, req),
       ).toBe(expectedResult);
-    });
-  });
-
-  describe('streamFacilityUnitAttributes', () => {
-    it('streams all facility unit attributes', async () => {
-      facilityUnitAttributesRepository.getStreamQuery.mockResolvedValue('');
-
-      let filters = new StreamFacilityAttributesParamsDTO();
-
-      req.headers.accept = '';
-
-      let result = await facilitiesService.streamFacilitiesUnitAttributes(
-        req,
-        filters,
-      );
-
-      expect(result).toEqual(
-        new StreamableFile(Buffer.from('stream'), {
-          type: req.headers.accept,
-          disposition: `attachment; filename="facilities-attributes-${0}.json"`,
-        }),
-      );
     });
   });
 });

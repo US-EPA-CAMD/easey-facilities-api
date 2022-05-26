@@ -150,24 +150,6 @@ export class FacilityAttributesParamsDTO {
   }
 }
 
-export class StreamFacilityAttributesParamsDTO extends FacilityAttributesParamsDTO {
-  @ApiProperty({
-    enum: ExcludeFacilityAttributes,
-    description: propertyMetadata.exclude.description,
-  })
-  @IsOptional()
-  @IsInEnum(ExcludeFacilityAttributes, {
-    each: true,
-    message: ErrorMessages.RemovableParameter(),
-  })
-  @IsInResponse(fieldMappings.facilities.attributes, {
-    each: true,
-    message: ErrorMessages.ValidParameter(),
-  })
-  @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
-  exclude?: ExcludeFacilityAttributes[];
-}
-
 export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesParamsDTO {
   @Min(1, {
     message: ErrorMessages.GreaterThanOrEqual('page', 1),
