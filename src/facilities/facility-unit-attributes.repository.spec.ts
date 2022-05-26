@@ -8,17 +8,13 @@ import {
   ControlTechnology,
   Program,
   SourceCategory,
-  ExcludeFacilityAttributes,
 } from '@us-epa-camd/easey-common/enums';
+
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 
-import {
-  StreamFacilityAttributesParamsDTO,
-  PaginatedFacilityAttributesParamsDTO,
-} from '../dtos/facility-attributes.param.dto';
+import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
-import { Stream } from 'stream';
 
 const mockQueryBuilder = () => ({
   andWhere: jest.fn(),
@@ -29,7 +25,6 @@ const mockQueryBuilder = () => ({
   getCount: jest.fn(),
   skip: jest.fn(),
   take: jest.fn(),
-  stream: jest.fn(),
   getQueryAndParameters: jest.fn(),
 });
 
@@ -78,18 +73,7 @@ describe('FacilityUnitAttributesRepository', () => {
     queryBuilder.take.mockReturnValue('mockPagination');
     queryBuilder.getCount.mockReturnValue('mockCount');
     queryBuilder.getMany.mockReturnValue('mockFacilityAttributes');
-    queryBuilder.stream.mockReturnValue('mockStream');
     queryBuilder.getQueryAndParameters.mockReturnValue('');
-  });
-
-  describe('streamFacilityUnitAttributes', () => {
-    it('streams all facility unit attributes', async () => {
-      const result = await facilityUnitAttributesRepository.getStreamQuery(
-        new StreamFacilityAttributesParamsDTO(),
-      );
-
-      expect(result).toEqual('');
-    });
   });
 
   describe('getAllFacilityAttributes', () => {
