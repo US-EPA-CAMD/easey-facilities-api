@@ -10,10 +10,13 @@ import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attribute
 export class FacilityUnitAttributesRepository extends Repository<
   FacilityUnitAttributes
 > {
+
   private buildQuery(
     params: PaginatedFacilityAttributesParamsDTO,
   ): SelectQueryBuilder<FacilityUnitAttributes> {
-    const query = this.createQueryBuilder('fua').select(this.getColumns());
+    const query = this.createQueryBuilder('fua').select(
+      this.getColumns(),
+    );
 
     if (params.unitFuelType) {
       let string = '(';
@@ -179,11 +182,13 @@ export class FacilityUnitAttributesRepository extends Repository<
     const { page, perPage } = facilityAttributesParamsDTO;
     const query = this.buildQuery(facilityAttributesParamsDTO);
 
-    query.skip((page - 1) * perPage).take(perPage);
-    const [results, totalCount] = await query.getManyAndCount();
-    ResponseHeaders.setPagination(req, page, perPage, totalCount);
+    if (page && perPage) {
+      query.skip((page - 1) * perPage).take(perPage);
+      const totalCount = await query.getCount();
+      ResponseHeaders.setPagination(req, page, perPage, totalCount);
+    }
 
-    return results;
+    return query.getMany();
   }
 
   async lastArchivedYear(): Promise<number> {
