@@ -26,25 +26,27 @@ export class FacilityAttributesMap extends BaseMap<
       ', ',
     );
 
-    for (let index = 0; index < generatorIdArr.length; index++) {
-      associatedGeneratorsAndNameplateCapacityStr += generatorIdArr[index];
-      if (
-        arpNameplateCapacityArr &&
-        arpNameplateCapacityArr[index] !== 'null'
-      ) {
-        associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
-          arpNameplateCapacityArr[index],
-        )})`;
-      } else if (
-        otherNameplateCapacityArr &&
-        otherNameplateCapacityArr[index] !== 'null'
-      ) {
-        associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
-          otherNameplateCapacityArr[index],
-        )})`;
-      }
-      if (generatorIdArr.length > 1 && index < generatorIdArr.length - 1) {
-        associatedGeneratorsAndNameplateCapacityStr += ', ';
+    if (generatorIdArr) {
+      for (let index = 0; index < generatorIdArr.length; index++) {
+        associatedGeneratorsAndNameplateCapacityStr += generatorIdArr[index];
+        if (
+          arpNameplateCapacityArr &&
+          arpNameplateCapacityArr[index] !== 'null'
+        ) {
+          associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
+            arpNameplateCapacityArr[index],
+          )})`;
+        } else if (
+          otherNameplateCapacityArr &&
+          otherNameplateCapacityArr[index] !== 'null'
+        ) {
+          associatedGeneratorsAndNameplateCapacityStr += ` (${Number(
+            otherNameplateCapacityArr[index],
+          )})`;
+        }
+        if (generatorIdArr.length > 1 && index < generatorIdArr.length - 1) {
+          associatedGeneratorsAndNameplateCapacityStr += ', ';
+        }
       }
     }
 
