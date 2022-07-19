@@ -65,7 +65,7 @@ export class ProgramYearDimRepository extends Repository<ProgramYearDim> {
         'fyd',
         'utyd.year = fyd.year AND utyd.id = fyd.id',
       )
-      .innerJoin(
+      .leftJoin(
         ControlYearDim,
         'cyd',
         'fyd.year = cyd.year AND fyd.id = cyd.id',
