@@ -2,6 +2,7 @@ import { Request } from 'express';
 import { Not, IsNull, FindManyOptions } from 'typeorm';
 
 import {
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -10,6 +11,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Logger } from '@us-epa-camd/easey-common/logger';
+import { LoggingException } from '@us-epa-camd/easey-common/exceptions';
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 
 import {
@@ -34,7 +36,6 @@ import { FacilityUnitAttributesRepository } from './facility-unit-attributes.rep
 
 @Injectable()
 export class FacilitiesService {
-  
   constructor(
     private readonly logger: Logger,
     @InjectRepository(FacilitiesRepository)
@@ -84,7 +85,7 @@ export class FacilitiesService {
       ResponseHeaders.setPagination(req, page, perPage, totalCount);
       this.logger.info('Got facilities');
     } catch (e) {
-      this.logger.error(InternalServerErrorException, e.message, true);
+      throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     return this.facilityMap.many(results);
@@ -94,9 +95,11 @@ export class FacilitiesService {
     const facility = await this.facilitiesRepository.findOne(id);
 
     if (facility === undefined) {
-      this.logger.error(NotFoundException, 'Facility id does not exist', true, {
-        id: id,
-      });
+      throw new LoggingException(
+        'Facility id does not exist',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { id: id },
+      );
     }
 
     return this.facilityMap.one(facility);
@@ -114,7 +117,7 @@ export class FacilitiesService {
         req,
       );
     } catch (e) {
-      this.logger.error(InternalServerErrorException, e.message, true);
+      throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     req.res.setHeader(
@@ -166,7 +169,7 @@ export class FacilitiesService {
       );
       this.logger.info('Got all applicable facility attributes');
     } catch (e) {
-      this.logger.error(InternalServerErrorException, e.message, true);
+      throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     return this.applicableFacilityAttributesMap.many(query);
