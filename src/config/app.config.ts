@@ -18,6 +18,8 @@ if (host === 'localhost') {
 export default registerAs('app', () => ({
   name: 'facilities-api',
   title: process.env.EASEY_FACILITIES_API_TITLE || 'Facilities Management',
+  description:
+    'Facility management API endpoints for power sector facilities and their attributes (e.g. units, stacks, and owners)',
   path,
   host,
   apiHost: process.env.EASEY_API_GATEWAY_HOST || 'api.epa.gov/easey/dev',
