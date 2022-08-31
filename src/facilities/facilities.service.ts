@@ -4,8 +4,6 @@ import { Not, IsNull, FindManyOptions } from 'typeorm';
 import {
   HttpStatus,
   Injectable,
-  InternalServerErrorException,
-  NotFoundException,
 } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
@@ -138,34 +136,11 @@ export class FacilitiesService {
   async getApplicableFacilityAttributes(
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
   ): Promise<ApplicableFacilityAttributesDTO[]> {
-    let isUnion = false;
-    let isArchived = false;
-
-    const archivedYear = await this.facilityUnitAttributesRepository.lastArchivedYear();
-    const archivedYears = applicableFacilityAttributesParamsDTO.year.map(
-      el => Number(el) <= archivedYear,
-    );
-
-    isArchived = archivedYears.includes(true);
-    this.logger.info(
-      `Query params ${
-        isArchived ? 'contains' : 'do not contain'
-      } archived years`,
-    );
-    isUnion = isArchived && archivedYears.includes(false);
-    this.logger.info(
-      `Query params ${
-        isUnion ? 'contains' : 'do not contain'
-      } archived & non-archived years`,
-    );
-
     let query;
     try {
       this.logger.info('Getting all applicable facility attributes');
       query = await this.programYearRepository.getApplicableFacilityAttributes(
-        applicableFacilityAttributesParamsDTO,
-        isArchived,
-        isUnion,
+        applicableFacilityAttributesParamsDTO.year
       );
       this.logger.info('Got all applicable facility attributes');
     } catch (e) {

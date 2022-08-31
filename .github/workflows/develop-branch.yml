@@ -6,15 +6,14 @@ on:
     paths-ignore:
     - '**/*.md'
     - 'LICENSE'
-    - '.github/**'
-    - '.gitignore'    
+    - '.gitignore'
     
 jobs:
   Build-Test-Deploy:
     runs-on: ubuntu-latest
     environment:
       name: Dev
-      url: https://api.epa.gov/easey/test/facilities-mgmt/swagger
+      url: https://api.epa.gov/easey/dev/facilities-mgmt/swagger
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
