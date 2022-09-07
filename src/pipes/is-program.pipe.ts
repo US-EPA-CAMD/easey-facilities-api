@@ -10,7 +10,7 @@ import { ProgramCode } from '../entities/program-code.entity';
 /**
  * This decorator can optionally exclude programs specified in the @property param
  */
-export function IsEmissionsProgram(validationOptions?: ValidationOptions) {
+export function IsProgram(validationOptions?: ValidationOptions) {
   return function(object: Object, propertyName: string) {
     registerDecorator({
       name: 'isProgram',
@@ -23,7 +23,6 @@ export function IsEmissionsProgram(validationOptions?: ValidationOptions) {
 
           const found = await manager.findOne(ProgramCode, {
             programCode: value.toUpperCase(),
-            emissionsUIFilter: 1,
           });
           return found != null;
         },
