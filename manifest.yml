@@ -18,6 +18,7 @@ applications:
       EASEY_FACILITIES_API_ENABLE_AUTH_TOKEN: false
       EASEY_FACILITIES_API_ENABLE_GLOBAL_VALIDATION_PIPE: true
       EASEY_FACILITIES_API_MAX_PAGINATION_PER_PAGE: 25000
+      EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN: true
     routes:
       - route: ((host))/((path))
     services:
