@@ -34,6 +34,42 @@ Follow these [instructions](https://github.com/US-EPA-CAMD/devops/blob/master/GE
     ```
     $ yarn install
     ```
+## Configuration
+The Facilities API uses a number of environment variables to properly configure the api. The following is the list of configureble values and their default setting.
+
+| Typescript Var Name | Environment Var Name | Default Value | Comment |
+| :------------------ | :------------------- | :------------ | :------ |
+| name | N/A | facilities-api | Fixed value |
+| host | EASEY_FACILITIES_HOST | localhost | Configurable
+| port | EASEY_FACILITIES_PORT | 8020 | Configurable |
+| path | EASEY_FACILITIES_PATH | facilities-mgmt | Configurable |
+| uri | N/A | N/A | Determined by host, port, & path |
+| title | EASEY_FACILITIES_API_TITLE | Facilities Management | Configurable |
+| description | EASEY_FACILITIES_API_DESCRIPTION | Facility management API endpoints for power sector facilities and their attributes (e.g. units, stacks, and owners) | Configurable |
+| apiHost | EASEY_API_GATEWAY_HOST | api.epa.gov/easey/dev | Configurable |
+| env | EASEY_FACILITIES_API_ENV | local-dev | Configurable |
+| enableCors | EASEY_FACILITIES_API_ENABLE_CORS | true | Configurable |
+| enableApiKey | EASEY_FACILITIES_API_ENABLE_API_KEY | false | Configurable |
+| enableGlobalValidationPipes | EASEY_FACILITIES_API_ENABLE_GLOBAL_VALIDATION_PIPE | true | Configurable |
+| version | EASEY_FACILITIES_API_VERSION | v0.0.0 | Dynamically set by CI/CD workflow |
+| published | EASEY_FACILITIES_API_PUBLISHED | local | Dynamically set by CI/CD workflow |
+| perPageLimit | EASEY_FACILITIES_API_PAGINATION_MAX_PER_PAGE | 500 | Configurable |
+| enableSecretToken | EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN | false | Configurable |
+| enableDebug | EASEY_FACILITIES_API_ENABLE_DEBUG | false | Configurable |
+
+## Environment Variables File
+Database credentials are injected into the cloud.gov environments as part of the CI/CD deployment process therefore they do not need to be configured. However, when running locally for local development the following environment variables are required to be configured using a local .env file in the root of the project. **PLEASE DO NOT commit the .env file to source control.**
+
+- EASEY_FACILITIES_API_ENABLE_DEBUG=true
+- EASEY_FACILITIES_API_ENABLE_API_KEY=false
+- EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN=false
+
+**Please refer to our [Getting Started](https://github.com/US-EPA-CAMD/devops/blob/master/GETTING-STARTED.md) instructions on how to configure the following environment variables & connect to the database.**
+- EASEY_DB_HOST
+- EASEY_DB_PORT
+- EASEY_DB_NAME
+- EASEY_DB_USER
+- EASEY_DB_PWD
 
 ## Building, Testing, & Running the application
 From within the projects root directory run the following commands using the yarn command line interface
