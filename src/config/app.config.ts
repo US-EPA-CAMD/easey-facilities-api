@@ -12,7 +12,7 @@ const host = getConfigValue('EASEY_FACILITIES_API_HOST', 'localhost');
 const port = getConfigValueNumber('EASEY_FACILITIES_API_PORT', 8020);
 
 export const PAGINATION_MAX_PER_PAGE = getConfigValueNumber(
-  'EASEY_FACILITY_API_PAGINATION_MAX_PER_PAGE', 25000,
+  'EASEY_FACILITIES_API_PAGINATION_MAX_PER_PAGE', 25000,
 );
 
 let uri = `https://${host}/${path}`;
