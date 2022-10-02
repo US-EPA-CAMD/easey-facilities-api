@@ -75,7 +75,7 @@ export class FacilityAttributesParamsDTO {
   @IsOptional()
   @IsStateCode({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'stateCode'),
+    message: ErrorMessages.UnitCharacteristics(true, 'state-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   stateCode?: State[];
@@ -87,7 +87,7 @@ export class FacilityAttributesParamsDTO {
   @IsOptional()
   @IsUnitType({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'unitType'),
+    message: ErrorMessages.UnitCharacteristics(true, 'unit-type-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   unitType?: UnitType[];
@@ -99,7 +99,7 @@ export class FacilityAttributesParamsDTO {
   @IsOptional()
   @IsUnitFuelType({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'unitFuelType'),
+    message: ErrorMessages.UnitCharacteristics(true, 'fuel-type-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   unitFuelType?: UnitFuelType[];
@@ -111,7 +111,7 @@ export class FacilityAttributesParamsDTO {
   @IsOptional()
   @IsControlTechnology({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'controlTechnologies'),
+    message: ErrorMessages.UnitCharacteristics(true, 'control-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   controlTechnologies?: ControlTechnology[];
@@ -123,7 +123,7 @@ export class FacilityAttributesParamsDTO {
   @IsOptional()
   @IsSourceCategory({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'sourceCategories'),
+    message: ErrorMessages.UnitCharacteristics(true, 'source-category-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   sourceCategory?: SourceCategory[];
@@ -136,7 +136,7 @@ export class FacilityAttributesParamsDTO {
   @IsProgram({
     each: true,
     message:
-      ErrorMessages.UnitCharacteristics(true, 'programCodeInfo'),
+      ErrorMessages.UnitCharacteristics(true, 'program-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   programCodeInfo?: Program[];
