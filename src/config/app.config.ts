@@ -1,13 +1,19 @@
-require('dotenv').config();
 import { registerAs } from '@nestjs/config';
-import { parseBool } from '@us-epa-camd/easey-common/utilities';
+import {
+  getConfigValue,
+  getConfigValueNumber,
+  getConfigValueBoolean,
+} from '@us-epa-camd/easey-common/utilities';
 
-const path = process.env.EASEY_FACILITIES_API_PATH || 'facilities-mgmt';
-const host = process.env.EASEY_FACILITIES_API_HOST || 'localhost';
-const port = +process.env.EASEY_FACILITIES_API_PORT || 8020;
+require('dotenv').config();
 
-export const PAGINATION_MAX_PER_PAGE =
-  +process.env.EASEY_FACILITY_API_PAGINATION_MAX_PER_PAGE || 25000;
+const path = getConfigValue('EASEY_FACILITIES_API_PATH', 'facilities-mgmt');
+const host = getConfigValue('EASEY_FACILITIES_API_HOST', 'localhost');
+const port = getConfigValueNumber('EASEY_FACILITIES_API_PORT', 8020);
+
+export const PAGINATION_MAX_PER_PAGE = getConfigValueNumber(
+  'EASEY_FACILITIES_API_PAGINATION_MAX_PER_PAGE', 500,
+);
 
 let uri = `https://${host}/${path}`;
 
@@ -17,32 +23,41 @@ if (host === 'localhost') {
 
 export default registerAs('app', () => ({
   name: 'facilities-api',
-  title: process.env.EASEY_FACILITIES_API_TITLE || 'Facilities Management',
-  description:
+  host, port, path, uri,
+  title: getConfigValue(
+    'EASEY_FACILITIES_API_TITLE', 'Facilities Management',
+  ),
+  description: getConfigValue(
+    'EASEY_FACILITIES_API_DESCRIPTION',
     'Facility management API endpoints for power sector facilities and their attributes (e.g. units, stacks, and owners)',
-  path,
-  host,
-  apiHost: process.env.EASEY_API_GATEWAY_HOST || 'api.epa.gov/easey/dev',
-  port,
-  uri,
-  env: process.env.EASEY_FACILITIES_API_ENV || 'local-dev',
-  enableCors: parseBool(process.env.EASEY_FACILITIES_API_ENABLE_CORS, true),
-  enableApiKey: parseBool(
-    process.env.EASEY_FACILITIES_API_ENABLE_API_KEY,
-    true,
   ),
-  enableAuthToken: parseBool(
-    process.env.EASEY_FACILITIES_API_ENABLE_AUTH_TOKEN,
+  apiHost: getConfigValue(
+    'EASEY_API_GATEWAY_HOST', 'api.epa.gov/easey/dev',
   ),
-  enableGlobalValidationPipes: parseBool(
-    process.env.EASEY_FACILITIES_API_ENABLE_GLOBAL_VALIDATION_PIPE,
-    true,
+  env: getConfigValue(
+    'EASEY_FACILITIES_API_ENV', 'local-dev',
   ),
-  version: process.env.EASEY_FACILITIES_API_VERSION || 'v0.0.0',
-  published: process.env.EASEY_FACILITIES_API_PUBLISHED || 'local',
+  enableCors: getConfigValueBoolean(
+    'EASEY_FACILITIES_API_ENABLE_CORS', true,
+  ),
+  enableApiKey: getConfigValueBoolean(
+    'EASEY_FACILITIES_API_ENABLE_API_KEY',
+  ),
+  enableGlobalValidationPipes: getConfigValueBoolean(
+    'EASEY_FACILITIES_API_ENABLE_GLOBAL_VALIDATION_PIPE', true,
+  ),
+  version: getConfigValue(
+    'EASEY_FACILITIES_API_VERSION', 'v0.0.0',
+  ),
+  published: getConfigValue(
+    'EASEY_FACILITIES_API_PUBLISHED', 'local',
+  ),
   perPageLimit: PAGINATION_MAX_PER_PAGE,
-  enableSecretToken: parseBool(
-    process.env.EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN,
-    false,
+  enableSecretToken: getConfigValueBoolean(
+    'EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN',
+  ),
+  // ENABLES DEBUG CONSOLE LOGS
+  enableDebug: getConfigValueBoolean(
+    'EASEY_FACILITIES_API_ENABLE_DEBUG',
   ),
 }));

@@ -8,7 +8,6 @@ import {
 
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Logger } from '@us-epa-camd/easey-common/logger';
 import { LoggingException } from '@us-epa-camd/easey-common/exceptions';
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 
@@ -35,7 +34,6 @@ import { FacilityUnitAttributesRepository } from './facility-unit-attributes.rep
 @Injectable()
 export class FacilitiesService {
   constructor(
-    private readonly logger: Logger,
     @InjectRepository(FacilitiesRepository)
     private readonly facilitiesRepository: FacilitiesRepository,
     private readonly facilityMap: FacilityMap,
@@ -55,7 +53,6 @@ export class FacilitiesService {
     let totalCount: number;
 
     try {
-      this.logger.info('Getting facilities');
       const { stateCode, page, perPage } = facilityParamsDTO;
 
       const findOpts: FindManyOptions = {
@@ -81,7 +78,6 @@ export class FacilitiesService {
       );
 
       ResponseHeaders.setPagination(req, page, perPage, totalCount);
-      this.logger.info('Got facilities');
     } catch (e) {
       throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -107,7 +103,6 @@ export class FacilitiesService {
     paginatedFacilityAttributesParamsDTO: PaginatedFacilityAttributesParamsDTO,
     req: Request,
   ): Promise<FacilityAttributesDTO[]> {
-    this.logger.info('Getting all facility attributes');
     let query;
     try {
       query = await this.facilityUnitAttributesRepository.getAllFacilityAttributes(
@@ -128,8 +123,6 @@ export class FacilitiesService {
       JSON.stringify(fieldMappings.facilities.attributes.excludableColumns),
     );
 
-    this.logger.info('Got all facility attributes');
-
     return this.facilityAttributesMap.many(query);
   }
 
@@ -138,11 +131,9 @@ export class FacilitiesService {
   ): Promise<ApplicableFacilityAttributesDTO[]> {
     let query;
     try {
-      this.logger.info('Getting all applicable facility attributes');
       query = await this.programYearRepository.getApplicableFacilityAttributes(
         applicableFacilityAttributesParamsDTO.year
       );
-      this.logger.info('Got all applicable facility attributes');
     } catch (e) {
       throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
