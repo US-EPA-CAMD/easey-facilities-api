@@ -40,9 +40,9 @@ The Facilities API uses a number of environment variables to properly configure 
 | Typescript Var Name | Environment Var Name | Default Value | Comment |
 | :------------------ | :------------------- | :------------ | :------ |
 | name | N/A | facilities-api | Fixed value |
-| host | EASEY_FACILITIES_HOST | localhost | Configurable
-| port | EASEY_FACILITIES_PORT | 8020 | Configurable |
-| path | EASEY_FACILITIES_PATH | facilities-mgmt | Configurable |
+| host | EASEY_FACILITIES_API_HOST | localhost | Configurable
+| port | EASEY_FACILITIES_API_PORT | 8020 | Configurable |
+| path | EASEY_FACILITIES_API_PATH | facilities-mgmt | Configurable |
 | uri | N/A | N/A | Determined by host, port, & path |
 | title | EASEY_FACILITIES_API_TITLE | Facilities Management | Configurable |
 | description | EASEY_FACILITIES_API_DESCRIPTION | Facility management API endpoints for power sector facilities and their attributes (e.g. units, stacks, and owners) | Configurable |
@@ -54,6 +54,7 @@ The Facilities API uses a number of environment variables to properly configure 
 | version | EASEY_FACILITIES_API_VERSION | v0.0.0 | Dynamically set by CI/CD workflow |
 | published | EASEY_FACILITIES_API_PUBLISHED | local | Dynamically set by CI/CD workflow |
 | perPageLimit | EASEY_FACILITIES_API_PAGINATION_MAX_PER_PAGE | 500 | Configurable |
+| secretToken | EASEY_FACILITIES_API_SECRET_TOKEN | N/A | Dynamically set by CI/CD workflow |
 | enableSecretToken | EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN | false | Configurable |
 | enableDebug | EASEY_FACILITIES_API_ENABLE_DEBUG | false | Configurable |
 

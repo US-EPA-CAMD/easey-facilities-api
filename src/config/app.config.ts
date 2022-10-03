@@ -53,6 +53,9 @@ export default registerAs('app', () => ({
     'EASEY_FACILITIES_API_PUBLISHED', 'local',
   ),
   perPageLimit: PAGINATION_MAX_PER_PAGE,
+  secretToken: getConfigValue(
+    'EASEY_FACILITIES_API_SECRET_TOKEN',
+  ),
   enableSecretToken: getConfigValueBoolean(
     'EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN',
   ),
