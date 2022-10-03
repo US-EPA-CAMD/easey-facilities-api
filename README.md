@@ -54,6 +54,7 @@ The Facilities API uses a number of environment variables to properly configure 
 | version | EASEY_FACILITIES_API_VERSION | v0.0.0 | Dynamically set by CI/CD workflow |
 | published | EASEY_FACILITIES_API_PUBLISHED | local | Dynamically set by CI/CD workflow |
 | perPageLimit | EASEY_FACILITIES_API_PAGINATION_MAX_PER_PAGE | 500 | Configurable |
+| secretToken | EASEY_FACILITIES_API_SECRET_TOKEN | N/A | Dynamically set by CI/CD workflow |
 | enableSecretToken | EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN | false | Configurable |
 | enableDebug | EASEY_FACILITIES_API_ENABLE_DEBUG | false | Configurable |
 
