@@ -40,9 +40,9 @@ The Facilities API uses a number of environment variables to properly configure 
 | Typescript Var Name | Environment Var Name | Default Value | Comment |
 | :------------------ | :------------------- | :------------ | :------ |
 | name | N/A | facilities-api | Fixed value |
-| host | EASEY_FACILITIES_HOST | localhost | Configurable
-| port | EASEY_FACILITIES_PORT | 8020 | Configurable |
-| path | EASEY_FACILITIES_PATH | facilities-mgmt | Configurable |
+| host | EASEY_FACILITIES_API_HOST | localhost | Configurable
+| port | EASEY_FACILITIES_API_PORT | 8020 | Configurable |
+| path | EASEY_FACILITIES_API_PATH | facilities-mgmt | Configurable |
 | uri | N/A | N/A | Determined by host, port, & path |
 | title | EASEY_FACILITIES_API_TITLE | Facilities Management | Configurable |
 | description | EASEY_FACILITIES_API_DESCRIPTION | Facility management API endpoints for power sector facilities and their attributes (e.g. units, stacks, and owners) | Configurable |
