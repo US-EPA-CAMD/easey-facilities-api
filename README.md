@@ -28,7 +28,7 @@ Follow these [instructions](https://github.com/US-EPA-CAMD/devops/blob/master/GE
     ```
 3. Navigate to the projects root directory
     ```
-    $ cd easey-emissions-api
+    $ cd easey-facilities-api
     ```
 4. Install package dependencies
     ```
@@ -64,10 +64,10 @@ Database credentials are injected into the cloud.gov environments as part of the
 - EASEY_FACILITIES_API_ENABLE_DEBUG=true|false
 - EASEY_FACILITIES_API_ENABLE_API_KEY=true|false
   - IF ABOVE IS TRUE THEN SET
-    - EASEY_EMISSIONS_API_KEY={ask project dev/tech lead}
+    - EASEY_FACILITIES_API_KEY={ask project dev/tech lead}
 - EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN=true|false
   - IF ABOVE IS TRUE THEN SET
-    - EASEY_EMISSIONS_API_SECRET_TOKEN={ask project dev/tech lead}
+    - EASEY_FACILITIES_API_SECRET_TOKEN={ask project dev/tech lead}
 
 **Please refer to our [Getting Started](https://github.com/US-EPA-CAMD/devops/blob/master/GETTING-STARTED.md) instructions on how to configure the following environment variables & connect to the database.**
 - EASEY_DB_HOST
