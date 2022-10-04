@@ -7,17 +7,18 @@ applications:
       - nodejs_buildpack
     env:
       OPTIMIZE_MEMORY: true
-      EASEY_API_GATEWAY_HOST: ((apiHost))
-      EASEY_FACILITIES_API_TITLE: ((title))
       EASEY_FACILITIES_API_HOST: ((host))
       EASEY_FACILITIES_API_PORT: ((port))
       EASEY_FACILITIES_API_PATH: ((path))
+      EASEY_FACILITIES_API_TITLE: ((title))
+      EASEY_FACILITIES_API_DESCRIPTION: ((description))
       EASEY_FACILITIES_API_ENV: ((environment))
-      EASEY_FACILITIES_API_ENABLE_CORS: true
       EASEY_FACILITIES_API_ENABLE_API_KEY: true
       EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN: true
+      EASEY_FACILITIES_API_ENABLE_CORS: true
       EASEY_FACILITIES_API_ENABLE_GLOBAL_VALIDATION_PIPE: true
       EASEY_FACILITIES_API_MAX_PAGINATION_PER_PAGE: 500
+      EASEY_API_GATEWAY_HOST: ((apiHost))
     routes:
       - route: ((host))/((path))
     services:
