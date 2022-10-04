@@ -1,11 +1,12 @@
 #THIS FILE SHOULD CONTAIN DEV SETTINGS AND CI/CD WORKFLOW WILL CHANGE SETTINGS BASED ON ENV
-name: facilities-api
-title: Facilities Management
-path: facilities-mgmt
-port: 8080
-memory: 1024
 disk: 1024
+memory: 1024
 instances: 1
-environment: development
+name: facilities-api
 host: api-easey-dev.app.cloud.gov
+port: 8080
+path: facilities-mgmt
+title: Facilities Management
+description: Facility management API endpoints for power sector facilities and their attributes (e.g. units, stacks, and owners)
+environment: development
 apiHost: api.epa.gov/easey/dev
