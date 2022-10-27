@@ -58,7 +58,7 @@ export class FacilityAttributesMap extends BaseMap<
       associatedStacks: entity.associatedStacks,
       year: entity.year,
       programCodeInfo: entity.programCodeInfo,
-      programRepInfo: entity.primaryRepInfo,
+      primaryRepInfo: entity.primaryRepInfo,
       epaRegion: entity.epaRegion,
       nercRegion: entity.nercRegion,
       county: entity.county,
