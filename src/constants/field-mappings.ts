@@ -51,6 +51,7 @@ const excludableColumns = [
   { ...propertyMetadata.operatingStatus.fieldLabels },
   { ...propertyMetadata.pmControlInfo.fieldLabels },
   { ...propertyMetadata.programCodeInfo.fieldLabels },
+  { ...propertyMetadata.primaryRepInfo.fieldLabels },
   { ...propertyMetadata.primaryFuelInfo.fieldLabels },
   { ...propertyMetadata.secondaryFuelInfo.fieldLabels },
   { ...propertyMetadata.so2ControlInfo.fieldLabels },
