@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 import { PAGINATION_MAX_PER_PAGE } from '../config/app.config';
 
@@ -33,9 +33,6 @@ import { IsControlTechnology } from '../pipes/is-control-technology.pipe';
 import { IsSourceCategory } from '../pipes/is-source-category.pipe';
 
 export class FacilityAttributesParamsDTO {
-  @ApiHideProperty()
-  currentDate: Date = this.getCurrentDate;
-
   @ApiProperty({
     isArray: true,
     description: propertyMetadata.year.description,
@@ -45,7 +42,7 @@ export class FacilityAttributesParamsDTO {
     each: true,
     message: ErrorMessages.MultipleFormat('year', 'YYYY format'),
   })
-  @IsInDateRange([new Date(1995, 0), 'currentDate'], true, true, true, {
+  @IsInDateRange(new Date(1995, 0), true, true, true, {
     each: true,
     message: ErrorMessages.DateRange(
       'year',
@@ -140,10 +137,6 @@ export class FacilityAttributesParamsDTO {
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   programCodeInfo?: Program[];
-
-  private get getCurrentDate(): Date {
-    return new Date();
-  }
 }
 
 export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesParamsDTO {

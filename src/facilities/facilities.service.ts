@@ -22,7 +22,7 @@ import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesRepository } from './facilities.repository';
 import { FacilityMap } from '../maps/facility.map';
-import { ProgramYearDimRepository } from './program-year-dim.repository';
+import { UnitFactRepository } from './unit-fact.repository';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
@@ -37,8 +37,8 @@ export class FacilitiesService {
     @InjectRepository(FacilitiesRepository)
     private readonly facilitiesRepository: FacilitiesRepository,
     private readonly facilityMap: FacilityMap,
-    @InjectRepository(ProgramYearDimRepository)
-    private readonly programYearRepository: ProgramYearDimRepository,
+    @InjectRepository(UnitFactRepository)
+    private readonly unitFactRepository: UnitFactRepository,
     private readonly applicableFacilityAttributesMap: ApplicableFacilityAttributesMap,
     @InjectRepository(FacilityUnitAttributesRepository)
     private readonly facilityUnitAttributesRepository: FacilityUnitAttributesRepository,
@@ -86,7 +86,9 @@ export class FacilitiesService {
   }
 
   async getFacilityById(id: number): Promise<FacilityDTO> {
-    const facility = await this.facilitiesRepository.findOne(id);
+    const facility = await this.facilitiesRepository.findOne({
+      facilityId: id,
+    });
 
     if (facility === undefined) {
       throw new LoggingException(
@@ -131,7 +133,7 @@ export class FacilitiesService {
   ): Promise<ApplicableFacilityAttributesDTO[]> {
     let query;
     try {
-      query = await this.programYearRepository.getApplicableFacilityAttributes(
+      query = await this.unitFactRepository.getApplicableFacilityAttributes(
         applicableFacilityAttributesParamsDTO.year
       );
     } catch (e) {
