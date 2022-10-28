@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
 import { BaseMap } from '@us-epa-camd/easey-common/maps';
 
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
@@ -11,17 +10,16 @@ export class ApplicableFacilityAttributesMap extends BaseMap<
 > {
   public async one(entity: any): Promise<any> {
     return {
-      [propertyMetadata.year.fieldLabels.value]: Number(entity.pyd_op_year),
-      [propertyMetadata.programCode.fieldLabels.value]: entity.pyd_prg_code,
-      [propertyMetadata.facilityId.fieldLabels.value]: Number(
-        entity.uf_orispl_code,
+      year: Number(entity.year),
+      programCode: entity.programCode,
+      facilityId: Number(
+        entity.facilityId,
       ),
-      [propertyMetadata.stateCode.fieldLabels.value]: entity.uf_state,
-      [propertyMetadata.unitTypeCode.fieldLabels.value]: entity.utyd_unit_type,
-      [propertyMetadata.fuelTypeCode.fieldLabels.value]: entity.fyd_fuel_code,
-      [propertyMetadata.controlCode.fieldLabels.value]: entity.cyd_control_code,
-      [propertyMetadata.sourceCategoryDescription.fieldLabels.value]:
-        entity.uf_source_cat,
+      stateCode: entity.stateCode,
+      unitTypeCode: entity.unitTypeCode,
+      fuelTypeCode: entity.fuelTypeCode,
+      controlCode: entity.controlCode,
+      sourceCategoryDescription: entity.sourceCategory,
     };
   }
 }

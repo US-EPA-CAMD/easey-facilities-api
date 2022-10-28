@@ -20,14 +20,17 @@ export class UnitFactRepository extends Repository<UnitFact> {
       'pyd.programCode',
       'uf.facilityId',
       'uf.stateCode',
-      'utyd.unitType',
-      'fyd.fuelCode',
+      'utyd.unitTypeCode',
+      'fyd.fuelTypeCode',
       'cyd.controlCode',
       'uf.sourceCategory',
     ];
 
     const query = this.createQueryBuilder('uf')
-      .select(columnList)
+      .select(columnList.map(col => {
+          return `${col} AS "${col.split('.')[1]}"`;
+        }),
+      )
       .distinctOn(columnList)
       .leftJoin(ProgramYearDim,
         'pyd',
@@ -51,6 +54,8 @@ export class UnitFactRepository extends Repository<UnitFact> {
     query.andWhere(`uf.year IN (:...years)`, {
       years: yearArray,
     });
+
+    console.log(query.getQueryAndParameters());
 
     return query;
   }

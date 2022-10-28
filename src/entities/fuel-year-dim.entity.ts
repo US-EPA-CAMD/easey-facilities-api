@@ -25,5 +25,5 @@ export class FuelYearDim extends BaseEntity {
   @Column({
     name: 'fuel_code',
   })
-  fuelCode: string;
+  fuelTypeCode: string;
 }
