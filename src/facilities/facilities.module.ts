@@ -5,7 +5,7 @@ import { FacilitiesController } from './facilities.controller';
 import { FacilitiesService } from './facilities.service';
 import { FacilitiesRepository } from './facilities.repository';
 import { FacilityMap } from '../maps/facility.map';
-import { ProgramYearDimRepository } from './program-year-dim.repository';
+import { UnitFactRepository } from './unit-fact.repository';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
@@ -13,8 +13,8 @@ import { FacilityUnitAttributesRepository } from './facility-unit-attributes.rep
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      UnitFactRepository,
       FacilitiesRepository,
-      ProgramYearDimRepository,
       FacilityUnitAttributesRepository,
     ]),
   ],

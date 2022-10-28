@@ -1,8 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
 
-import { LinkDTO } from './link.dto';
-
 export class FacilityDTO {
   facilityRecordId: number;
 
@@ -33,6 +31,4 @@ export class FacilityDTO {
     name: propertyMetadata.epaRegion.fieldLabels.value,
   })
   epaRegion: number;
-
-  links: LinkDTO[];
 }
