@@ -1,10 +1,7 @@
 import { Request } from 'express';
 import { Not, IsNull, FindManyOptions } from 'typeorm';
 
-import {
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -134,7 +131,7 @@ export class FacilitiesService {
     let query;
     try {
       query = await this.unitFactRepository.getApplicableFacilityAttributes(
-        applicableFacilityAttributesParamsDTO.year
+        applicableFacilityAttributesParamsDTO.year,
       );
     } catch (e) {
       throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
