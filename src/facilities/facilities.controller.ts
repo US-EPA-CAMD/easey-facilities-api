@@ -6,7 +6,7 @@ import {
   ApiQuery,
   getSchemaPath,
   ApiExtraModels,
-  ApiSecurity
+  ApiSecurity,
 } from '@nestjs/swagger';
 
 import {
@@ -73,7 +73,7 @@ export class FacilitiesController {
       'text/csv': {
         schema: {
           type: 'string',
-          example: fieldMappings.facilities.attributes
+          example: fieldMappings.facilities.attributes.data
             .map(i => i.label)
             .join(','),
         },

@@ -2,41 +2,43 @@ import { Request } from 'express';
 import { Not, IsNull, FindManyOptions } from 'typeorm';
 
 import {
+  HttpStatus,
   Injectable,
-  InternalServerErrorException,
-  NotFoundException,
 } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Logger } from '@us-epa-camd/easey-common/logger';
+import { LoggingException } from '@us-epa-camd/easey-common/exceptions';
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
+
+import {
+  excludableColumnHeader,
+  fieldMappingHeader,
+  fieldMappings,
+} from '../constants/field-mappings';
 
 import { Plant } from '../entities/plant.entity';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesRepository } from './facilities.repository';
 import { FacilityMap } from '../maps/facility.map';
-import { ProgramYearDimRepository } from './program-year-dim.repository';
+import { UnitFactRepository } from './unit-fact.repository';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
-import { fieldMappings } from '../constants/field-mappings';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 
 @Injectable()
 export class FacilitiesService {
-  
   constructor(
-    private readonly logger: Logger,
     @InjectRepository(FacilitiesRepository)
     private readonly facilitiesRepository: FacilitiesRepository,
     private readonly facilityMap: FacilityMap,
-    @InjectRepository(ProgramYearDimRepository)
-    private readonly programYearRepository: ProgramYearDimRepository,
+    @InjectRepository(UnitFactRepository)
+    private readonly unitFactRepository: UnitFactRepository,
     private readonly applicableFacilityAttributesMap: ApplicableFacilityAttributesMap,
     @InjectRepository(FacilityUnitAttributesRepository)
     private readonly facilityUnitAttributesRepository: FacilityUnitAttributesRepository,
@@ -51,7 +53,6 @@ export class FacilitiesService {
     let totalCount: number;
 
     try {
-      this.logger.info('Getting facilities');
       const { stateCode, page, perPage } = facilityParamsDTO;
 
       const findOpts: FindManyOptions = {
@@ -77,21 +78,24 @@ export class FacilitiesService {
       );
 
       ResponseHeaders.setPagination(req, page, perPage, totalCount);
-      this.logger.info('Got facilities');
     } catch (e) {
-      this.logger.error(InternalServerErrorException, e.message, true);
+      throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     return this.facilityMap.many(results);
   }
 
   async getFacilityById(id: number): Promise<FacilityDTO> {
-    const facility = await this.facilitiesRepository.findOne(id);
+    const facility = await this.facilitiesRepository.findOne({
+      facilityId: id,
+    });
 
     if (facility === undefined) {
-      this.logger.error(NotFoundException, 'Facility id does not exist', true, {
-        id: id,
-      });
+      throw new LoggingException(
+        'Facility id does not exist',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { id: id },
+      );
     }
 
     return this.facilityMap.one(facility);
@@ -101,7 +105,6 @@ export class FacilitiesService {
     paginatedFacilityAttributesParamsDTO: PaginatedFacilityAttributesParamsDTO,
     req: Request,
   ): Promise<FacilityAttributesDTO[]> {
-    this.logger.info('Getting all facility attributes');
     let query;
     try {
       query = await this.facilityUnitAttributesRepository.getAllFacilityAttributes(
@@ -109,15 +112,18 @@ export class FacilitiesService {
         req,
       );
     } catch (e) {
-      this.logger.error(InternalServerErrorException, e.message, true);
+      throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     req.res.setHeader(
-      'X-Field-Mappings',
-      JSON.stringify(fieldMappings.facilities.attributes),
+      fieldMappingHeader,
+      JSON.stringify(fieldMappings.facilities.attributes.data),
     );
 
-    this.logger.info('Got all facility attributes');
+    req.res.setHeader(
+      excludableColumnHeader,
+      JSON.stringify(fieldMappings.facilities.attributes.excludableColumns),
+    );
 
     return this.facilityAttributesMap.many(query);
   }
@@ -125,38 +131,13 @@ export class FacilitiesService {
   async getApplicableFacilityAttributes(
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
   ): Promise<ApplicableFacilityAttributesDTO[]> {
-    let isUnion = false;
-    let isArchived = false;
-
-    const archivedYear = await this.facilityUnitAttributesRepository.lastArchivedYear();
-    const archivedYears = applicableFacilityAttributesParamsDTO.year.map(
-      el => Number(el) <= archivedYear,
-    );
-
-    isArchived = archivedYears.includes(true);
-    this.logger.info(
-      `Query params ${
-        isArchived ? 'contains' : 'do not contain'
-      } archived years`,
-    );
-    isUnion = isArchived && archivedYears.includes(false);
-    this.logger.info(
-      `Query params ${
-        isUnion ? 'contains' : 'do not contain'
-      } archived & non-archived years`,
-    );
-
     let query;
     try {
-      this.logger.info('Getting all applicable facility attributes');
-      query = await this.programYearRepository.getApplicableFacilityAttributes(
-        applicableFacilityAttributesParamsDTO,
-        isArchived,
-        isUnion,
+      query = await this.unitFactRepository.getApplicableFacilityAttributes(
+        applicableFacilityAttributesParamsDTO.year
       );
-      this.logger.info('Got all applicable facility attributes');
     } catch (e) {
-      this.logger.error(InternalServerErrorException, e.message, true);
+      throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     return this.applicableFacilityAttributesMap.many(query);

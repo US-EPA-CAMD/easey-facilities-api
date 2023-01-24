@@ -1,6 +1,6 @@
-import { IsDefined, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 import { PAGINATION_MAX_PER_PAGE } from '../config/app.config';
 
@@ -15,7 +15,6 @@ import {
   ControlTechnology,
   Program,
   SourceCategory,
-  ExcludeFacilityAttributes
 } from '@us-epa-camd/easey-common/enums';
 import {
   IsInDateRange,
@@ -23,32 +22,27 @@ import {
   IsYearFormat,
   Min,
   IsInRange,
-  IsInEnum,
-  IsInResponse
+  IsNotEmptyString,
 } from '@us-epa-camd/easey-common/pipes';
 
+import { IsProgram } from '../pipes/is-program.pipe';
 import { IsStateCode } from '../pipes/is-state-code.pipe';
 import { IsUnitType } from '../pipes/is-unit-type.pipe';
 import { IsUnitFuelType } from '../pipes/is-unit-fuel-type.pipe';
 import { IsControlTechnology } from '../pipes/is-control-technology.pipe';
-import { IsEmissionsProgram } from '../pipes/is-emissions-program.pipe';
 import { IsSourceCategory } from '../pipes/is-source-category.pipe';
-import { fieldMappings } from '../constants/field-mappings';
 
 export class FacilityAttributesParamsDTO {
-  @ApiHideProperty()
-  currentDate: Date = this.getCurrentDate;
-
   @ApiProperty({
     isArray: true,
     description: propertyMetadata.year.description,
   })
-  @IsDefined({ message: ErrorMessages.RequiredProperty() })
+  @IsNotEmptyString({ message: ErrorMessages.RequiredProperty() })
   @IsYearFormat({
     each: true,
     message: ErrorMessages.MultipleFormat('year', 'YYYY format'),
   })
-  @IsInDateRange([new Date(1995, 0), 'currentDate'], true, true, true, {
+  @IsInDateRange(new Date(1995, 0), true, true, true, {
     each: true,
     message: ErrorMessages.DateRange(
       'year',
@@ -78,7 +72,7 @@ export class FacilityAttributesParamsDTO {
   @IsOptional()
   @IsStateCode({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'stateCode'),
+    message: ErrorMessages.UnitCharacteristics(true, 'state-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   stateCode?: State[];
@@ -90,7 +84,7 @@ export class FacilityAttributesParamsDTO {
   @IsOptional()
   @IsUnitType({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'unitType'),
+    message: ErrorMessages.UnitCharacteristics(true, 'unit-type-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   unitType?: UnitType[];
@@ -102,7 +96,7 @@ export class FacilityAttributesParamsDTO {
   @IsOptional()
   @IsUnitFuelType({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'unitFuelType'),
+    message: ErrorMessages.UnitCharacteristics(true, 'fuel-type-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   unitFuelType?: UnitFuelType[];
@@ -114,7 +108,7 @@ export class FacilityAttributesParamsDTO {
   @IsOptional()
   @IsControlTechnology({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'controlTechnologies'),
+    message: ErrorMessages.UnitCharacteristics(true, 'control-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   controlTechnologies?: ControlTechnology[];
@@ -126,7 +120,7 @@ export class FacilityAttributesParamsDTO {
   @IsOptional()
   @IsSourceCategory({
     each: true,
-    message: ErrorMessages.UnitCharacteristics(true, 'sourceCategories'),
+    message: ErrorMessages.UnitCharacteristics(true, 'source-category-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   sourceCategory?: SourceCategory[];
@@ -136,18 +130,13 @@ export class FacilityAttributesParamsDTO {
     description: propertyMetadata.programCodeInfo.description,
   })
   @IsOptional()
-  @IsEmissionsProgram({
+  @IsProgram({
     each: true,
     message:
-      ErrorMessages.UnitCharacteristics(true, 'programCodeInfo') +
-      '?emissionsUIFilter=true',
+      ErrorMessages.UnitCharacteristics(true, 'program-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   programCodeInfo?: Program[];
-
-  private get getCurrentDate(): Date {
-    return new Date();
-  }
 }
 
 export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesParamsDTO {
@@ -157,7 +146,7 @@ export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesPara
   @ApiProperty({
     description: propertyMetadata.page.description,
   })
-  @IsDefined()
+  @IsNotEmpty({ message: ErrorMessages.RequiredProperty() })
   page: number;
 
   @IsInRange(1, PAGINATION_MAX_PER_PAGE, {
@@ -166,6 +155,6 @@ export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesPara
   @ApiProperty({
     description: propertyMetadata.perPage.description,
   })
-  @IsDefined()
+  @IsNotEmpty({ message: ErrorMessages.RequiredProperty() })
   perPage: number;
 }

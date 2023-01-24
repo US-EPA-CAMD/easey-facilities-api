@@ -28,12 +28,53 @@ Follow these [instructions](https://github.com/US-EPA-CAMD/devops/blob/master/GE
     ```
 3. Navigate to the projects root directory
     ```
-    $ cd easey-emissions-api
+    $ cd easey-facilities-api
     ```
 4. Install package dependencies
     ```
     $ yarn install
     ```
+
+## Configuration
+The Facilities API uses a number of environment variables to properly configure the api. The following is the list of configureble values and their default setting.
+
+| Typescript Var Name | Environment Var Name | Default Value | Comment |
+| :------------------ | :------------------- | :------------ | :------ |
+| name | N/A | facilities-api | Fixed value |
+| host | EASEY_FACILITIES_API_HOST | localhost | Configurable
+| port | EASEY_FACILITIES_API_PORT | 8020 | Configurable |
+| path | EASEY_FACILITIES_API_PATH | facilities-mgmt | Configurable |
+| title | EASEY_FACILITIES_API_TITLE | Facilities Management | Configurable |
+| description | EASEY_FACILITIES_API_DESCRIPTION | Facility management API endpoints for power sector facilities and their attributes (e.g. units, stacks, and owners) | Configurable |
+| env | EASEY_FACILITIES_API_ENV | local-dev | Configurable |
+| enableApiKey | EASEY_FACILITIES_API_ENABLE_API_KEY | false | Configurable |
+| secretToken | EASEY_FACILITIES_API_SECRET_TOKEN | *** | Dynamically set by CI/CD workflow |
+| enableSecretToken | EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN | false | Configurable |
+| enableCors | EASEY_FACILITIES_API_ENABLE_CORS | true | Configurable |
+| enableGlobalValidationPipes | EASEY_FACILITIES_API_ENABLE_GLOBAL_VALIDATION_PIPE | true | Configurable |
+| version | EASEY_FACILITIES_API_VERSION | v0.0.0 | Dynamically set by CI/CD workflow |
+| published | EASEY_FACILITIES_API_PUBLISHED | local | Dynamically set by CI/CD workflow |
+| enableDebug | EASEY_FACILITIES_API_ENABLE_DEBUG | false | Configurable |
+| perPageLimit | EASEY_FACILITIES_API_PAGINATION_MAX_PER_PAGE | 500 | Configurable |
+| apiHost | EASEY_API_GATEWAY_HOST | api.epa.gov/easey/dev | Configurable |
+
+## Environment Variables File
+Database credentials are injected into the cloud.gov environments as part of the CI/CD deployment process therefore they do not need to be configured. However, when running locally for local development the following environment variables are required to be configured using a local .env file in the root of the project. **PLEASE DO NOT commit the .env file to source control.**
+
+- EASEY_FACILITIES_API_ENABLE_DEBUG=true|false
+- EASEY_FACILITIES_API_ENABLE_API_KEY=true|false
+  - IF ABOVE IS TRUE THEN SET
+    - EASEY_FACILITIES_API_KEY={ask project dev/tech lead}
+- EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN=true|false
+  - IF ABOVE IS TRUE THEN SET
+    - EASEY_FACILITIES_API_SECRET_TOKEN={ask project dev/tech lead}
+
+**Please refer to our [Getting Started](https://github.com/US-EPA-CAMD/devops/blob/master/GETTING-STARTED.md) instructions on how to configure the following environment variables & connect to the database.**
+- EASEY_DB_HOST
+- EASEY_DB_PORT
+- EASEY_DB_NAME
+- EASEY_DB_USER
+- EASEY_DB_PWD
 
 ## Building, Testing, & Running the application
 From within the projects root directory run the following commands using the yarn command line interface
@@ -65,7 +106,7 @@ $ yarn start
 
 ## API Endpoints
 Please refer to the Facilities Management API Swagger Documentation for descriptions of the endpoints.<br>
-[Dev Environment](https://api.epa.gov/easey/dev/facilities-mgmt/swagger/) | [Test Environment](https://api.epa.gov/easey/test/facilities-mgmt/swagger/) | [Beta Environment](https://api.epa.gov/easey/beta/facilities-mgmt/swagger/) | [Staging Environment](https://api.epa.gov/easey/staging/facilities-mgmt/swagger/)
+[Dev Environment](https://api.epa.gov/easey/dev/facilities-mgmt/swagger/) | [Test Environment](https://api.epa.gov/easey/test/facilities-mgmt/swagger/) | [Performance Environment](https://api.epa.gov/easey/perf/facilities-mgmt/swagger/) | [Beta Environment](https://api.epa.gov/easey/beta/facilities-mgmt/swagger/) | [Staging Environment](https://api.epa.gov/easey/staging/facilities-mgmt/swagger/)
 
 ## License & Contributing
 This project is licensed under the MIT License. We encourage you to read this project’s [License](LICENSE), [Contributing Guidelines](CONTRIBUTING.md), and [Code of Conduct](CODE-OF-CONDUCT.md).
