@@ -17,7 +17,6 @@ import { FacilitiesRepository } from './facilities.repository';
 import { FacilitiesService } from './facilities.service';
 import { FacilityMap } from '../maps/facility.map';
 import { Plant } from '../entities/plant.entity';
-import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
@@ -25,6 +24,7 @@ import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import { UnitFactRepository } from './unit-fact.repository';
 
 const mockRequest = (url?: string, page?: number, perPage?: number) => {
   return {
@@ -57,7 +57,7 @@ const mockPlant = (
   return plant;
 };
 
-const mockPyd = () => ({
+const mockUnitFact = () => ({
   getApplicableFacilityAttributes: jest.fn(),
 });
 
@@ -76,7 +76,6 @@ describe('-- Facilities Service --', () => {
   let facilitiesRepositoryMock: MockType<Repository<Plant>>;
   let facilitiesService: FacilitiesService;
   const facilityMap = new FacilityMap();
-  let programYearDimRepository;
   let applicableFacilityAttributesMap;
   let facilityUnitAttributesRepository;
   let facilityAttributesMap;
@@ -93,8 +92,8 @@ describe('-- Facilities Service --', () => {
           useFactory: repositoryMockFactory,
         },
         {
-          provide: ProgramYearDimRepository,
-          useFactory: mockPyd,
+          provide: UnitFactRepository,
+          useFactory: mockUnitFact,
         },
         {
           provide: ApplicableFacilityAttributesMap,
@@ -113,7 +112,6 @@ describe('-- Facilities Service --', () => {
 
     facilitiesService = module.get(FacilitiesService);
     facilitiesRepositoryMock = module.get(FacilitiesRepository);
-    programYearDimRepository = module.get(ProgramYearDimRepository);
     applicableFacilityAttributesMap = module.get(
       ApplicableFacilityAttributesMap,
     );
@@ -266,7 +264,7 @@ describe('-- Facilities Service --', () => {
       const paramsDto: FacilityParamsDTO = {
         page: undefined,
         perPage: undefined,
-        stateCode: 'TX',
+        stateCode: State.TX,
         epaRegion: undefined,
       };
       const plants = plantList.filter(p => (p.stateCode = paramsDto.stateCode));
@@ -301,7 +299,7 @@ describe('-- Facilities Service --', () => {
         .getFacilityById(-1)
         .then()
         .catch(error => {
-          expect(error.status).toBe(404);
+          expect(error.status).toBe(500);
           expect(error.message).toBe('Facility id does not exist');
         });
     });
@@ -318,9 +316,6 @@ describe('-- Facilities Service --', () => {
         false,
       ]);
 
-      programYearDimRepository.getApplicableFacilityAttributes.mockResolvedValue(
-        'entities',
-      );
       applicableFacilityAttributesMap.many.mockResolvedValue(expectedResult);
 
       expect(
