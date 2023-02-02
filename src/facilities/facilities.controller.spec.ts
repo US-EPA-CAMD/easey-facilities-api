@@ -99,9 +99,5 @@ describe('-- Facilities Controller --', () => {
         await facilitiesController.getAllFacilityAttributes(null, req),
       ).toBe(expectedResult);
     });
-
-    it('testing failing test to stop pipeline', async () => {
-      expect(false).toBe(true);
-    });
   });
 });
