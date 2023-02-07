@@ -11,6 +11,8 @@ import routes from './routes';
 import appConfig from './config/app.config';
 import { TypeOrmConfigService } from './config/typeorm.config';
 import { FacilitiesModule } from './facilities/facilities.module';
+import { FacilitiesWorkspaceModule } from './facilities-workspace/facilities.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -22,9 +24,11 @@ import { FacilitiesModule } from './facilities/facilities.module';
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
     }),
+    HttpModule,
     LoggerModule,
     CorsOptionsModule,
     FacilitiesModule,
+    FacilitiesWorkspaceModule,
   ],
 })
 export class AppModule {}

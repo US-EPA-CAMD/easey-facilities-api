@@ -132,8 +132,7 @@ export class FacilityAttributesParamsDTO {
   @IsOptional()
   @IsProgram({
     each: true,
-    message:
-      ErrorMessages.UnitCharacteristics(true, 'program-code'),
+    message: ErrorMessages.UnitCharacteristics(true, 'program-code'),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
   programCodeInfo?: Program[];
