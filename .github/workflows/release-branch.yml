@@ -2,11 +2,11 @@ name: Release Branch Workflow
 
 on:
   push:
-    branches: [ release/* ]
+    branches: [release/*]
     paths-ignore:
-    - '**/*.md'
-    - 'LICENSE'
-    - '.gitignore'
+      - '**/*.md'
+      - 'LICENSE'
+      - '.gitignore'
 
 jobs:
   Build-Test-Package:
@@ -39,7 +39,7 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}          
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Package App
         run: devops/scripts/package-artifact.sh
         env:
@@ -81,6 +81,7 @@ jobs:
       - name: Configure Env Vars (secrets)
         run: scripts/environment-variables-secrets.sh
         env:
+          FACILITIES_API_KEY: ${{ secrets.API_KEY }}
           FACILITIES_API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
       - name: Deploy
         run: devops/scripts/deploy.sh
@@ -120,6 +121,7 @@ jobs:
       - name: Configure Env Vars (secrets)
         run: scripts/environment-variables-secrets.sh
         env:
+          FACILITIES_API_KEY: ${{ secrets.API_KEY }}
           FACILITIES_API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
       - name: Deploy
         run: devops/scripts/deploy.sh
@@ -159,6 +161,7 @@ jobs:
       - name: Configure Env Vars (secrets)
         run: scripts/environment-variables-secrets.sh
         env:
+          FACILITIES_API_KEY: ${{ secrets.API_KEY }}
           FACILITIES_API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
       - name: Deploy
         run: devops/scripts/deploy.sh
@@ -198,6 +201,7 @@ jobs:
       - name: Configure Env Vars (secrets)
         run: scripts/environment-variables-secrets.sh
         env:
+          FACILITIES_API_KEY: ${{ secrets.API_KEY }}
           FACILITIES_API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
       - name: Deploy
         run: devops/scripts/deploy.sh

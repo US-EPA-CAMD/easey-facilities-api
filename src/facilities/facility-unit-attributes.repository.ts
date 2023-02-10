@@ -10,13 +10,10 @@ import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attribute
 export class FacilityUnitAttributesRepository extends Repository<
   FacilityUnitAttributes
 > {
-
   private buildQuery(
     params: PaginatedFacilityAttributesParamsDTO,
   ): SelectQueryBuilder<FacilityUnitAttributes> {
-    const query = this.createQueryBuilder('fua').select(
-      this.getColumns(),
-    );
+    const query = this.createQueryBuilder('fua').select(this.getColumns());
 
     if (params.unitFuelType) {
       let string = '(';
@@ -179,9 +176,16 @@ export class FacilityUnitAttributesRepository extends Repository<
   async getAllFacilityAttributes(
     facilityAttributesParamsDTO: PaginatedFacilityAttributesParamsDTO,
     req: Request,
+    allowedOrisCodes?: number[],
   ): Promise<FacilityUnitAttributes[]> {
     const { page, perPage } = facilityAttributesParamsDTO;
     const query = this.buildQuery(facilityAttributesParamsDTO);
+
+    if (allowedOrisCodes) {
+      query.andWhere(`fua.facilityId IN (:...facilityIds)`, {
+        facilityIds: allowedOrisCodes,
+      });
+    }
 
     if (page && perPage) {
       query.skip((page - 1) * perPage).take(perPage);
