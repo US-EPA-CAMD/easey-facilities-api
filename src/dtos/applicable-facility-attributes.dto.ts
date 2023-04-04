@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
+import { IsNumber, IsString } from 'class-validator';
 
 export class ApplicableFacilityAttributesDTO {
   @ApiProperty({
@@ -7,6 +8,7 @@ export class ApplicableFacilityAttributesDTO {
     example: propertyMetadata.year.example,
     name: propertyMetadata.year.fieldLabels.value,
   })
+  @IsNumber()
   year: number;
 
   @ApiProperty({
@@ -14,6 +16,7 @@ export class ApplicableFacilityAttributesDTO {
     example: propertyMetadata.programCode.example,
     name: propertyMetadata.programCode.fieldLabels.value,
   })
+  @IsString()
   programCode: string;
 
   @ApiProperty({
@@ -21,6 +24,7 @@ export class ApplicableFacilityAttributesDTO {
     example: propertyMetadata.facilityId.example,
     name: propertyMetadata.facilityId.fieldLabels.value,
   })
+  @IsNumber()
   facilityId: number;
 
   @ApiProperty({
@@ -28,6 +32,7 @@ export class ApplicableFacilityAttributesDTO {
     example: propertyMetadata.stateCode.example,
     name: propertyMetadata.stateCode.fieldLabels.value,
   })
+  @IsString()
   stateCode: string;
 
   @ApiProperty({
@@ -35,6 +40,7 @@ export class ApplicableFacilityAttributesDTO {
     example: propertyMetadata.unitTypeCode.example,
     name: propertyMetadata.unitTypeCode.fieldLabels.value,
   })
+  @IsString()
   unitTypeCode: string;
 
   @ApiProperty({
@@ -42,6 +48,7 @@ export class ApplicableFacilityAttributesDTO {
     example: propertyMetadata.fuelTypeCode.example,
     name: propertyMetadata.fuelTypeCode.fieldLabels.value,
   })
+  @IsString()
   fuelTypeCode: string;
 
   @ApiProperty({
@@ -49,6 +56,7 @@ export class ApplicableFacilityAttributesDTO {
     example: propertyMetadata.controlCode.example,
     name: propertyMetadata.controlCode.fieldLabels.value,
   })
+  @IsString()
   controlCode: string;
 
   @ApiProperty({
@@ -56,5 +64,6 @@ export class ApplicableFacilityAttributesDTO {
     example: propertyMetadata.sourceCategoryDescription.example,
     name: propertyMetadata.sourceCategoryDescription.fieldLabels.value,
   })
+  @IsString()
   sourceCategoryDescription: string;
 }
