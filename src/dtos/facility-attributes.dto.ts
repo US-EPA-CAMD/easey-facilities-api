@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class FacilityAttributesDTO {
   @ApiProperty({
@@ -7,6 +8,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.stateCode.example,
     name: propertyMetadata.stateCode.fieldLabels.value,
   })
+  @IsString()
   stateCode: string;
 
   @ApiProperty({
@@ -14,6 +16,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.facilityName.example,
     name: propertyMetadata.facilityName.fieldLabels.value,
   })
+  @IsString()
   facilityName: string;
 
   @ApiProperty({
@@ -21,6 +24,8 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.facilityId.example,
     name: propertyMetadata.facilityId.fieldLabels.value,
   })
+  @IsNumber()
+  @IsOptional()
   facilityId?: number;
 
   @ApiProperty({
@@ -28,6 +33,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.unitId.example,
     name: propertyMetadata.unitId.fieldLabels.value,
   })
+  @IsString()
   unitId: string;
 
   @ApiProperty({
@@ -35,6 +41,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.associatedStacks.example,
     name: propertyMetadata.associatedStacks.fieldLabels.value,
   })
+  @IsString()
   associatedStacks: string;
 
   @ApiProperty({
@@ -42,6 +49,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.year.example,
     name: propertyMetadata.year.fieldLabels.value,
   })
+  @IsNumber()
   year: number;
 
   @ApiProperty({
@@ -49,6 +57,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.programCodeInfo.example,
     name: propertyMetadata.programCodeInfo.fieldLabels.value,
   })
+  @IsString()
   programCodeInfo: string;
 
   @ApiProperty({
@@ -56,6 +65,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.primaryRepInfo.example,
     name: propertyMetadata.primaryRepInfo.fieldLabels.value,
   })
+  @IsString()
   primaryRepInfo: string;
 
   @ApiProperty({
@@ -63,6 +73,8 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.epaRegion.example,
     name: propertyMetadata.epaRegion.fieldLabels.value,
   })
+  @IsNumber()
+  @IsOptional()
   epaRegion?: number;
 
   @ApiProperty({
@@ -70,6 +82,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.nercRegion.example,
     name: propertyMetadata.nercRegion.fieldLabels.value,
   })
+  @IsString()
   nercRegion: string;
 
   @ApiProperty({
@@ -77,6 +90,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.county.example,
     name: propertyMetadata.county.fieldLabels.value,
   })
+  @IsString()
   county: string;
 
   @ApiProperty({
@@ -84,6 +98,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.countyCode.example,
     name: propertyMetadata.countyCode.fieldLabels.value,
   })
+  @IsString()
   countyCode: string;
 
   @ApiProperty({
@@ -91,6 +106,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.fipsCode.example,
     name: propertyMetadata.fipsCode.fieldLabels.value,
   })
+  @IsString()
   fipsCode: string;
 
   @ApiProperty({
@@ -98,6 +114,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.sourceCategory.example,
     name: propertyMetadata.sourceCategory.fieldLabels.value,
   })
+  @IsString()
   sourceCategory: string;
 
   @ApiProperty({
@@ -105,6 +122,8 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.latitude.example,
     name: propertyMetadata.latitude.fieldLabels.value,
   })
+  @IsNumber()
+  @IsOptional()
   latitude?: number;
 
   @ApiProperty({
@@ -112,6 +131,8 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.longitude.example,
     name: propertyMetadata.longitude.fieldLabels.value,
   })
+  @IsNumber()
+  @IsOptional()
   longitude?: number;
 
   @ApiProperty({
@@ -119,6 +140,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.ownerOperatorInfo.example,
     name: propertyMetadata.ownerOperatorInfo.fieldLabels.value,
   })
+  @IsString()
   ownerOperator: string;
 
   @ApiProperty({
@@ -126,6 +148,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.so2Phase.example,
     name: propertyMetadata.so2Phase.fieldLabels.value,
   })
+  @IsString()
   so2Phase: string;
 
   @ApiProperty({
@@ -133,6 +156,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.noxPhase.example,
     name: propertyMetadata.noxPhase.fieldLabels.value,
   })
+  @IsString()
   noxPhase: string;
 
   @ApiProperty({
@@ -140,6 +164,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.unitType.example,
     name: propertyMetadata.unitType.fieldLabels.value,
   })
+  @IsString()
   unitType: string;
 
   @ApiProperty({
@@ -147,6 +172,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.primaryFuelInfo.example,
     name: propertyMetadata.primaryFuelInfo.fieldLabels.value,
   })
+  @IsString()
   primaryFuelInfo: string;
 
   @ApiProperty({
@@ -154,6 +180,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.secondaryFuelInfo.example,
     name: propertyMetadata.secondaryFuelInfo.fieldLabels.value,
   })
+  @IsString()
   secondaryFuelInfo: string;
 
   @ApiProperty({
@@ -161,6 +188,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.so2ControlInfo.example,
     name: propertyMetadata.so2ControlInfo.fieldLabels.value,
   })
+  @IsString()
   so2ControlInfo: string;
 
   @ApiProperty({
@@ -168,6 +196,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.noxControlInfo.example,
     name: propertyMetadata.noxControlInfo.fieldLabels.value,
   })
+  @IsString()
   noxControlInfo: string;
 
   @ApiProperty({
@@ -175,6 +204,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.pmControlInfo.example,
     name: propertyMetadata.pmControlInfo.fieldLabels.value,
   })
+  @IsString()
   pmControlInfo: string;
 
   @ApiProperty({
@@ -182,6 +212,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.hgControlInfo.example,
     name: propertyMetadata.hgControlInfo.fieldLabels.value,
   })
+  @IsString()
   hgControlInfo: string;
 
   @ApiProperty({
@@ -189,6 +220,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.commercialOperationDate.example,
     name: propertyMetadata.commercialOperationDate.fieldLabels.value,
   })
+  @IsString()
   commercialOperationDate: string;
 
   @ApiProperty({
@@ -196,6 +228,7 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.operatingStatus.example,
     name: propertyMetadata.operatingStatus.fieldLabels.value,
   })
+  @IsString()
   operatingStatus: string;
 
   @ApiProperty({
@@ -203,6 +236,8 @@ export class FacilityAttributesDTO {
     example: propertyMetadata.maxHourlyHIRate.example,
     name: propertyMetadata.maxHourlyHIRate.fieldLabels.value,
   })
+  @IsString()
+  @IsOptional()
   maxHourlyHIRate?: number;
 
   @ApiProperty({
@@ -213,5 +248,6 @@ export class FacilityAttributesDTO {
       propertyMetadata.associatedGeneratorsAndNameplateCapacity.fieldLabels
         .value,
   })
+  @IsString()
   associatedGeneratorsAndNamePlateCapacity: string;
 }

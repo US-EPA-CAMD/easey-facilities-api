@@ -1,8 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { State } from '@us-epa-camd/easey-common/enums';
-import { ErrorMessages, propertyMetadata } from '@us-epa-camd/easey-common/constants';
+import {
+  ErrorMessages,
+  propertyMetadata,
+} from '@us-epa-camd/easey-common/constants';
 
-import { IsOptional } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { PaginationDTO } from './pagination.dto';
 import { IsStateCode } from '../pipes/is-state-code.pipe';
 
@@ -15,11 +18,12 @@ export class FacilityParamsDTO extends PaginationDTO {
   @IsStateCode({
     message: ErrorMessages.UnitCharacteristics(true, 'state-code'),
   })
-  stateCode?: State
+  stateCode?: State;
 
   @ApiProperty({
     description: propertyMetadata.epaRegion.description,
   })
   @IsOptional()
+  @IsString()
   epaRegion?: string;
 }
