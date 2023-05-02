@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -51,6 +51,7 @@ export class FacilityAttributesParamsDTO {
     ),
   })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
+  @IsArray()
   year: number[];
 
   @ApiProperty({
@@ -146,6 +147,7 @@ export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesPara
     description: propertyMetadata.page.description,
   })
   @IsNotEmpty({ message: ErrorMessages.RequiredProperty() })
+  @IsNumber()
   page: number;
 
   @IsInRange(1, PAGINATION_MAX_PER_PAGE, {
@@ -155,5 +157,6 @@ export class PaginatedFacilityAttributesParamsDTO extends FacilityAttributesPara
     description: propertyMetadata.perPage.description,
   })
   @IsNotEmpty({ message: ErrorMessages.RequiredProperty() })
+  @IsNumber()
   perPage: number;
 }

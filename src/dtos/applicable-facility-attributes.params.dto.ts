@@ -9,6 +9,7 @@ import {
   IsNotEmptyString,
   IsYearFormat,
 } from '@us-epa-camd/easey-common/pipes';
+import { IsArray } from 'class-validator';
 
 export class ApplicableFacilityAttributesParamsDTO {
   @ApiProperty({
@@ -29,5 +30,6 @@ export class ApplicableFacilityAttributesParamsDTO {
   })
   @IsNotEmptyString({ message: ErrorMessages.RequiredProperty() })
   @Transform(({ value }) => value.split('|').map((item: string) => item.trim()))
+  @IsArray()
   year: number[];
 }
