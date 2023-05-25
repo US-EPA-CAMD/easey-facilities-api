@@ -22,6 +22,7 @@ applications:
       EASEY_AUTH_API: https://((apiHost))/auth-mgmt
       EASEY_FACILITIES_API_ENABLE_ROLE_GUARD: true
       EASEY_FACILITIES_API_ENABLE_AUTH_TOKEN: true
+      TZ: America/New_York
     routes:
       - route: ((host))/((path))
     services:
