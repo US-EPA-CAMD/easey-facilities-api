@@ -8,7 +8,6 @@ import { FacilitiesService } from './facilities.service';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityMap } from './../maps/facility.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
-import { ProgramYearDimRepository } from './program-year-dim.repository';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
@@ -38,7 +37,6 @@ describe('-- Facilities Controller --', () => {
         FacilityAttributesMap,
         FacilitiesService,
         FacilitiesRepository,
-        ProgramYearDimRepository,
         FacilityUnitAttributesRepository,
       ],
     }).compile();
