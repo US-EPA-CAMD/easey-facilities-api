@@ -21,7 +21,7 @@ export function IsControlTechnology(validationOptions?: ValidationOptions) {
           const found = await manager.findOne(ControlCode, {
             controlDescription: ILike(value),
           });
-          return found != null;
+          return found != null;//
         },
       },
     });
