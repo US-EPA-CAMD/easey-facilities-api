@@ -53,8 +53,6 @@ export class UnitFactRepository extends Repository<UnitFact> {
       years: yearArray,
     });
 
-    console.log(query.getQueryAndParameters());
-
     return query;
   }
 }
