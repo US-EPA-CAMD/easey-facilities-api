@@ -19,6 +19,7 @@ import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.
 const mockQueryBuilder = () => ({
   andWhere: jest.fn(),
   getMany: jest.fn(),
+  getManyAndCount: jest.fn(),
   select: jest.fn(),
   orderBy: jest.fn(),
   addOrderBy: jest.fn(),
@@ -27,6 +28,15 @@ const mockQueryBuilder = () => ({
   take: jest.fn(),
   getQueryAndParameters: jest.fn(),
 });
+
+const mockRequest = (url: string) => {
+  return {
+    url,
+    res: {
+      setHeader: jest.fn(),
+    },
+  };
+};
 
 const filters: PaginatedFacilityAttributesParamsDTO = new PaginatedFacilityAttributesParamsDTO();
 filters.page = undefined;
@@ -44,8 +54,9 @@ filters.programCodeInfo = [Program.ARP, Program.RGGI];
 filters.sourceCategory = [SourceCategory.AUTOMOTIVE_STAMPINGS];
 
 describe('FacilityUnitAttributesRepository', () => {
-  let facilityUnitAttributesRepository;
-  let queryBuilder;
+  let facilityUnitAttributesRepository:FacilityUnitAttributesRepository;
+  let queryBuilder:any;
+  let req: any;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -61,6 +72,8 @@ describe('FacilityUnitAttributesRepository', () => {
     queryBuilder = module.get<SelectQueryBuilder<FacilityUnitAttributes>>(
       SelectQueryBuilder,
     );
+    req = mockRequest('');
+    req.res.setHeader.mockReturnValue();
 
     facilityUnitAttributesRepository.createQueryBuilder = jest
       .fn()
@@ -73,6 +86,10 @@ describe('FacilityUnitAttributesRepository', () => {
     queryBuilder.take.mockReturnValue('mockPagination');
     queryBuilder.getCount.mockReturnValue('mockCount');
     queryBuilder.getMany.mockReturnValue('mockFacilityAttributes');
+    queryBuilder.getManyAndCount.mockReturnValue([
+      'mockFacilityAttributes',
+      0,
+    ]);
     queryBuilder.getQueryAndParameters.mockReturnValue('');
   });
 
@@ -81,11 +98,11 @@ describe('FacilityUnitAttributesRepository', () => {
       // branch coverage
       const emptyFilters: PaginatedFacilityAttributesParamsDTO = new PaginatedFacilityAttributesParamsDTO();
       let result = await facilityUnitAttributesRepository.getAllFacilityAttributes(
-        emptyFilters,
+        emptyFilters,req
       );
 
       result = await facilityUnitAttributesRepository.getAllFacilityAttributes(
-        filters,
+        filters,req
       );
 
       expect(queryBuilder.getMany).toHaveBeenCalled();
@@ -102,7 +119,7 @@ describe('FacilityUnitAttributesRepository', () => {
       paginatedFilters.perPage = 10;
 
       const paginatedResult = await facilityUnitAttributesRepository.getAllFacilityAttributes(
-        paginatedFilters,
+        paginatedFilters,req
       );
 
       expect(ResponseHeaders.setPagination).toHaveBeenCalled();
