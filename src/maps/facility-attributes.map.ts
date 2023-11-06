@@ -18,7 +18,7 @@ export class FacilityAttributesMap extends BaseMap<
       .slice(0, -1)
       .split('),');
     const ownOprUniqueList = [...new Set(ownOprList)];
-    const ownerOperator = ownOprUniqueList.join(') | ');
+    const ownerOperator = ownOprUniqueList.join('),');
 
     const generatorIdArr = entity.generatorId?.split(', ');
     const arpNameplateCapacityArr = entity.arpNameplateCapacity?.split(', ');
