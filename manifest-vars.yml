@@ -10,3 +10,4 @@ title: Facilities Management
 description: Facility management API endpoints for power sector facilities and their attributes (e.g. units, stacks, and owners)
 environment: development
 apiHost: api.epa.gov/easey/dev
+dbSvc: camd-pg-db
