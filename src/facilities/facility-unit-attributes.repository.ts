@@ -180,16 +180,19 @@ export class FacilityUnitAttributesRepository extends Repository<
     facilityAttributesParamsDTO: PaginatedFacilityAttributesParamsDTO,
     req: Request,
   ): Promise<FacilityUnitAttributes[]> {
+    let totalCount: number;
+    let results: FacilityUnitAttributes[];
     const { page, perPage } = facilityAttributesParamsDTO;
     const query = this.buildQuery(facilityAttributesParamsDTO);
 
     if (page && perPage) {
       query.skip((page - 1) * perPage).take(perPage);
-      const totalCount = await query.getCount();
+      [results, totalCount] = await query.getManyAndCount();
       ResponseHeaders.setPagination(req, page, perPage, totalCount);
+    } else {
+      results = await query.getMany();
     }
-
-    return query.getMany();
+    return results;
   }
 
   async lastArchivedYear(): Promise<number> {
