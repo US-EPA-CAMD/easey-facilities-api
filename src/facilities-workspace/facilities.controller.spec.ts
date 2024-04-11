@@ -1,20 +1,20 @@
+import { HttpModule } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
+import { DataSource, EntityManager } from 'typeorm';
 
-import { FacilitiesRepository } from '../facilities/facilities.repository';
-import { FacilitiesWorkspaceController } from './facilities.controller';
-import { FacilitiesWorkspaceService } from './facilities.service';
-import { FacilityDTO } from '../dtos/facility.dto';
-import { FacilityMap } from '../maps/facility.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
+import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
+import { FacilityDTO } from '../dtos/facility.dto';
+import { FacilitiesRepository } from '../facilities/facilities.repository';
+import { FacilityUnitAttributesRepository } from '../facilities/facility-unit-attributes.repository';
+import { UnitFactRepository } from '../facilities/unit-fact.repository';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
-import { FacilityUnitAttributesRepository } from '../facilities/facility-unit-attributes.repository';
-import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
-import { UnitFactRepository } from '../facilities/unit-fact.repository';
-import { ConfigService } from '@nestjs/config';
-import { HttpModule } from '@nestjs/axios';
+import { FacilityMap } from '../maps/facility.map';
+import { FacilitiesWorkspaceController } from './facilities.controller';
+import { FacilitiesWorkspaceService } from './facilities.service';
 
 const mockRequest = (url: string) => {
   return {
@@ -35,6 +35,7 @@ describe('-- Facilities Controller --', () => {
       imports: [LoggerModule, HttpModule],
       controllers: [FacilitiesWorkspaceController],
       providers: [
+        EntityManager,
         FacilityMap,
         ApplicableFacilityAttributesMap,
         FacilityAttributesMap,
@@ -43,6 +44,10 @@ describe('-- Facilities Controller --', () => {
         FacilitiesRepository,
         FacilityUnitAttributesRepository,
         ConfigService,
+        {
+          provide: DataSource,
+          useValue: {},
+        },
       ],
     }).compile();
 

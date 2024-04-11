@@ -1,15 +1,15 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { FacilitiesRepository } from '../facilities/facilities.repository';
-import { FacilityMap } from '../maps/facility.map';
+import { FacilityUnitAttributesRepository } from '../facilities/facility-unit-attributes.repository';
 import { UnitFactRepository } from '../facilities/unit-fact.repository';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
-import { FacilityUnitAttributesRepository } from '../facilities/facility-unit-attributes.repository';
+import { FacilityMap } from '../maps/facility.map';
 import { FacilitiesWorkspaceController } from './facilities.controller';
 import { FacilitiesWorkspaceService } from './facilities.service';
-import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -22,10 +22,13 @@ import { HttpModule } from '@nestjs/axios';
   ],
   controllers: [FacilitiesWorkspaceController],
   providers: [
-    FacilityMap,
-    FacilitiesWorkspaceService,
     ApplicableFacilityAttributesMap,
+    FacilitiesRepository,
+    FacilitiesWorkspaceService,
     FacilityAttributesMap,
+    FacilityMap,
+    FacilityUnitAttributesRepository,
+    UnitFactRepository,
   ],
 })
 export class FacilitiesWorkspaceModule {}
