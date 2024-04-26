@@ -1,6 +1,6 @@
 {
   "name": "easey-facilities-api",
-  "version": "1.3",
+  "version": "1.4",
   "description": "EPA CAMD Facilities Management API",
   "license": "MIT",
   "private": true,
