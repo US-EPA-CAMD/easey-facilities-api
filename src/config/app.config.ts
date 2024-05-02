@@ -34,6 +34,10 @@ export default registerAs('app', () => ({
   path,
   uri,
   title: getConfigValue('EASEY_FACILITIES_API_TITLE', 'Facilities Management'),
+  currentUser: getConfigValue(
+    'EASEY_FACILITIES_API_CURRENT_USER',
+    '{"userId": ""}',
+  ),
   description: getConfigValue(
     'EASEY_FACILITIES_API_DESCRIPTION',
     'Facility management API endpoints for power sector facilities and their attributes (e.g. units, stacks, and owners)',
