@@ -1,17 +1,17 @@
 import { Test } from '@nestjs/testing';
-
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
+import { EntityManager } from 'typeorm';
 
-import { FacilitiesRepository } from './facilities.repository';
-import { FacilitiesController } from './facilities.controller';
-import { FacilitiesService } from './facilities.service';
-import { FacilityDTO } from '../dtos/facility.dto';
-import { FacilityMap } from './../maps/facility.map';
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
+import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
+import { FacilityDTO } from '../dtos/facility.dto';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
+import { FacilityMap } from './../maps/facility.map';
+import { FacilitiesController } from './facilities.controller';
+import { FacilitiesRepository } from './facilities.repository';
+import { FacilitiesService } from './facilities.service';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
-import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { UnitFactRepository } from './unit-fact.repository';
 
 const mockRequest = (url: string) => {
@@ -33,6 +33,7 @@ describe('-- Facilities Controller --', () => {
       imports: [LoggerModule],
       controllers: [FacilitiesController],
       providers: [
+        EntityManager,
         FacilityMap,
         ApplicableFacilityAttributesMap,
         FacilityAttributesMap,

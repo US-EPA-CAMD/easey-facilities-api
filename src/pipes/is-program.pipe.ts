@@ -1,11 +1,6 @@
-import {
-  registerDecorator,
-  ValidationOptions,
-  ValidationArguments,
-} from 'class-validator';
-import { getManager } from 'typeorm';
+import { registerDecorator, ValidationOptions } from 'class-validator';
 
-import { ProgramCode } from '../entities/program-code.entity';
+import { IsProgramValidator } from '../validators/is-program.validator';
 
 /**
  * This decorator can optionally exclude programs specified in the @property param
@@ -17,16 +12,7 @@ export function IsProgram(validationOptions?: ValidationOptions) {
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
-      validator: {
-        async validate(value: any, args: ValidationArguments) {
-          const manager = getManager();
-
-          const found = await manager.findOne(ProgramCode, {
-            programCode: value.toUpperCase(),
-          });
-          return found != null;
-        },
-      },
+      validator: IsProgramValidator,
     });
   };
 }
