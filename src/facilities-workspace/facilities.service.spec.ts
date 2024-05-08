@@ -287,14 +287,14 @@ describe('-- Facilities Service --', () => {
       const facilityId = 1000;
       const plant = mockPlant(facilityId, 'Test Plant', 123456, 'TX');
       const facility = await facilityMap.one(plant);
-      facilitiesRepositoryMock.findOne.mockReturnValue(plant);
+      facilitiesRepositoryMock.findOneBy.mockReturnValue(plant);
       expect(await facilitiesService.getFacilityById(facilityId)).toStrictEqual(
         facility,
       );
     });
 
     it('should throw NotFoundException if facility not found', async () => {
-      facilitiesRepositoryMock.findOne.mockReturnValue(undefined);
+      facilitiesRepositoryMock.findOneBy.mockReturnValue(undefined);
       await facilitiesService
         .getFacilityById(-1)
         .then()
@@ -363,7 +363,7 @@ describe('-- Facilities Service --', () => {
 // @ts-ignore
 export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
   () => ({
-    findOne: jest.fn(),
+    findOneBy: jest.fn(),
     findAndCount: jest.fn(),
   }),
 );

@@ -91,7 +91,7 @@ export class FacilitiesWorkspaceService {
   }
 
   async getFacilityById(id: number): Promise<FacilityDTO> {
-    const facility = await this.facilitiesRepository.findOne({
+    const facility = await this.facilitiesRepository.findOneBy({
       facilityId: id,
     });
 
