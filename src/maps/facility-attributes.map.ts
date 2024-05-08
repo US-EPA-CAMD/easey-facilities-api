@@ -11,14 +11,15 @@ export class FacilityAttributesMap extends BaseMap<
 > {
   public async one(entity: any): Promise<any> {
     let associatedGeneratorsAndNameplateCapacityStr = '';
-    const array = [entity.ownDisplay, entity.oprDisplay];
-    const ownOprList = array
-      .filter(e => e)
-      .join(',')
-      .slice(0, -1)
-      .split('),');
-    const ownOprUniqueList = [...new Set(ownOprList)];
-    const ownerOperator = ownOprUniqueList.join(')|');
+
+    const splitOwnWithPipe = entity.ownDisplay?.split('|');
+    const splitOprWithPipe = entity.oprDisplay?.split('|');
+
+    const uniqueOwn = [...new Set(splitOwnWithPipe)].join('|');
+    const uniqueOpr = [...new Set(splitOprWithPipe)].join('|');
+
+    const uniqueOwnOprList = [uniqueOwn, uniqueOpr];
+    const ownerOperator = uniqueOwnOprList.filter(e => e).join('|');
 
     const generatorIdArr = entity.generatorId?.split(', ');
     const arpNameplateCapacityArr = entity.arpNameplateCapacity?.split(', ');
@@ -67,7 +68,7 @@ export class FacilityAttributesMap extends BaseMap<
       sourceCategory: entity.sourceCategory,
       latitude: entity.latitude,
       longitude: entity.longitude,
-      ownerOperator: ownerOperator.length > 0 ? `${ownerOperator})` : null,
+      ownerOperator: ownerOperator.length > 0 ? `${ownerOperator}` : null,
       so2Phase: entity.so2Phase,
       noxPhase: entity.noxPhase,
       unitType: entity.unitType,
