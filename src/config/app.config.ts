@@ -34,6 +34,21 @@ export default registerAs('app', () => ({
   path,
   uri,
   title: getConfigValue('EASEY_FACILITIES_API_TITLE', 'Facilities Management'),
+  /**
+   * Needs to be set in .env file for local development if `EASEY_EMISSIONS_API_ENABLE_AUTH_TOKEN` is false.
+   * Format:
+   *   {
+   *       "facilities": [
+   *           { "facId": number, "orisCode": number, "permissions": string[] }
+   *       ],
+   *       "roles": <"Preparer" | "Submitter" | "Sponsor">[],
+   *       "userId": string
+   *   }
+   */
+  currentUser: getConfigValue(
+    'EASEY_FACILITIES_API_CURRENT_USER',
+    '{"userId": ""}',
+  ),
   description: getConfigValue(
     'EASEY_FACILITIES_API_DESCRIPTION',
     'Facility management API endpoints for power sector facilities and their attributes (e.g. units, stacks, and owners)',
