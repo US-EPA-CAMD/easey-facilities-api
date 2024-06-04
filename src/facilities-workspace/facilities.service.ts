@@ -95,7 +95,7 @@ export class FacilitiesWorkspaceService {
       facilityId: id,
     });
 
-    if (facility === undefined) {
+    if (!facility) {
       throw new EaseyException(
         new Error('Facility id does not exist'),
         HttpStatus.INTERNAL_SERVER_ERROR,
