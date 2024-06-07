@@ -1,20 +1,18 @@
 import { Test } from '@nestjs/testing';
-import { SelectQueryBuilder } from 'typeorm';
-
 import {
-  State,
-  UnitType,
-  UnitFuelType,
   ControlTechnology,
   Program,
   SourceCategory,
+  State,
+  UnitFuelType,
+  UnitType,
 } from '@us-epa-camd/easey-common/enums';
-
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
+import { EntityManager, SelectQueryBuilder } from 'typeorm';
 
 import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
-import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
+import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
 
 const mockQueryBuilder = () => ({
   andWhere: jest.fn(),
@@ -54,13 +52,14 @@ filters.programCodeInfo = [Program.ARP, Program.RGGI];
 filters.sourceCategory = [SourceCategory.AUTOMOTIVE_STAMPINGS];
 
 describe('FacilityUnitAttributesRepository', () => {
-  let facilityUnitAttributesRepository:FacilityUnitAttributesRepository;
-  let queryBuilder:any;
+  let facilityUnitAttributesRepository: FacilityUnitAttributesRepository;
+  let queryBuilder: any;
   let req: any;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
+        EntityManager,
         FacilityUnitAttributesRepository,
         { provide: SelectQueryBuilder, useFactory: mockQueryBuilder },
       ],
@@ -86,10 +85,7 @@ describe('FacilityUnitAttributesRepository', () => {
     queryBuilder.take.mockReturnValue('mockPagination');
     queryBuilder.getCount.mockReturnValue('mockCount');
     queryBuilder.getMany.mockReturnValue('mockFacilityAttributes');
-    queryBuilder.getManyAndCount.mockReturnValue([
-      'mockFacilityAttributes',
-      0,
-    ]);
+    queryBuilder.getManyAndCount.mockReturnValue(['mockFacilityAttributes', 0]);
     queryBuilder.getQueryAndParameters.mockReturnValue('');
   });
 
@@ -98,11 +94,13 @@ describe('FacilityUnitAttributesRepository', () => {
       // branch coverage
       const emptyFilters: PaginatedFacilityAttributesParamsDTO = new PaginatedFacilityAttributesParamsDTO();
       let result = await facilityUnitAttributesRepository.getAllFacilityAttributes(
-        emptyFilters,req
+        emptyFilters,
+        req,
       );
 
       result = await facilityUnitAttributesRepository.getAllFacilityAttributes(
-        filters,req
+        filters,
+        req,
       );
 
       expect(queryBuilder.getMany).toHaveBeenCalled();
@@ -119,7 +117,8 @@ describe('FacilityUnitAttributesRepository', () => {
       paginatedFilters.perPage = 10;
 
       const paginatedResult = await facilityUnitAttributesRepository.getAllFacilityAttributes(
-        paginatedFilters,req
+        paginatedFilters,
+        req,
       );
 
       expect(ResponseHeaders.setPagination).toHaveBeenCalled();

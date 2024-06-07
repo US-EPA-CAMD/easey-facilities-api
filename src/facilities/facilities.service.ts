@@ -1,43 +1,35 @@
-import { Request } from 'express';
-import { Not, IsNull, FindManyOptions } from 'typeorm';
-
 import { HttpStatus, Injectable } from '@nestjs/common';
-
-import { InjectRepository } from '@nestjs/typeorm';
-
 import { EaseyException } from '@us-epa-camd/easey-common/exceptions';
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
+import { Request } from 'express';
+import { FindManyOptions, IsNull, Not } from 'typeorm';
 
 import {
   excludableColumnHeader,
   fieldMappingHeader,
   fieldMappings,
 } from '../constants/field-mappings';
-
-import { Plant } from '../entities/plant.entity';
+import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
+import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
+import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
+import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
-import { FacilitiesRepository } from './facilities.repository';
-import { FacilityMap } from '../maps/facility.map';
-import { UnitFactRepository } from './unit-fact.repository';
-import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
+import { Plant } from '../entities/plant.entity';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
-import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
-import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
-import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
+import { FacilityMap } from '../maps/facility.map';
+import { FacilitiesRepository } from './facilities.repository';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
+import { UnitFactRepository } from './unit-fact.repository';
 
 @Injectable()
 export class FacilitiesService {
   constructor(
-    @InjectRepository(FacilitiesRepository)
     private readonly facilitiesRepository: FacilitiesRepository,
     private readonly facilityMap: FacilityMap,
-    @InjectRepository(UnitFactRepository)
     private readonly unitFactRepository: UnitFactRepository,
     private readonly applicableFacilityAttributesMap: ApplicableFacilityAttributesMap,
-    @InjectRepository(FacilityUnitAttributesRepository)
     private readonly facilityUnitAttributesRepository: FacilityUnitAttributesRepository,
     private readonly facilityAttributesMap: FacilityAttributesMap,
   ) {}
@@ -83,11 +75,11 @@ export class FacilitiesService {
   }
 
   async getFacilityById(id: number): Promise<FacilityDTO> {
-    const facility = await this.facilitiesRepository.findOne({
+    const facility = await this.facilitiesRepository.findOneBy({
       facilityId: id,
     });
 
-    if (facility === undefined) {
+    if (!facility) {
       throw new EaseyException(
         new Error('Facility id does not exist'),
         HttpStatus.INTERNAL_SERVER_ERROR,
