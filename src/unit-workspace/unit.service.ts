@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { UnitMap } from '@us-epa-camd/easey-common/maps';
 
+import { UnitMap } from '../maps/unit.map';
 import { UnitWorkspaceRepository } from './unit.repository';
 
 @Injectable()

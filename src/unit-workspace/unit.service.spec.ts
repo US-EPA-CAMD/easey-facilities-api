@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
 import { Unit } from '@us-epa-camd/easey-common/entities/workspace';
-import { UnitMap } from '@us-epa-camd/easey-common/maps';
 
+import { UnitMap } from '../maps/unit.map';
 import { UnitWorkspaceRepository } from './unit.repository';
 import { UnitWorkspaceService } from './unit.service';
 

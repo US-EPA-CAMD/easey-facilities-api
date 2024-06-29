@@ -2,8 +2,8 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOkResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { RoleGuard } from '@us-epa-camd/easey-common/decorators';
 import { LookupType } from '@us-epa-camd/easey-common/enums';
-import { UnitDTO } from '@us-epa-camd/easey-common/dtos';
 
+import { UnitDTO } from '../dtos/unit.dto';
 import { UnitWorkspaceService } from './unit.service';
 
 @Controller()
