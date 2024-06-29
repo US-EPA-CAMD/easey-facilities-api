@@ -4,6 +4,7 @@ import { readFileSync } from 'fs';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmOptionsFactory, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import * as WorkspaceEntities from '@us-epa-camd/easey-common/entities/workspace';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -11,15 +12,17 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
 
   constructor(private readonly configService: ConfigService) {
     const host = configService.get<string>('database.host');
-    this.tlsOptions.rejectUnauthorized = (host !== 'localhost');
-    this.tlsOptions.ca = (host !== 'localhost')
-      ? readFileSync("./us-gov-west-1-bundle.pem").toString()
-      : null;
+    this.tlsOptions.rejectUnauthorized = host !== 'localhost';
+    this.tlsOptions.ca =
+      host !== 'localhost'
+        ? readFileSync('./us-gov-west-1-bundle.pem').toString()
+        : null;
     console.log('TLS/SSL Config:', {
       ...this.tlsOptions,
-      ca: (this.tlsOptions.ca !== null)
-        ? `${this.tlsOptions.ca.slice(0, 30)}...(truncated for display only)`
-        : null
+      ca:
+        this.tlsOptions.ca !== null
+          ? `${this.tlsOptions.ca.slice(0, 30)}...(truncated for display only)`
+          : null,
     });
   }
 
@@ -32,7 +35,10 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: this.configService.get<string>('database.user'),
       password: this.configService.get<string>('database.pwd'),
       database: this.configService.get<string>('database.name'),
-      entities: [__dirname + '/../**/*.entity.{js,ts}'],
+      entities: [
+        __dirname + '/../**/*.entity.{js,ts}',
+        ...Object.values(WorkspaceEntities),
+      ],
       synchronize: false,
       ssl: this.tlsOptions,
     };
