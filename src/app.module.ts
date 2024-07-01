@@ -12,6 +12,9 @@ import { TypeOrmConfigService } from './config/typeorm.config';
 import { FacilitiesWorkspaceModule } from './facilities-workspace/facilities.module';
 import { FacilitiesModule } from './facilities/facilities.module';
 import routes from './routes';
+import { StackPipeWorkspaceModule } from './stack-pipe-workspace/stack-pipe.module';
+import { UnitStackConfigurationWorkspaceModule } from './unit-stack-configuration-workspace/unit-stack-configuration.module';
+import { UnitWorkspaceModule } from './unit-workspace/unit.module';
 import {
   IsControlTechnologyValidator,
   IsProgramValidator,
@@ -20,7 +23,6 @@ import {
   IsUnitFuelTypeValidator,
   IsUnitTypeValidator,
 } from './validators';
-import { UnitWorkspaceModule } from './unit-workspace/unit.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { UnitWorkspaceModule } from './unit-workspace/unit.module';
     FacilitiesModule,
     FacilitiesWorkspaceModule,
     UnitWorkspaceModule,
+    StackPipeWorkspaceModule,
+    UnitStackConfigurationWorkspaceModule,
   ],
   providers: [
     IsControlTechnologyValidator,
