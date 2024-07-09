@@ -8,9 +8,9 @@ const KEY = 'Unit';
 export class UnitDTO {
   @IsNumber()
   @ApiProperty({
-    description: propertyMetadata.unit_id.description,
-    example: propertyMetadata.unit_id.example,
-    name: propertyMetadata.unit_id.fieldLabels.value,
+    description: propertyMetadata.unit.id.description,
+    example: propertyMetadata.unit.id.example,
+    name: propertyMetadata.unit.id.fieldLabels.value,
   })
   id: number;
 

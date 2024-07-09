@@ -16,9 +16,9 @@ const KEY = 'Stack Pipe';
 export class StackPipeDTO {
   @IsString()
   @ApiProperty({
-    description: propertyMetadata.stackPipe.stack_pipe_id.description,
-    example: propertyMetadata.stackPipe.stack_pipe_id.example,
-    name: propertyMetadata.stackPipe.stack_pipe_id.fieldLabels.value,
+    description: propertyMetadata.stackPipe.id.description,
+    example: propertyMetadata.stackPipe.id.example,
+    name: propertyMetadata.stackPipe.id.fieldLabels.value,
   })
   id: string;
 
