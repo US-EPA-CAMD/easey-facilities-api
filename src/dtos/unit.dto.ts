@@ -1,7 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { propertyMetadata } from '@us-epa-camd/easey-common/constants';
-import { MatchesRegEx } from '@us-epa-camd/easey-common/pipes';
-import { IsNumber, IsString, ValidationArguments } from 'class-validator';
+import {
+  DATE_FORMAT,
+  propertyMetadata,
+} from '@us-epa-camd/easey-common/constants';
+import {
+  IsIsoFormat,
+  IsValidDate,
+  MatchesRegEx,
+} from '@us-epa-camd/easey-common/pipes';
+import { CheckCatalogService } from '@us-epa-camd/easey-common/check-catalog';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  ValidateIf,
+  ValidationArguments,
+} from 'class-validator';
 
 const KEY = 'Unit';
 
@@ -34,4 +48,44 @@ export class UnitDTO {
     name: propertyMetadata.facilityId.fieldLabels.value,
   })
   facilityId: number;
+
+  @ApiProperty({
+    description: propertyMetadata.monitorQualificationDTOBeginDate.description,
+    example: propertyMetadata.monitorQualificationDTOBeginDate.example,
+    name: propertyMetadata.monitorQualificationDTOBeginDate.fieldLabels.value,
+  })
+  @IsNotEmpty()
+  @IsIsoFormat({
+    message: (args: ValidationArguments) => {
+      return `The value of [${args.value}] for [${args.property}] must be a valid ISO date format [YYYY-MM-DD]`;
+    },
+  })
+  @IsValidDate({
+    message: (args: ValidationArguments) => {
+      return CheckCatalogService.formatMessage(
+        `[${args.property}] must be a valid date in the format of ${DATE_FORMAT}. You reported an invalid date of [${args.value}]`,
+      );
+    },
+  })
+  beginDate: Date;
+
+  @ApiProperty({
+    description: propertyMetadata.monitorQualificationDTOEndDate.description,
+    example: propertyMetadata.monitorQualificationDTOEndDate.example,
+    name: propertyMetadata.monitorQualificationDTOEndDate.fieldLabels.value,
+  })
+  @ValidateIf(o => o.endDate !== null)
+  @IsIsoFormat({
+    message: (args: ValidationArguments) => {
+      return `The value for [${args.value}] for [${args.property}] must be a valid ISO date format [YYYY-MM-DD]`;
+    },
+  })
+  @IsValidDate({
+    message: (args: ValidationArguments) => {
+      return CheckCatalogService.formatMessage(
+        `[${args.property}] must be a valid date in the format of ${DATE_FORMAT}. You reported an invalid date of [${args.value}]`,
+      );
+    },
+  })
+  endDate: Date;
 }

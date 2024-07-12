@@ -11,7 +11,15 @@ export class UnitWorkspaceService {
   ) {}
 
   async getUnitsByFacId(facId: number) {
-    const results = await this.repository.findBy({ facId });
+    const results = await this.repository.find({
+      where: { facId },
+      relations: {
+        location: {
+          methods: true,
+        },
+        opStatuses: true,
+      },
+    });
     return this.map.many(results);
   }
 }
