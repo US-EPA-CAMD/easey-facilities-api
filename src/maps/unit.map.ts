@@ -8,7 +8,9 @@ import { UnitDTO } from '../dtos/unit.dto';
 @Injectable()
 export class UnitMap extends BaseMap<Unit | UnitWorkspace, UnitDTO> {
   private getBeginDate(entity: Unit | UnitWorkspace): Date {
-    const methods = entity.location.methods;
+    const methods = entity.location?.methods;
+    if (!methods) return null;
+
     const beginDateEpoch = Math.min(
       ...methods.map(m => new Date(m.beginDate).getTime()),
     );
@@ -33,6 +35,7 @@ export class UnitMap extends BaseMap<Unit | UnitWorkspace, UnitDTO> {
       facilityId: entity.facId,
       beginDate: this.getBeginDate(entity),
       endDate: this.getEndDate(entity),
+      nonLoadBasedIndicator: entity.nonLoadBasedIndicator,
     };
   }
 }

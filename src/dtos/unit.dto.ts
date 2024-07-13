@@ -4,14 +4,17 @@ import {
   propertyMetadata,
 } from '@us-epa-camd/easey-common/constants';
 import {
+  IsInRange,
   IsIsoFormat,
   IsValidDate,
   MatchesRegEx,
 } from '@us-epa-camd/easey-common/pipes';
 import { CheckCatalogService } from '@us-epa-camd/easey-common/check-catalog';
 import {
+  IsInt,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   ValidateIf,
   ValidationArguments,
@@ -88,4 +91,21 @@ export class UnitDTO {
     },
   })
   endDate: Date;
+
+  @ApiProperty({
+    description:
+      propertyMetadata.monitorLocationDTONonLoadBasedIndicator.description,
+    example: propertyMetadata.monitorLocationDTONonLoadBasedIndicator.example,
+    name:
+      propertyMetadata.monitorLocationDTONonLoadBasedIndicator.fieldLabels
+        .value,
+  })
+  @IsOptional()
+  @IsInt()
+  @IsInRange(0, 1, {
+    message: (args: ValidationArguments) => {
+      return `The value of [${args.value}] for [${args.property}] must be an integer of 0 and 1 for [${KEY}].`;
+    },
+  })
+  nonLoadBasedIndicator: number;
 }
