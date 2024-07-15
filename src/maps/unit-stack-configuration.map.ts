@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { UnitStackConfiguration } from '@us-epa-camd/easey-common/entities';
-import { UnitStackConfiguration as UnitStackConfigurationWorkspace } from '@us-epa-camd/easey-common/entities/workspace';
 import { BaseMap } from '@us-epa-camd/easey-common/maps';
 
 import { UnitStackConfigurationDTO } from '../dtos/unit-stack-configuration.dto';
+import { UnitStackConfiguration } from '../entities/unit-stack-configuration.entity';
+import { UnitStackConfiguration as UnitStackConfigurationWorkspace } from '../entities/workspace/unit-stack-configuration.entity';
 
 @Injectable()
 export class UnitStackConfigurationMap extends BaseMap<

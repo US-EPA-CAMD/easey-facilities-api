@@ -4,7 +4,6 @@ import { readFileSync } from 'fs';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmOptionsFactory, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import * as WorkspaceEntities from '@us-epa-camd/easey-common/entities/workspace';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -35,10 +34,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: this.configService.get<string>('database.user'),
       password: this.configService.get<string>('database.pwd'),
       database: this.configService.get<string>('database.name'),
-      entities: [
-        __dirname + '/../**/*.entity.{js,ts}',
-        ...Object.values(WorkspaceEntities),
-      ],
+      entities: [__dirname + '/../**/*.entity.{js,ts}'],
       synchronize: false,
       ssl: this.tlsOptions,
     };

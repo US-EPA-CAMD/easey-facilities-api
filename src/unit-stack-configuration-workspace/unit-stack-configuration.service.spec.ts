@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
-import { UnitStackConfiguration } from '@us-epa-camd/easey-common/entities/workspace';
 
+import { UnitStackConfiguration } from '../entities/workspace/unit-stack-configuration.entity';
 import { UnitStackConfigurationMap } from '../maps/unit-stack-configuration.map';
 import { UnitStackConfigurationWorkspaceRepository } from './unit-stack-configuration.repository';
 import { UnitStackConfigurationWorkspaceService } from './unit-stack-configuration.service';

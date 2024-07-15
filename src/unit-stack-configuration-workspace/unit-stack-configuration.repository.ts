@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager, Repository } from 'typeorm';
-import { UnitStackConfiguration } from '@us-epa-camd/easey-common/entities/workspace';
+
+import { UnitStackConfiguration } from '../entities/workspace/unit-stack-configuration.entity';
 
 @Injectable()
 export class UnitStackConfigurationWorkspaceRepository extends Repository<

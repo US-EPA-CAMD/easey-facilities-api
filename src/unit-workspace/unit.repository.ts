@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager, Repository } from 'typeorm';
-import { Unit } from '@us-epa-camd/easey-common/entities/workspace';
+
+import { Unit } from '../entities/workspace/unit.entity';
 
 @Injectable()
 export class UnitWorkspaceRepository extends Repository<Unit> {

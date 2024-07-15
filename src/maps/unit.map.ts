@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Unit } from '@us-epa-camd/easey-common/entities';
-import { Unit as UnitWorkspace } from '@us-epa-camd/easey-common/entities/workspace';
 import { BaseMap } from '@us-epa-camd/easey-common/maps';
 
 import { UnitDTO } from '../dtos/unit.dto';
+import { Unit } from '../entities/unit.entity';
+import { Unit as UnitWorkspace } from '../entities/workspace/unit.entity';
 
 @Injectable()
 export class UnitMap extends BaseMap<Unit | UnitWorkspace, UnitDTO> {

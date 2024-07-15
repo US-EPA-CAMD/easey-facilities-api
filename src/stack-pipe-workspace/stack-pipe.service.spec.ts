@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
-import { StackPipe } from '@us-epa-camd/easey-common/entities/workspace';
 
+import { StackPipe } from '../entities/workspace/stack-pipe.entity';
 import { StackPipeMap } from '../maps/stack-pipe.map';
 import { StackPipeWorkspaceRepository } from './stack-pipe.repository';
 import { StackPipeWorkspaceService } from './stack-pipe.service';
