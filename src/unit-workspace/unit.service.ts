@@ -16,6 +16,7 @@ export class UnitWorkspaceService {
       relations: {
         location: {
           methods: true,
+          plans: true,
         },
         opStatuses: true,
       },

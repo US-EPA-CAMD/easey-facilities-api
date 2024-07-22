@@ -11,6 +11,7 @@ import {
 } from '@us-epa-camd/easey-common/pipes';
 import { CheckCatalogService } from '@us-epa-camd/easey-common/check-catalog';
 import {
+  IsArray,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -30,6 +31,11 @@ export class UnitDTO {
     name: propertyMetadata.unit.id.fieldLabels.value,
   })
   id: number;
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  associatedMonitorPlanIds?: string[];
 
   @IsString()
   @MatchesRegEx('^[A-z0-9\\-\\*#]{1,6}$', {

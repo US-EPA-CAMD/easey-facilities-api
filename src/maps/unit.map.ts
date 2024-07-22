@@ -36,6 +36,7 @@ export class UnitMap extends BaseMap<Unit | UnitWorkspace, UnitDTO> {
       beginDate: this.getBeginDate(entity),
       endDate: this.getEndDate(entity),
       nonLoadBasedIndicator: entity.nonLoadBasedIndicator,
+      associatedMonitorPlanIds: entity.location?.plans?.map(plan => plan.id),
     };
   }
 }
