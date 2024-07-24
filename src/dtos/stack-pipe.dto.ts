@@ -68,16 +68,16 @@ export class StackPipeDTO {
   })
   retireDate: Date;
 
-  @IsString()
-  @MatchesRegEx('^(C|c|M|m|X|x)(S|s|P|p)[A-z0-9\\-]{1,6}$', {
-    message: (args: ValidationArguments) => {
-      return `The value [${args.value}] for [${args.property}] must be match the RegEx: (C|c|M|m|X|x)(S|s|P|p)[A-z0-9-]{1,4} for [${KEY}].`;
-    },
-  })
   @ApiProperty({
     description: propertyMetadata.stackPipeId.description,
     example: propertyMetadata.stackPipeId.example,
     name: propertyMetadata.stackPipeId.fieldLabels.value,
+  })
+  @IsString()
+  @MatchesRegEx('^[MC][SP][a-zA-Z0-9\\-]{1,4}$', {
+    message: (args: ValidationArguments) => {
+      return `[MONLOC-19-B] - The value of [${args.value}] for [${args.property}] must start with CS, CP, MS, or MP and be followed by 1 to 4 alphanumeric characters or dash (-) characters for [${KEY}].`;
+    },
   })
   stackPipeId: string;
 }
