@@ -18,6 +18,9 @@ export class UnitMap extends BaseMap<Unit | UnitWorkspace, UnitDTO> {
   }
 
   private getEndDate(entity: Unit | UnitWorkspace): Date {
+    const opStatuses = entity.opStatuses;
+    if (!opStatuses) return null;
+
     const unitRetireDateEpoch = Math.min(
       ...entity.opStatuses
         .filter(s => s.opStatusCode === 'RET')
@@ -36,7 +39,8 @@ export class UnitMap extends BaseMap<Unit | UnitWorkspace, UnitDTO> {
       beginDate: this.getBeginDate(entity),
       endDate: this.getEndDate(entity),
       nonLoadBasedIndicator: entity.nonLoadBasedIndicator,
-      associatedMonitorPlanIds: entity.location?.plans?.map(plan => plan.id),
+      associatedMonitorPlanIds:
+        entity.location?.plans?.map(plan => plan.id) ?? [],
     };
   }
 }

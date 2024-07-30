@@ -7,6 +7,7 @@ import { UnitStackConfigurationWorkspaceRepository } from './unit-stack-configur
 import { UnitStackConfigurationWorkspaceService } from './unit-stack-configuration.service';
 
 const mockRepository = () => ({
+  find: jest.fn().mockResolvedValue(''),
   findBy: jest.fn().mockResolvedValue(''),
   findOneBy: jest.fn().mockResolvedValue(''),
   update: jest.fn().mockResolvedValue(true),
@@ -55,7 +56,7 @@ describe('UnitStackConfiguration Workspace Tests', () => {
     it('should return array with all unitStackConfigs for a facility', async () => {
       const unitStackConfigs = unitStackConfigList.filter(u => u.unitId === 2);
       const unitStackConfigsDto = await map.many(unitStackConfigs);
-      jest.spyOn(repository, 'findBy').mockResolvedValue(unitStackConfigs);
+      jest.spyOn(repository, 'find').mockResolvedValue(unitStackConfigs);
       const results = await service.getUnitStackConfigurationsByFacId(1);
       expect(results).toStrictEqual(unitStackConfigsDto);
     });

@@ -6,7 +6,10 @@ import { UnitMap } from '../maps/unit.map';
 import { UnitWorkspaceRepository } from './unit.repository';
 import { UnitWorkspaceService } from './unit.service';
 
+const mockDate = new Date();
+
 const mockRepository = () => ({
+  find: jest.fn().mockResolvedValue(''),
   findBy: jest.fn().mockResolvedValue(''),
   findOneBy: jest.fn().mockResolvedValue(''),
   update: jest.fn().mockResolvedValue(true),
@@ -17,6 +20,7 @@ const mockUnit = (id: number, name: string, facId: number) => {
   unit.id = id;
   unit.name = name;
   unit.facId = facId;
+  unit.nonLoadBasedIndicator = 0;
   return unit;
 };
 
@@ -49,7 +53,7 @@ describe('Unit Workspace Tests', () => {
     it('should return array with all units for a facility', async () => {
       const units = unitList.filter(u => u.facId === 2);
       const unitsDto = await map.many(units);
-      jest.spyOn(repository, 'findBy').mockResolvedValue(units);
+      jest.spyOn(repository, 'find').mockResolvedValue(units);
       const results = await service.getUnitsByFacId(2);
       expect(results).toStrictEqual(unitsDto);
     });
