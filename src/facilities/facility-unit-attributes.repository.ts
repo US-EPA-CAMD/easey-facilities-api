@@ -1,22 +1,23 @@
+import { Injectable } from '@nestjs/common';
+import { Regex, ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 import { Request } from 'express';
-import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
+import { EntityManager, Repository, SelectQueryBuilder } from 'typeorm';
 
-import { ResponseHeaders, Regex } from '@us-epa-camd/easey-common/utilities';
-
-import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
 import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
+import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
 
-@EntityRepository(FacilityUnitAttributes)
+@Injectable()
 export class FacilityUnitAttributesRepository extends Repository<
   FacilityUnitAttributes
 > {
+  constructor(entityManager: EntityManager) {
+    super(FacilityUnitAttributes, entityManager);
+  }
 
   private buildQuery(
     params: PaginatedFacilityAttributesParamsDTO,
   ): SelectQueryBuilder<FacilityUnitAttributes> {
-    const query = this.createQueryBuilder('fua').select(
-      this.getColumns(),
-    );
+    const query = this.createQueryBuilder('fua').select(this.getColumns());
 
     if (params.unitFuelType) {
       let string = '(';
