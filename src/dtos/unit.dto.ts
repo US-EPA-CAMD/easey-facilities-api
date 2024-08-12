@@ -106,7 +106,6 @@ export class UnitDTO {
       propertyMetadata.monitorLocationDTONonLoadBasedIndicator.fieldLabels
         .value,
   })
-  @IsOptional()
   @IsInt()
   @IsInRange(0, 1, {
     message: (args: ValidationArguments) => {
