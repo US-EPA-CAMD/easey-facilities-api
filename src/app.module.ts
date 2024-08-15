@@ -7,6 +7,14 @@ import { dbConfig } from '@us-epa-camd/easey-common/config';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
 import { CorsOptionsModule } from '@us-epa-camd/easey-common/cors-options';
 
+import {
+  IsControlTechnologyValidator,
+  IsProgramValidator,
+  IsSourceCategoryValidator,
+  IsStateCodeValidator,
+  IsUnitFuelTypeValidator,
+  IsUnitTypeValidator,
+} from './validators';
 import routes from './routes';
 import appConfig from './config/app.config';
 import { TypeOrmConfigService } from './config/typeorm.config';
@@ -25,6 +33,14 @@ import { FacilitiesModule } from './facilities/facilities.module';
     LoggerModule,
     CorsOptionsModule,
     FacilitiesModule,
+  ],
+  providers: [
+    IsControlTechnologyValidator,
+    IsProgramValidator,
+    IsSourceCategoryValidator,
+    IsStateCodeValidator,
+    IsUnitFuelTypeValidator,
+    IsUnitTypeValidator,
   ],
 })
 export class AppModule {}

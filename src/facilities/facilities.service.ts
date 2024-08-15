@@ -1,14 +1,8 @@
 import { Request } from 'express';
-import { Not, IsNull, FindManyOptions } from 'typeorm';
+import { FindManyOptions, IsNull, Not } from 'typeorm';
 
-import {
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
-
-import { InjectRepository } from '@nestjs/typeorm';
-
-import { LoggingException } from '@us-epa-camd/easey-common/exceptions';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { EaseyException } from '@us-epa-camd/easey-common/exceptions';
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 
 import {
@@ -16,31 +10,27 @@ import {
   fieldMappingHeader,
   fieldMappings,
 } from '../constants/field-mappings';
-
-import { Plant } from '../entities/plant.entity';
+import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
+import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
+import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
+import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
-import { FacilitiesRepository } from './facilities.repository';
-import { FacilityMap } from '../maps/facility.map';
-import { UnitFactRepository } from './unit-fact.repository';
-import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facility-attributes.params.dto';
+import { Plant } from '../entities/plant.entity';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
-import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
-import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
-import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { FacilityAttributesMap } from '../maps/facility-attributes.map';
+import { FacilityMap } from '../maps/facility.map';
+import { FacilitiesRepository } from './facilities.repository';
 import { FacilityUnitAttributesRepository } from './facility-unit-attributes.repository';
+import { UnitFactRepository } from './unit-fact.repository';
 
 @Injectable()
 export class FacilitiesService {
   constructor(
-    @InjectRepository(FacilitiesRepository)
     private readonly facilitiesRepository: FacilitiesRepository,
     private readonly facilityMap: FacilityMap,
-    @InjectRepository(UnitFactRepository)
     private readonly unitFactRepository: UnitFactRepository,
     private readonly applicableFacilityAttributesMap: ApplicableFacilityAttributesMap,
-    @InjectRepository(FacilityUnitAttributesRepository)
     private readonly facilityUnitAttributesRepository: FacilityUnitAttributesRepository,
     private readonly facilityAttributesMap: FacilityAttributesMap,
   ) {}
@@ -79,20 +69,23 @@ export class FacilitiesService {
 
       ResponseHeaders.setPagination(req, page, perPage, totalCount);
     } catch (e) {
-      throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new EaseyException(
+        new Error(e.message),
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
 
     return this.facilityMap.many(results);
   }
 
   async getFacilityById(id: number): Promise<FacilityDTO> {
-    const facility = await this.facilitiesRepository.findOne({
+    const facility = await this.facilitiesRepository.findOneBy({
       facilityId: id,
     });
 
-    if (facility === undefined) {
-      throw new LoggingException(
-        'Facility id does not exist',
+    if (!facility) {
+      throw new EaseyException(
+        new Error('Facility id does not exist'),
         HttpStatus.INTERNAL_SERVER_ERROR,
         { id: id },
       );
@@ -112,7 +105,10 @@ export class FacilitiesService {
         req,
       );
     } catch (e) {
-      throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new EaseyException(
+        new Error(e.message),
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
 
     req.res.setHeader(
@@ -134,10 +130,13 @@ export class FacilitiesService {
     let query;
     try {
       query = await this.unitFactRepository.getApplicableFacilityAttributes(
-        applicableFacilityAttributesParamsDTO.year
+        applicableFacilityAttributesParamsDTO.year,
       );
     } catch (e) {
-      throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new EaseyException(
+        new Error(e.message),
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
 
     return this.applicableFacilityAttributesMap.many(query);
