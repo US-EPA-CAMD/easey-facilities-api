@@ -2,7 +2,7 @@ import { Request } from 'express';
 import { FindManyOptions, IsNull, Not } from 'typeorm';
 
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { EaseyException } from '@us-epa-camd/easey-common/exceptions';
+import { LoggingException } from '@us-epa-camd/easey-common/exceptions';
 import { ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
 
 import {
@@ -69,10 +69,7 @@ export class FacilitiesService {
 
       ResponseHeaders.setPagination(req, page, perPage, totalCount);
     } catch (e) {
-      throw new EaseyException(
-        new Error(e.message),
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     return this.facilityMap.many(results);
@@ -84,7 +81,7 @@ export class FacilitiesService {
     });
 
     if (!facility) {
-      throw new EaseyException(
+      throw new LoggingException(
         new Error('Facility id does not exist'),
         HttpStatus.INTERNAL_SERVER_ERROR,
         { id: id },
@@ -105,10 +102,7 @@ export class FacilitiesService {
         req,
       );
     } catch (e) {
-      throw new EaseyException(
-        new Error(e.message),
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     req.res.setHeader(
@@ -133,10 +127,7 @@ export class FacilitiesService {
         applicableFacilityAttributesParamsDTO.year,
       );
     } catch (e) {
-      throw new EaseyException(
-        new Error(e.message),
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new LoggingException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     return this.applicableFacilityAttributesMap.many(query);
