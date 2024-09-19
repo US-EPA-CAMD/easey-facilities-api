@@ -10,13 +10,16 @@ export class UnitStackConfigurationWorkspaceService {
     private readonly map: UnitStackConfigurationMap,
   ) {}
 
-  async getUnitStackConfigurationsByFacId(facId: number) {
+  async getUnitStackConfigurationsByOrisCode(orisCode: number) {
     const results = await this.repository.find({
       relations: {
         stackPipe: true,
         unit: true,
       },
-      where: [{ unit: { facId } }, { stackPipe: { facId } }],
+      where: [
+        { unit: { plant: { facilityId: orisCode } } },
+        { stackPipe: { plant: { facilityId: orisCode } } },
+      ],
     });
     return this.map.many(results);
   }

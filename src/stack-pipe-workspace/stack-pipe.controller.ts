@@ -16,17 +16,17 @@ export class StackPipeWorkspaceController {
   @ApiOkResponse({
     isArray: true,
     type: StackPipeDTO,
-    description: 'Retrieves a list of stacks/pipes by facility ID',
+    description: 'Retrieves a list of stacks/pipes by oris code',
   })
   @RoleGuard(
     {
       enforceCheckout: false,
-      pathParam: 'facId',
+      pathParam: 'orisCode',
       enforceEvalSubmitCheck: false,
     },
     LookupType.Facility,
   )
-  getStackPipesByFacId(@Param('facId') facId: number) {
-    return this.service.getStackPipesByFacId(facId);
+  getStackPipesByOrisCode(@Param('orisCode') orisCode: number) {
+    return this.service.getStackPipesByOrisCode(orisCode);
   }
 }

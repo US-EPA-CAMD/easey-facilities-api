@@ -1,6 +1,15 @@
-import { BaseEntity, Entity, Column, OneToMany, PrimaryColumn } from 'typeorm';
+import {
+  ManyToOne,
+  JoinColumn,
+  BaseEntity,
+  Entity,
+  Column,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 import { NumericColumnTransformer } from '@us-epa-camd/easey-common/transforms';
 
+import { Plant } from './plant.entity';
 import { UnitStackConfiguration } from './unit-stack-configuration.entity';
 
 @Entity({ name: 'camdecmpswks.stack_pipe' })
@@ -43,6 +52,13 @@ export class StackPipe extends BaseEntity {
 
   @Column({ type: 'timestamp', name: 'update_date' })
   updateDate: Date;
+
+  @ManyToOne(
+    () => Plant,
+    plant => plant.stackPipes,
+  )
+  @JoinColumn({ name: 'fac_id' })
+  plant: Plant;
 
   @OneToMany(
     () => UnitStackConfiguration,

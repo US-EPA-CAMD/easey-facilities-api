@@ -52,7 +52,7 @@ describe('StackPipe Workspace Tests', () => {
       const stackPipes = stackPipeList.filter(u => u.facId === 2);
       const stackPipesDto = await map.many(stackPipes);
       jest.spyOn(repository, 'findBy').mockResolvedValue(stackPipes);
-      const results = await service.getStackPipesByFacId(2);
+      const results = await service.getStackPipesByOrisCode(5);
       expect(results).toStrictEqual(stackPipesDto);
     });
   });

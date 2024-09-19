@@ -10,8 +10,10 @@ export class StackPipeWorkspaceService {
     private readonly map: StackPipeMap,
   ) {}
 
-  async getStackPipesByFacId(facId: number) {
-    const results = await this.repository.findBy({ facId });
+  async getStackPipesByOrisCode(orisCode: number) {
+    const results = await this.repository.findBy({
+      plant: { facilityId: orisCode },
+    });
     return this.map.many(results);
   }
 }

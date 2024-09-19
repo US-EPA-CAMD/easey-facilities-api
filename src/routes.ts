@@ -16,15 +16,15 @@ const routes: Routes = [
     module: FacilitiesWorkspaceModule,
     children: [
       {
-        path: '/:facId/units',
+        path: '/:orisCode/units',
         module: UnitWorkspaceModule,
       },
       {
-        path: '/:facId/stack-pipes',
+        path: '/:orisCode/stack-pipes',
         module: StackPipeWorkspaceModule,
       },
       {
-        path: '/:facId/unit-stack-configurations',
+        path: '/:orisCode/unit-stack-configurations',
         module: UnitStackConfigurationWorkspaceModule,
       },
     ],
