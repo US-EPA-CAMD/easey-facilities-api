@@ -16,17 +16,17 @@ export class UnitWorkspaceController {
   @ApiOkResponse({
     isArray: true,
     type: UnitDTO,
-    description: 'Retrieves a list of units by facility ID',
+    description: 'Retrieves a list of units by facility oris code',
   })
   @RoleGuard(
     {
       enforceCheckout: false,
-      pathParam: 'facId',
+      pathParam: 'orisCode',
       enforceEvalSubmitCheck: false,
     },
     LookupType.Facility,
   )
-  getUnitsByFacId(@Param('facId') facId: number) {
-    return this.service.getUnitsByFacId(facId);
+  getUnitsByOrisCode(@Param('orisCode') orisCode: number) {
+    return this.service.getUnitsByOrisCode(orisCode);
   }
 }

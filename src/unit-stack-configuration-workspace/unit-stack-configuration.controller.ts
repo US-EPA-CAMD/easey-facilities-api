@@ -18,17 +18,17 @@ export class UnitStackConfigurationWorkspaceController {
   @ApiOkResponse({
     isArray: true,
     type: UnitStackConfigurationDTO,
-    description: 'Retrieves a list of unit stack configurations by facility ID',
+    description: 'Retrieves a list of unit stack configurations by oris code',
   })
   @RoleGuard(
     {
       enforceCheckout: false,
-      pathParam: 'facId',
+      pathParam: 'orisCode',
       enforceEvalSubmitCheck: false,
     },
     LookupType.Facility,
   )
-  getUnitStackConfigurationsByFacId(@Param('facId') facId: number) {
-    return this.service.getUnitStackConfigurationsByFacId(facId);
+  getUnitStackConfigurationsByOrisCode(@Param('orisCode') orisCode: number) {
+    return this.service.getUnitStackConfigurationsByOrisCode(orisCode);
   }
 }

@@ -10,9 +10,13 @@ export class UnitWorkspaceService {
     private readonly map: UnitMap,
   ) {}
 
-  async getUnitsByFacId(facId: number) {
+  async getUnitsByOrisCode(orisCode: number) {
     const results = await this.repository.find({
-      where: { facId },
+      where: {
+        plant: {
+          facilityId: orisCode,
+        },
+      },
       relations: {
         location: {
           methods: true,

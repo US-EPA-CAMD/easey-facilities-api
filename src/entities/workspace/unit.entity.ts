@@ -1,15 +1,18 @@
+import { NumericColumnTransformer } from '@us-epa-camd/easey-common/transforms';
 import {
   BaseEntity,
-  Entity,
   Column,
-  PrimaryColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
+  PrimaryColumn,
 } from 'typeorm';
-import { NumericColumnTransformer } from '@us-epa-camd/easey-common/transforms';
 
-import { UnitOpStatus } from './unit-op-status.entity';
 import { MonitorLocation } from './monitor-location.entity';
+import { Plant } from './plant.entity';
+import { UnitOpStatus } from './unit-op-status.entity';
 import { UnitStackConfiguration } from './unit-stack-configuration.entity';
 
 @Entity({ name: 'camd.unit' })
@@ -53,6 +56,13 @@ export class Unit extends BaseEntity {
     transformer: new NumericColumnTransformer(),
   })
   facId: number;
+
+  @ManyToOne(
+    () => Plant,
+    plant => plant.units,
+  )
+  @JoinColumn({ name: 'fac_id' })
+  plant: Plant;
 
   @OneToOne(
     () => MonitorLocation,
