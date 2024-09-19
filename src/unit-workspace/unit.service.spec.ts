@@ -54,7 +54,7 @@ describe('Unit Workspace Tests', () => {
       const units = unitList.filter(u => u.facId === 2);
       const unitsDto = await map.many(units);
       jest.spyOn(repository, 'find').mockResolvedValue(units);
-      const results = await service.getUnitsByFacId(2);
+      const results = await service.getUnitsByOrisCode(5);
       expect(results).toStrictEqual(unitsDto);
     });
   });
