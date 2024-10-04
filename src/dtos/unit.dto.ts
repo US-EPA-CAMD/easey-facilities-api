@@ -113,4 +113,12 @@ export class UnitDTO {
     },
   })
   nonLoadBasedIndicator: number;
+
+  @ApiProperty({
+    description: propertyMetadata.unitDTOOpStatusCd.description,
+    example: propertyMetadata.unitDTOOpStatusCd.example,
+    name: propertyMetadata.unitDTOOpStatusCd.fieldLabels.value,
+  })
+  @IsString()
+  opStatusCd: string;
 }

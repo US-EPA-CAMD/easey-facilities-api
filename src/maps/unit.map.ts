@@ -31,6 +31,20 @@ export class UnitMap extends BaseMap<Unit | UnitWorkspace, UnitDTO> {
       : null;
   }
 
+  private getOpStatusCode(entity: Unit | UnitWorkspace): string {
+    const opStatuses = entity.opStatuses;
+    if (!opStatuses) return null;
+
+    const activeOpStatus = opStatuses.reduce((acc, cur) => {
+      if (!acc) return cur;
+      if (new Date(cur.beginDate).getTime() > new Date(acc.beginDate).getTime()) {
+        return cur;
+      }
+    }, null);
+
+    return activeOpStatus?.opStatusCode ?? null;
+  }
+
   public async one(entity: Unit | UnitWorkspace): Promise<UnitDTO> {
     return {
       id: entity.id,
@@ -39,6 +53,7 @@ export class UnitMap extends BaseMap<Unit | UnitWorkspace, UnitDTO> {
       beginDate: this.getBeginDate(entity),
       endDate: this.getEndDate(entity),
       nonLoadBasedIndicator: entity.nonLoadBasedIndicator,
+      opStatusCd: this.getOpStatusCode(entity),
       associatedMonitorPlanIds:
         entity.location?.plans?.map(plan => plan.id) ?? [],
     };
