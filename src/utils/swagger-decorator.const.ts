@@ -1,5 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiNotFoundResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiExcludeController, ApiExcludeEndpoint, ApiNotFoundResponse, ApiQuery } from '@nestjs/swagger';
+import { getConfigValue } from '@us-epa-camd/easey-common/utilities';
 
 export const BadRequestResponse = () =>
   ApiBadRequestResponse({
@@ -28,4 +29,15 @@ export function ExcludeQuery() {
   return applyDecorators(
     ApiQuery({style: 'pipeDelimited', name: 'exclude', required: false, explode: false,})
   );
+}
+
+const env = getConfigValue('EASEY_FACILITIES_API_ENV', 'local-dev');
+const disable = ['local-dev','development','testing'].includes(env) ? false : true;
+
+export function ApiExcludeControllerByEnv() {
+    return applyDecorators(ApiExcludeController(disable));
+}
+
+export function ApiExcludeEndpointByEnv() {
+    return applyDecorators(ApiExcludeEndpoint(disable));
 }

@@ -5,6 +5,7 @@ import { LookupType } from '@us-epa-camd/easey-common/enums';
 
 import { UnitStackConfigurationDTO } from '../dtos/unit-stack-configuration.dto';
 import { UnitStackConfigurationWorkspaceService } from './unit-stack-configuration.service';
+import { ApiExcludeEndpointByEnv } from '../utils/swagger-decorator.const';
 
 @Controller()
 @ApiSecurity('APIKey')
@@ -28,6 +29,7 @@ export class UnitStackConfigurationWorkspaceController {
     },
     LookupType.Facility,
   )
+  @ApiExcludeEndpointByEnv()
   getUnitStackConfigurationsByOrisCode(@Param('orisCode') orisCode: number) {
     return this.service.getUnitStackConfigurationsByOrisCode(orisCode);
   }

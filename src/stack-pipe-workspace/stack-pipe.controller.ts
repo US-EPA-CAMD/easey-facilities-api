@@ -5,6 +5,7 @@ import { LookupType } from '@us-epa-camd/easey-common/enums';
 
 import { StackPipeDTO } from '../dtos/stack-pipe.dto';
 import { StackPipeWorkspaceService } from './stack-pipe.service';
+import { ApiExcludeEndpointByEnv } from '../utils/swagger-decorator.const';
 
 @Controller()
 @ApiSecurity('APIKey')
@@ -26,6 +27,7 @@ export class StackPipeWorkspaceController {
     },
     LookupType.Facility,
   )
+  @ApiExcludeEndpointByEnv()
   getStackPipesByOrisCode(@Param('orisCode') orisCode: number) {
     return this.service.getStackPipesByOrisCode(orisCode);
   }

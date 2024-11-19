@@ -23,6 +23,7 @@ import {
 import { Json2CsvInterceptor } from '@us-epa-camd/easey-common/interceptors';
 
 import {
+  ApiExcludeEndpointByEnv,
   ApiQueryAttributesMultiSelect,
   BadRequestResponse,
   NotFoundResponse,
@@ -50,6 +51,7 @@ export class FacilitiesWorkspaceController {
 
   @Get()
   @RoleGuard({}, LookupType.Facility)
+  @ApiExcludeEndpointByEnv()
   @ApiOkResponse({
     description: 'Retrieves a list of Facilities',
   })
@@ -66,6 +68,7 @@ export class FacilitiesWorkspaceController {
 
   @Get('/attributes')
   @RoleGuard({}, LookupType.Facility)
+  @ApiExcludeEndpointByEnv()
   @UseInterceptors(Json2CsvInterceptor)
   @ApiOkResponse({
     description: 'Retrieves Facility Unit Attributes',
@@ -104,6 +107,7 @@ export class FacilitiesWorkspaceController {
 
   @Get('/attributes/applicable')
   @RoleGuard({}, LookupType.Facility)
+  @ApiExcludeEndpointByEnv()
   @ApiOkResponse({
     description: 'Retrieves Applicable Facility Attributes',
   })
@@ -129,6 +133,7 @@ export class FacilitiesWorkspaceController {
 
   @Get('/:id')
   @RoleGuard({ pathParam: 'id' }, LookupType.Facility)
+  @ApiExcludeEndpointByEnv()
   @ApiOkResponse({
     description: 'Retrieves a single Facilitiy By Id',
   })
