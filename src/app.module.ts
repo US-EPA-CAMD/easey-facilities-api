@@ -2,10 +2,11 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RouterModule } from '@nestjs/core';
+
 import { dbConfig } from '@us-epa-camd/easey-common/config';
 import { CorsOptionsModule } from '@us-epa-camd/easey-common/cors-options';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
-import { RouterModule } from 'nest-router';
 
 import appConfig from './config/app.config';
 import { TypeOrmConfigService } from './config/typeorm.config';
@@ -26,7 +27,7 @@ import {
 
 @Module({
   imports: [
-    RouterModule.forRoutes(routes),
+    RouterModule.register(routes),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [dbConfig, appConfig],
