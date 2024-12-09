@@ -1,5 +1,10 @@
 import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RouterModule } from '@nestjs/core';
@@ -7,6 +12,7 @@ import { RouterModule } from '@nestjs/core';
 import { dbConfig } from '@us-epa-camd/easey-common/config';
 import { CorsOptionsModule } from '@us-epa-camd/easey-common/cors-options';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
+import { MaintenanceMiddleware } from '@us-epa-camd/easey-common/middleware/maintenance.middleware';
 
 import appConfig from './config/app.config';
 import { TypeOrmConfigService } from './config/typeorm.config';
@@ -53,4 +59,10 @@ import {
     IsUnitTypeValidator,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(MaintenanceMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}
