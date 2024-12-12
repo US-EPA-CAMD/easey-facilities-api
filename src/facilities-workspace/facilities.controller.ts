@@ -21,13 +21,10 @@ import {
 } from '@nestjs/common';
 
 import { Json2CsvInterceptor } from '@us-epa-camd/easey-common/interceptors';
-
 import {
-  ApiQueryAttributesMultiSelect,
   BadRequestResponse,
   NotFoundResponse,
-} from '../utils/swagger-decorator.const';
-
+} from '@us-epa-camd/easey-common/utilities/swagger-decorator.const';
 import { fieldMappings } from '../constants/field-mappings';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
@@ -41,6 +38,7 @@ import {
   RoleGuard,
 } from '@us-epa-camd/easey-common/decorators';
 import { LookupType } from '@us-epa-camd/easey-common/enums';
+import { ApiQueryAttributesMultiSelect } from '../utils/swagger-decorator.const';
 
 @Controller()
 @ApiSecurity('APIKey')

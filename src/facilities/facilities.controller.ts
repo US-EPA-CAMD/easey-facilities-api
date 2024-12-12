@@ -21,13 +21,6 @@ import {
 } from '@nestjs/common';
 
 import { Json2CsvInterceptor } from '@us-epa-camd/easey-common/interceptors';
-
-import {
-  ApiQueryAttributesMultiSelect,
-  BadRequestResponse,
-  NotFoundResponse,
-} from '../utils/swagger-decorator.const';
-
 import { fieldMappings } from '../constants/field-mappings';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
@@ -36,6 +29,11 @@ import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facili
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
+import {
+  BadRequestResponse,
+  NotFoundResponse,
+} from '@us-epa-camd/easey-common/utilities/swagger-decorator.const';
+import { ApiQueryAttributesMultiSelect } from '../utils/swagger-decorator.const';
 
 @Controller()
 @ApiSecurity('APIKey')
