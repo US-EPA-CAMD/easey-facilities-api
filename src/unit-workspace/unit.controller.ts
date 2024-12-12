@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOkResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeEndpoint, ApiOkResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { RoleGuard } from '@us-epa-camd/easey-common/decorators';
 import { LookupType } from '@us-epa-camd/easey-common/enums';
 
@@ -13,6 +13,7 @@ export class UnitWorkspaceController {
   constructor(private readonly service: UnitWorkspaceService) {}
 
   @Get()
+  @ApiExcludeEndpoint()
   @ApiOkResponse({
     isArray: true,
     type: UnitDTO,
