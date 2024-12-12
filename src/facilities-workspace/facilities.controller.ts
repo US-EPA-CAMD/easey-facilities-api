@@ -6,7 +6,7 @@ import {
   ApiQuery,
   getSchemaPath,
   ApiExtraModels,
-  ApiSecurity, ApiExcludeEndpoint,
+  ApiSecurity, ApiExcludeController,
 } from '@nestjs/swagger';
 
 import {
@@ -45,11 +45,11 @@ import { LookupType } from '@us-epa-camd/easey-common/enums';
 @Controller()
 @ApiSecurity('APIKey')
 @ApiTags('Facilities')
+@ApiExcludeController()
 export class FacilitiesWorkspaceController {
   constructor(private readonly service: FacilitiesWorkspaceService) {}
 
   @Get()
-  @ApiExcludeEndpoint()
   @RoleGuard({}, LookupType.Facility)
   @ApiOkResponse({
     description: 'Retrieves a list of Facilities',
@@ -66,7 +66,6 @@ export class FacilitiesWorkspaceController {
   }
 
   @Get('/attributes')
-  @ApiExcludeEndpoint()
   @RoleGuard({}, LookupType.Facility)
   @UseInterceptors(Json2CsvInterceptor)
   @ApiOkResponse({
@@ -105,7 +104,6 @@ export class FacilitiesWorkspaceController {
   }
 
   @Get('/attributes/applicable')
-  @ApiExcludeEndpoint()
   @RoleGuard({}, LookupType.Facility)
   @ApiOkResponse({
     description: 'Retrieves Applicable Facility Attributes',
@@ -131,7 +129,6 @@ export class FacilitiesWorkspaceController {
   }
 
   @Get('/:id')
-  @ApiExcludeEndpoint()
   @RoleGuard({ pathParam: 'id' }, LookupType.Facility)
   @ApiOkResponse({
     description: 'Retrieves a single Facilitiy By Id',
