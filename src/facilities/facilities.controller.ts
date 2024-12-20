@@ -29,11 +29,8 @@ import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facili
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
-import {
-  BadRequestResponse,
-  NotFoundResponse,
-} from '@us-epa-camd/easey-common/utilities/swagger-decorator.const';
 import { ApiQueryAttributesMultiSelect } from '../utils/swagger-decorator.const';
+import { BadRequestResponse, NotFoundResponse } from '@us-epa-camd/easey-common/utilities/common-swagger';
 
 @Controller()
 @ApiSecurity('APIKey')

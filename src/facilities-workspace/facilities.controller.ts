@@ -21,10 +21,8 @@ import {
 } from '@nestjs/common';
 
 import { Json2CsvInterceptor } from '@us-epa-camd/easey-common/interceptors';
-import {
-  BadRequestResponse,
-  NotFoundResponse,
-} from '@us-epa-camd/easey-common/utilities/swagger-decorator.const';
+import { BadRequestResponse, NotFoundResponse } from '@us-epa-camd/easey-common/utilities/common-swagger';
+
 import { fieldMappings } from '../constants/field-mappings';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
