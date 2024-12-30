@@ -1,15 +1,16 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiExcludeController, ApiOkResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { RoleGuard } from '@us-epa-camd/easey-common/decorators';
 import { LookupType } from '@us-epa-camd/easey-common/enums';
 
 import { UnitStackConfigurationDTO } from '../dtos/unit-stack-configuration.dto';
 import { UnitStackConfigurationWorkspaceService } from './unit-stack-configuration.service';
+import { ApiExcludeControllerByEnv } from '../decorators/swagger-decorator';
 
 @Controller()
 @ApiSecurity('APIKey')
 @ApiTags('Unit Stack Configurations')
-@ApiExcludeController()
+@ApiExcludeControllerByEnv()
 export class UnitStackConfigurationWorkspaceController {
   constructor(
     private readonly service: UnitStackConfigurationWorkspaceService,

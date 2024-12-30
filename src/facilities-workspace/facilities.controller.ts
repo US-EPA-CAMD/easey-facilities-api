@@ -6,7 +6,7 @@ import {
   ApiQuery,
   getSchemaPath,
   ApiExtraModels,
-  ApiSecurity, ApiExcludeController,
+  ApiSecurity,
 } from '@nestjs/swagger';
 
 import {
@@ -37,11 +37,12 @@ import {
 } from '@us-epa-camd/easey-common/decorators';
 import { LookupType } from '@us-epa-camd/easey-common/enums';
 import { ApiQueryAttributesMultiSelect } from '../utils/swagger-decorator.const';
+import { ApiExcludeControllerByEnv } from '../decorators/swagger-decorator';
 
 @Controller()
 @ApiSecurity('APIKey')
 @ApiTags('Facilities')
-@ApiExcludeController()
+@ApiExcludeControllerByEnv()
 export class FacilitiesWorkspaceController {
   constructor(private readonly service: FacilitiesWorkspaceService) {}
 
