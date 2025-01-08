@@ -21,12 +21,7 @@ import {
 } from '@nestjs/common';
 
 import { Json2CsvInterceptor } from '@us-epa-camd/easey-common/interceptors';
-
-import {
-  ApiQueryAttributesMultiSelect,
-  BadRequestResponse,
-  NotFoundResponse,
-} from '../utils/swagger-decorator.const';
+import { BadRequestResponse, NotFoundResponse } from '@us-epa-camd/easey-common/utilities/common-swagger';
 
 import { fieldMappings } from '../constants/field-mappings';
 import { FacilityDTO } from '../dtos/facility.dto';
@@ -41,10 +36,13 @@ import {
   RoleGuard,
 } from '@us-epa-camd/easey-common/decorators';
 import { LookupType } from '@us-epa-camd/easey-common/enums';
+import { ApiQueryAttributesMultiSelect } from '../utils/swagger-decorator.const';
+import { ApiExcludeControllerByEnv } from '../decorators/swagger-decorator';
 
 @Controller()
 @ApiSecurity('APIKey')
 @ApiTags('Facilities')
+@ApiExcludeControllerByEnv()
 export class FacilitiesWorkspaceController {
   constructor(private readonly service: FacilitiesWorkspaceService) {}
 
