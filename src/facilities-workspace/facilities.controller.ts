@@ -38,6 +38,7 @@ import {
 import { LookupType } from '@us-epa-camd/easey-common/enums';
 import { ApiQueryAttributesMultiSelect } from '../utils/swagger-decorator.const';
 import { ApiExcludeControllerByEnv } from '../decorators/swagger-decorator';
+import { ArrayResponse } from '@us-epa-camd/easey-common/interfaces/common.interface';
 
 @Controller()
 @ApiSecurity('APIKey')
@@ -54,12 +55,15 @@ export class FacilitiesWorkspaceController {
   @BadRequestResponse()
   @NotFoundResponse()
   @ApiExtraModels(FacilityDTO)
-  getFacilities(
+  async getFacilities(
     @Query(ValidationPipe) facilityParamsDTO: FacilityParamsDTO,
     @Req() req: Request,
     @AllowedOrisCodes() allowedOrisCodes: number[],
-  ): Promise<FacilityDTO[]> {
-    return this.service.getFacilities(facilityParamsDTO, req, allowedOrisCodes);
+  ): Promise<ArrayResponse<FacilityDTO>> {
+    const facilites = await this.service.getFacilities(facilityParamsDTO, req, allowedOrisCodes);
+    return {
+      items: facilites
+    };
   }
 
   @Get('/attributes')

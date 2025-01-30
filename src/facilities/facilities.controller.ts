@@ -31,6 +31,7 @@ import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attribute
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
 import { ApiQueryAttributesMultiSelect } from '../utils/swagger-decorator.const';
 import { BadRequestResponse, NotFoundResponse } from '@us-epa-camd/easey-common/utilities/common-swagger';
+import { ArrayResponse } from '@us-epa-camd/easey-common/interfaces/common.interface';
 
 @Controller()
 @ApiSecurity('APIKey')
@@ -48,11 +49,14 @@ export class FacilitiesController {
   @BadRequestResponse()
   @NotFoundResponse()
   @ApiExtraModels(FacilityDTO)
-  getFacilities(
+  async getFacilities(
     @Query(ValidationPipe) facilityParamsDTO: FacilityParamsDTO,
     @Req() req: Request,
-  ): Promise<FacilityDTO[]> {
-    return this.service.getFacilities(facilityParamsDTO, req);
+  ): Promise<ArrayResponse<FacilityDTO>> {
+    const facilities = await this.service.getFacilities(facilityParamsDTO, req);
+    return {
+      items: facilities
+    };
   }
 
   @Get('/attributes')
