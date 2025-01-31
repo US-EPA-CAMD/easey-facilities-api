@@ -63,10 +63,13 @@ describe('-- Facilities Controller --', () => {
 
   describe('* getFacilities', () => {
     it('should return a list of Facilities', async () => {
-      const expectedResult: FacilityDTO[] = [];
+      const facilities: FacilityDTO[] = [];
+      const expectedResult = {
+        items:facilities
+      }
       jest
         .spyOn(facilitiesService, 'getFacilities')
-        .mockResolvedValue(expectedResult);
+        .mockResolvedValue(facilities);
       expect(await facilitiesController.getFacilities(null, null, null)).toBe(
         expectedResult,
       );
