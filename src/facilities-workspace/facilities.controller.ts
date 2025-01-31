@@ -91,17 +91,20 @@ export class FacilitiesWorkspaceController {
   @NotFoundResponse()
   @ApiQueryAttributesMultiSelect()
   @ApiExtraModels(FacilityAttributesDTO)
-  getAllFacilityAttributes(
+  async getAllFacilityAttributes(
     @Query()
     paginiatedFacilityattributesParamsDTO: PaginatedFacilityAttributesParamsDTO,
     @Req() req: Request,
     @AllowedOrisCodes() allowedOrisCodes: number[],
-  ): Promise<FacilityAttributesDTO[]> {
-    return this.service.getAllFacilityAttributes(
+  ): Promise<ArrayResponse<FacilityAttributesDTO>> {
+    const unitAttributes = await this.service.getAllFacilityAttributes(
       paginiatedFacilityattributesParamsDTO,
       req,
       allowedOrisCodes,
     );
+    return {
+      items:unitAttributes
+    }
   }
 
   @Get('/attributes/applicable')
@@ -118,15 +121,18 @@ export class FacilitiesWorkspaceController {
     explode: false,
   })
   @ApiExtraModels(ApplicableFacilityAttributesDTO)
-  getApplicableFacilityAttributes(
+  async getApplicableFacilityAttributes(
     @Query()
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
     @AllowedOrisCodes() allowedOrisCodes: number[],
-  ): Promise<ApplicableFacilityAttributesDTO[]> {
-    return this.service.getApplicableFacilityAttributes(
+  ): Promise<ArrayResponse<ApplicableFacilityAttributesDTO>> {
+    const applicableAttributes = await this.service.getApplicableFacilityAttributes(
       applicableFacilityAttributesParamsDTO,
       allowedOrisCodes,
     );
+    return {
+      items:applicableAttributes
+    }
   }
 
   @Get('/:id')

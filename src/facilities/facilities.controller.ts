@@ -83,15 +83,18 @@ export class FacilitiesController {
   @NotFoundResponse()
   @ApiQueryAttributesMultiSelect()
   @ApiExtraModels(FacilityAttributesDTO)
-  getAllFacilityAttributes(
+  async getAllFacilityAttributes(
     @Query()
     paginiatedFacilityattributesParamsDTO: PaginatedFacilityAttributesParamsDTO,
     @Req() req: Request,
-  ): Promise<FacilityAttributesDTO[]> {
-    return this.service.getAllFacilityAttributes(
+  ):  Promise<ArrayResponse<FacilityAttributesDTO>> {
+    const unitAttributes = await this.service.getAllFacilityAttributes(
       paginiatedFacilityattributesParamsDTO,
       req,
     );
+    return {
+      items: unitAttributes
+    }
   }
 
   @Get('/attributes/applicable')
@@ -107,13 +110,16 @@ export class FacilitiesController {
     explode: false,
   })
   @ApiExtraModels(ApplicableFacilityAttributesDTO)
-  getApplicableFacilityAttributes(
+  async getApplicableFacilityAttributes(
     @Query()
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
-  ): Promise<ApplicableFacilityAttributesDTO[]> {
-    return this.service.getApplicableFacilityAttributes(
+  ): Promise<ArrayResponse<ApplicableFacilityAttributesDTO>> {
+    const applicableAttributes = await this.service.getApplicableFacilityAttributes(
       applicableFacilityAttributesParamsDTO,
     );
+    return {
+      items:applicableAttributes
+    }
   }
 
   @Get('/:id')
