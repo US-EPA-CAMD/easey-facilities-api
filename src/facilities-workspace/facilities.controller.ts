@@ -74,7 +74,13 @@ export class FacilitiesWorkspaceController {
     content: {
       'application/json': {
         schema: {
-          $ref: getSchemaPath(FacilityAttributesDTO),
+          type: 'object',
+          properties: {
+            items: {
+              type: 'array',
+              items: { $ref: getSchemaPath(FacilityAttributesDTO) },
+            }
+           },
         },
       },
       'text/csv': {
