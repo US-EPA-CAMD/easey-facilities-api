@@ -18,7 +18,7 @@ export class UnitFactRepository extends Repository<UnitFact> {
     allowedOrisCodes?: number[],
   ): Promise<ProgramYearDim[]> {
     const query = await this.queryBuilderHelper(yearArray);
-    if (allowedOrisCodes) {
+    if (allowedOrisCodes?.length > 0) {
       query.andWhere(`uf.facilityId IN (:...facilityIds)`, {
         facilityIds: allowedOrisCodes,
       });
