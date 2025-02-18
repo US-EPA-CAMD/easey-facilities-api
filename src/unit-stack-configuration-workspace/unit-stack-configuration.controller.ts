@@ -6,6 +6,7 @@ import { LookupType } from '@us-epa-camd/easey-common/enums';
 import { UnitStackConfigurationDTO } from '../dtos/unit-stack-configuration.dto';
 import { UnitStackConfigurationWorkspaceService } from './unit-stack-configuration.service';
 import { ApiExcludeControllerByEnv } from '../decorators/swagger-decorator';
+import { ArrayResponse } from '@us-epa-camd/easey-common/interfaces/common.interface';
 
 @Controller()
 @ApiSecurity('APIKey')
@@ -30,7 +31,10 @@ export class UnitStackConfigurationWorkspaceController {
     },
     LookupType.Facility,
   )
-  getUnitStackConfigurationsByOrisCode(@Param('orisCode') orisCode: number) {
-    return this.service.getUnitStackConfigurationsByOrisCode(orisCode);
+  async getUnitStackConfigurationsByOrisCode(@Param('orisCode') orisCode: number):Promise<ArrayResponse<UnitStackConfigurationDTO>> {
+    const list = await this.service.getUnitStackConfigurationsByOrisCode(orisCode);
+    return {
+      items:list
+    }
   }
 }

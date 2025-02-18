@@ -38,6 +38,7 @@ import {
 import { LookupType } from '@us-epa-camd/easey-common/enums';
 import { ApiQueryAttributesMultiSelect } from '../utils/swagger-decorator.const';
 import { ApiExcludeControllerByEnv } from '../decorators/swagger-decorator';
+import { ArrayResponse } from '@us-epa-camd/easey-common/interfaces/common.interface';
 
 @Controller()
 @ApiSecurity('APIKey')
@@ -54,12 +55,15 @@ export class FacilitiesWorkspaceController {
   @BadRequestResponse()
   @NotFoundResponse()
   @ApiExtraModels(FacilityDTO)
-  getFacilities(
+  async getFacilities(
     @Query(ValidationPipe) facilityParamsDTO: FacilityParamsDTO,
     @Req() req: Request,
     @AllowedOrisCodes() allowedOrisCodes: number[],
-  ): Promise<FacilityDTO[]> {
-    return this.service.getFacilities(facilityParamsDTO, req, allowedOrisCodes);
+  ): Promise<ArrayResponse<FacilityDTO>> {
+    const facilites = await this.service.getFacilities(facilityParamsDTO, req, allowedOrisCodes);
+    return {
+      items: facilites
+    };
   }
 
   @Get('/attributes')
@@ -70,7 +74,13 @@ export class FacilitiesWorkspaceController {
     content: {
       'application/json': {
         schema: {
-          $ref: getSchemaPath(FacilityAttributesDTO),
+          type: 'object',
+          properties: {
+            items: {
+              type: 'array',
+              items: { $ref: getSchemaPath(FacilityAttributesDTO) },
+            }
+           },
         },
       },
       'text/csv': {
@@ -87,17 +97,20 @@ export class FacilitiesWorkspaceController {
   @NotFoundResponse()
   @ApiQueryAttributesMultiSelect()
   @ApiExtraModels(FacilityAttributesDTO)
-  getAllFacilityAttributes(
+  async getAllFacilityAttributes(
     @Query()
     paginiatedFacilityattributesParamsDTO: PaginatedFacilityAttributesParamsDTO,
     @Req() req: Request,
     @AllowedOrisCodes() allowedOrisCodes: number[],
-  ): Promise<FacilityAttributesDTO[]> {
-    return this.service.getAllFacilityAttributes(
+  ): Promise<ArrayResponse<FacilityAttributesDTO>> {
+    const unitAttributes = await this.service.getAllFacilityAttributes(
       paginiatedFacilityattributesParamsDTO,
       req,
       allowedOrisCodes,
     );
+    return {
+      items:unitAttributes
+    }
   }
 
   @Get('/attributes/applicable')
@@ -114,15 +127,18 @@ export class FacilitiesWorkspaceController {
     explode: false,
   })
   @ApiExtraModels(ApplicableFacilityAttributesDTO)
-  getApplicableFacilityAttributes(
+  async getApplicableFacilityAttributes(
     @Query()
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
     @AllowedOrisCodes() allowedOrisCodes: number[],
-  ): Promise<ApplicableFacilityAttributesDTO[]> {
-    return this.service.getApplicableFacilityAttributes(
+  ): Promise<ArrayResponse<ApplicableFacilityAttributesDTO>> {
+    const applicableAttributes = await this.service.getApplicableFacilityAttributes(
       applicableFacilityAttributesParamsDTO,
       allowedOrisCodes,
     );
+    return {
+      items:applicableAttributes
+    }
   }
 
   @Get('/:id')

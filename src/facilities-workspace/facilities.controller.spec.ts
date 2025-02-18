@@ -63,11 +63,14 @@ describe('-- Facilities Controller --', () => {
 
   describe('* getFacilities', () => {
     it('should return a list of Facilities', async () => {
-      const expectedResult: FacilityDTO[] = [];
+      const facilities: FacilityDTO[] = [];
+      const expectedResult = {
+        items:facilities
+      }
       jest
         .spyOn(facilitiesService, 'getFacilities')
-        .mockResolvedValue(expectedResult);
-      expect(await facilitiesController.getFacilities(null, null, null)).toBe(
+        .mockResolvedValue(facilities);
+      expect(await facilitiesController.getFacilities(null, null, null)).toEqual(
         expectedResult,
       );
     });
@@ -87,25 +90,31 @@ describe('-- Facilities Controller --', () => {
 
   describe('* getApplicableFacilityAtrributes', () => {
     it('should return a list of Applicable Facilities Attributes', async () => {
-      const expectedResult: ApplicableFacilityAttributesDTO[] = [];
+      const applicableFacilities: ApplicableFacilityAttributesDTO[] = [];
+      const expectedResult = {
+        items:applicableFacilities
+      }
       jest
         .spyOn(facilitiesService, 'getApplicableFacilityAttributes')
-        .mockResolvedValue(expectedResult);
+        .mockResolvedValue(applicableFacilities);
       expect(
         await facilitiesController.getApplicableFacilityAttributes(null, null),
-      ).toBe(expectedResult);
+      ).toEqual(expectedResult);
     });
   });
 
   describe('* getAllFacilityAttributes', () => {
     it('should return a list of All Facilities Attributes', async () => {
-      const expectedResult: FacilityAttributesDTO[] = [];
+      const unitFacilities: FacilityAttributesDTO[] = [];
+      const expectedResult = {
+        items:unitFacilities
+      }
       jest
         .spyOn(facilitiesService, 'getAllFacilityAttributes')
-        .mockResolvedValue(expectedResult);
+        .mockResolvedValue(unitFacilities);
       expect(
         await facilitiesController.getAllFacilityAttributes(null, req, null),
-      ).toBe(expectedResult);
+      ).toEqual(expectedResult);
     });
   });
 });
