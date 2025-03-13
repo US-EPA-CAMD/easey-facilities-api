@@ -4,6 +4,7 @@ import { readFileSync } from 'fs';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmOptionsFactory, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { LoggerOptions } from 'typeorm';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -37,6 +38,21 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       entities: [__dirname + '/../**/*.entity.{js,ts}'],
       synchronize: false,
       ssl: this.tlsOptions,
+
+      // Database specific (Postgres) settings.
+      extra: {
+        max: this.configService.get<number>('app.maxConnectionPool'),                                 // Max connections in pool
+        idleTimeoutMillis: this.configService.get<number>('app.idleTimeout'),                         // Close idle connections
+        connectionTimeoutMillis: this.configService.get<number>('app.connectionTimeout'),             // Maximum time (ms) to wait for a new connection before timing out.
+        acquireTimeoutMillis: this.configService.get<number>('app.acquireConnectionFromPoolTimeout'), // Fail if a connection is not acquired from the pool within timeframe
+        statement_timeout: this.configService.get<number>('app.statementTimeout'),                    // Terminates queries that exceed the timeout (in ms).
+        idle_in_transaction_session_timeout: this.configService.get<number>('app.idleInTransactionSessionTimeout'), // Terminates idle transactions after the specified time (in ms).
+        maxUses: this.configService.get<number>('app.maxUsesBeforeRecreatingConnection'), //Recreate connections after n uses
+      },
+      // Enable SQL Logging. Values are: true | false | 'all' | ['query', 'error', 'schema', 'warn', 'info', 'log']
+      logging: this.configService.get<LoggerOptions>('app.sqlLogging', ),
+      // Logs queries exceeding this limit (does not terminate, 'statement_timeout' terminates them).
+      maxQueryExecutionTime: this.configService.get<number>('app.maxQueryExecutionTime'),
     };
   }
 }
