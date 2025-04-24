@@ -1,6 +1,5 @@
 import { HttpStatus, Injectable, HttpException } from '@nestjs/common';
 import { Logger } from '@us-epa-camd/easey-common/logger';
-import { EntityManager } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { AxiosResponse } from 'axios';
@@ -15,53 +14,15 @@ export class CertOfRepListService {
   constructor(
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
-    private readonly entityManager: EntityManager,
     private readonly logger: Logger,
   ) {}
 
-  returnManager() {
-    return this.entityManager;
-  }
-
-  async getClientToken(): Promise<string> {
-    this.logger.debug('getClientToken ...');
-
-    //Construct the URL
-    const url =`${this.configService.get<string>('app.authApi.uri')}/tokens/client`;
-    this.logger.debug('using authApi: ' + url);
-
-    //Construct the headers
-    const headers = {
-      "x-api-key": this.configService.get<string>('app.apiKey'),
-    };
-
-    //Construct the body
-    const body = {
-      clientId: this.configService.get<string>('app.clientId'),
-      clientSecret: this.configService.get<string>('app.clientSecret')
-    };
-
-    this.logger.debug('Calling auth-api token validation API: ' +  url);
-    try {
-      const response: AxiosResponse<any> = await firstValueFrom(
-        this.httpService.post(url, body, { headers }),
-      );
-
-      if (!response.data) {
-        this.logger.error('Invalid response from auth-api token validation API');
-        return '';
-      }
-
-      return response.data.token;
-    } catch (error) {
-      this.logger.error('Error occurred during the API call to auth-api token validation API', error);
-      return '';
-    }
-  }
-
   async getCertOfRepList(
     lastUpdated: string,
-    programCode: string
+    programCode: string,
+    clientId: string,
+    token:string,
+    apiKey:string
   ): Promise<CertificateOfRepresentationDTO[]> {
 
     this.logger.debug('get Cert of Reps with params', { lastUpdated, programCode});
@@ -73,17 +34,11 @@ export class CertOfRepListService {
 
     this.logger.debug('using certOfRepApiUrl: ' + certOfRepApiUrl);
 
-    //Obtain client token
-    const clientToken = await this.getClientToken();
-    if (!clientToken) {
-      throw new HttpException('Unable to obtain client token from auth-api. Cannot proceed with certOfRep API call', HttpStatus.BAD_REQUEST);
-    }
-
     const headers = {
-      'x-api-key': this.configService.get<string>('app.apiKey'),
-      'x-client-id': this.configService.get<string>('app.clientId'),
+      'x-api-key': apiKey,
+      'x-client-id': clientId,
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${clientToken}`,
+      Authorization: `Bearer ${token}`,
     };
 
     const body = {
@@ -134,7 +89,10 @@ export class CertOfRepListService {
   }
 
   async getCertOfRepById(
-    id: number
+    id: number,
+    clientId: string,
+    token:string,
+    apiKey :string
   ): Promise<CertificateOfRepresentationDTO[]> {
 
     this.logger.debug('get Cert of Rep By ID with param ', id);
@@ -146,17 +104,11 @@ export class CertOfRepListService {
 
     this.logger.debug('using certOfRepApiUrl: ' + certOfRepApiUrl+'/'+id);
 
-    //Obtain client token
-    const clientToken = await this.getClientToken();
-    if (!clientToken) {
-      throw new HttpException('Unable to obtain client token from auth-api. Cannot proceed with certOfRep/id API call', HttpStatus.BAD_REQUEST);
-    }
-
     const headers = {
-      'x-api-key': this.configService.get<string>('app.apiKey'),
-      'x-client-id': this.configService.get<string>('app.clientId'),
+      'x-api-key': apiKey,
+      'x-client-id': clientId,
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${clientToken}`,
+      Authorization: `Bearer ${token}`,
     };
 
     this.logger.debug('Making API call to:', { url: certOfRepApiUrl });

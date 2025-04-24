@@ -5,12 +5,13 @@ import {
     ApiBearerAuth,
     ApiExtraModels
   } from '@nestjs/swagger';
-  import { Controller, UseGuards, Get, Query,   ParseIntPipe, Param } from '@nestjs/common';
+  import { Request } from 'express';
+  import { Controller, UseGuards, Get, Query,   ParseIntPipe, Param, Req } from '@nestjs/common';
   import { ClientTokenGuard } from '@us-epa-camd/easey-common/guards';
   import { Logger } from '@us-epa-camd/easey-common';
   import { CertOfRepListService} from './certOfRepList.service'
-  import { CertificateOfRepresentationDTO } from 'src/dtos/certificate-of-representation.dto';
-  import { CertOfRepParamsDTO } from 'src/dtos/certOfRep.params.dto';
+  import { CertificateOfRepresentationDTO } from '../dtos/certificate-of-representation.dto';
+  import { CertOfRepParamsDTO } from '../dtos/certOfRep.params.dto';
   import { BadRequestResponse, NotFoundResponse } from '@us-epa-camd/easey-common/utilities/common-swagger';
 
   @Controller()
@@ -25,6 +26,9 @@ import {
     }
   
     @Get('/')
+    @ApiSecurity('ClientId')
+    @ApiBearerAuth('ClientToken')
+    @UseGuards(ClientTokenGuard)
     @BadRequestResponse()
     @NotFoundResponse()
     @ApiExtraModels(CertificateOfRepresentationDTO)
@@ -34,13 +38,22 @@ import {
       })
     async certOfRep(
      @Query() certOfRepParamsDTO: CertOfRepParamsDTO,
-  ): Promise<CertificateOfRepresentationDTO[]> {
-      return this.certOfRepListService.getCertOfRepList(certOfRepParamsDTO?.lastUpdated,certOfRepParamsDTO?.programCode);
+     @Req() request: Request
+    ): Promise<CertificateOfRepresentationDTO[]> {
+      const authorizationHeader = request.headers['authorization'] as string;
+      const clientId = request.headers['x-client-id'] as string;
+      const token = authorizationHeader?.split(' ')[1].trim();
+      const apiKey = request.headers['x-api-key'] as string;
+      
+      return this.certOfRepListService.getCertOfRepList(certOfRepParamsDTO?.lastUpdated,certOfRepParamsDTO?.programCode, clientId,token,apiKey);
     }
 
 
 
       @Get('/:id')
+      @ApiSecurity('ClientId')
+      @ApiBearerAuth('ClientToken')
+      @UseGuards(ClientTokenGuard)
       @ApiOkResponse({
         description: 'Retrieves a Cert of Rep By Id',
         type: [CertificateOfRepresentationDTO]
@@ -48,8 +61,16 @@ import {
       @BadRequestResponse()
       @NotFoundResponse()
       @ApiExtraModels(CertificateOfRepresentationDTO)
-      getFacilityById(@Param('id', ParseIntPipe) id: number): Promise<CertificateOfRepresentationDTO[]> {
-        return this.certOfRepListService.getCertOfRepById(id);
+      getFacilityById(
+        @Param('id', ParseIntPipe) id: number,
+        @Req() request: Request
+      ): Promise<CertificateOfRepresentationDTO[]> {
+        const authorizationHeader = request.headers['authorization'] as string;
+        const clientId = request.headers['x-client-id'] as string;
+        const token = authorizationHeader?.split(' ')[1].trim();
+        const apiKey = request.headers['x-api-key'] as string;
+
+        return this.certOfRepListService.getCertOfRepById(id,clientId,token,apiKey);
       }
   }
   

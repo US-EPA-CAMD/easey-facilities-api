@@ -75,6 +75,9 @@ export default registerAs('app', () => ({
     'EASEY_FACILITIES_API_ENABLE_AUTH_TOKEN',
     true,
   ),
+  enableClientToken: getConfigValueBoolean(
+    'EASEY_CAMD_SERVICES_ENABLE_CLIENT_TOKEN',
+  ),
   // ENABLES DEBUG CONSOLE LOGS
   enableDebug: getConfigValueBoolean('EASEY_FACILITIES_API_ENABLE_DEBUG'),
   perPageLimit: PAGINATION_MAX_PER_PAGE,

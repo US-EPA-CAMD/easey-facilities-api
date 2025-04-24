@@ -1,6 +1,6 @@
 import { ValidationArguments, IsNumber, IsString, IsOptional, IsArray, IsDateString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { IsValidDateFormat } from 'src/pipes/is-valid-date-format.pipe';
+import { IsValidDateFormat } from '../pipes/is-valid-date-format.pipe';
 
 class RepresentativeDataDTO {
   @IsNumber()
