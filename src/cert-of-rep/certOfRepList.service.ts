@@ -64,7 +64,7 @@ export class CertOfRepListService {
     programCode: string
   ): Promise<CertificateOfRepresentationDTO[]> {
 
-    this.logger.debug('getEmailRecipients with params', { lastUpdated, programCode});
+    this.logger.debug('get Cert of Reps with params', { lastUpdated, programCode});
 
     const certOfRepApiUrl = this.configService.get<string>('app.certOfRepApi');
     if (!certOfRepApiUrl) {
@@ -130,6 +130,72 @@ export class CertOfRepListService {
       }
 
       throw new HttpException('Error occurred during the API call to cert of reps: ' + error.message || error , error.response.status);
+    }
+  }
+
+  async getCertOfRepById(
+    id: number
+  ): Promise<CertificateOfRepresentationDTO[]> {
+
+    this.logger.debug('get Cert of Rep By ID with param ', id);
+
+    const certOfRepApiUrl = this.configService.get<string>('app.certOfRepApi');
+    if (!certOfRepApiUrl) {
+      throw new HttpException('certOfRepApiUrl is not configured', HttpStatus.NOT_FOUND);
+    }
+
+    this.logger.debug('using certOfRepApiUrl: ' + certOfRepApiUrl+'/'+id);
+
+    //Obtain client token
+    const clientToken = await this.getClientToken();
+    if (!clientToken) {
+      throw new HttpException('Unable to obtain client token from auth-api. Cannot proceed with certOfRep/id API call', HttpStatus.BAD_REQUEST);
+    }
+
+    const headers = {
+      'x-api-key': this.configService.get<string>('app.apiKey'),
+      'x-client-id': this.configService.get<string>('app.clientId'),
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${clientToken}`,
+    };
+
+    this.logger.debug('Making API call to:', { url: certOfRepApiUrl });
+
+    const allowLegacyRenegotiationforNodeJsOptions = {
+      httpsAgent: new https.Agent({
+        secureOptions: crypto.constants.SSL_OP_LEGACY_SERVER_CONNECT,
+      }),
+    };
+
+
+    //The CBS API expects a GET
+    try {
+      const response: AxiosResponse<any> = await firstValueFrom(
+        this.httpService.request({
+          method: 'GET',
+          url: `${certOfRepApiUrl}/${id}`, 
+          headers: headers,
+          ...allowLegacyRenegotiationforNodeJsOptions
+        }),
+      );
+
+      const certOfRepList = response.data
+
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        this.logger.debug('First item of the  list: ', response.data[0]);
+      } else {
+        this.logger.debug('response.data is is empty.');
+      }
+
+      return certOfRepList;
+    } catch (error) {
+      this.logger.error('Error occurred during the API call to cert of rep by ID', error.message || error);
+      if (error.response) {
+        this.logger.error('API response error status:', error.response.status || '');
+        this.logger.error('API response error data:', error.response.data || '');
+      }
+
+      throw new HttpException('Error occurred during the API call to cert of rep by ID: ' + error.message || error , error.response.status);
     }
   }
 }
