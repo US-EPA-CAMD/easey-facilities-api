@@ -5,10 +5,13 @@ import { LookupType } from '@us-epa-camd/easey-common/enums';
 
 import { StackPipeDTO } from '../dtos/stack-pipe.dto';
 import { StackPipeWorkspaceService } from './stack-pipe.service';
+import { ApiExcludeControllerByEnv } from '../decorators/swagger-decorator';
+import { ArrayResponse } from '@us-epa-camd/easey-common/interfaces/common.interface';
 
 @Controller()
 @ApiSecurity('APIKey')
 @ApiTags('Stacks & Pipes')
+@ApiExcludeControllerByEnv()
 export class StackPipeWorkspaceController {
   constructor(private readonly service: StackPipeWorkspaceService) {}
 
@@ -26,7 +29,10 @@ export class StackPipeWorkspaceController {
     },
     LookupType.Facility,
   )
-  getStackPipesByOrisCode(@Param('orisCode') orisCode: number) {
-    return this.service.getStackPipesByOrisCode(orisCode);
+  async getStackPipesByOrisCode(@Param('orisCode') orisCode: number):Promise<ArrayResponse<StackPipeDTO>> {
+    const list = await this.service.getStackPipesByOrisCode(orisCode);
+    return {
+      items:list
+    }
   }
 }

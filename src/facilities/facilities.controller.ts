@@ -21,13 +21,6 @@ import {
 } from '@nestjs/common';
 
 import { Json2CsvInterceptor } from '@us-epa-camd/easey-common/interceptors';
-
-import {
-  ApiQueryAttributesMultiSelect,
-  BadRequestResponse,
-  NotFoundResponse,
-} from '../utils/swagger-decorator.const';
-
 import { fieldMappings } from '../constants/field-mappings';
 import { FacilityDTO } from '../dtos/facility.dto';
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
@@ -36,6 +29,9 @@ import { ApplicableFacilityAttributesParamsDTO } from '../dtos/applicable-facili
 import { ApplicableFacilityAttributesDTO } from '../dtos/applicable-facility-attributes.dto';
 import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { FacilityAttributesDTO } from '../dtos/facility-attributes.dto';
+import { ApiQueryAttributesMultiSelect } from '../utils/swagger-decorator.const';
+import { BadRequestResponse, NotFoundResponse } from '@us-epa-camd/easey-common/utilities/common-swagger';
+import { ArrayResponse } from '@us-epa-camd/easey-common/interfaces/common.interface';
 
 @Controller()
 @ApiSecurity('APIKey')
@@ -53,11 +49,14 @@ export class FacilitiesController {
   @BadRequestResponse()
   @NotFoundResponse()
   @ApiExtraModels(FacilityDTO)
-  getFacilities(
+  async getFacilities(
     @Query(ValidationPipe) facilityParamsDTO: FacilityParamsDTO,
     @Req() req: Request,
-  ): Promise<FacilityDTO[]> {
-    return this.service.getFacilities(facilityParamsDTO, req);
+  ): Promise<ArrayResponse<FacilityDTO>> {
+    const facilities = await this.service.getFacilities(facilityParamsDTO, req);
+    return {
+      items: facilities
+    };
   }
 
   @Get('/attributes')
@@ -67,7 +66,13 @@ export class FacilitiesController {
     content: {
       'application/json': {
         schema: {
-          $ref: getSchemaPath(FacilityAttributesDTO),
+          type: 'object',
+          properties: {
+            items: {
+              type: 'array',
+              items: { $ref: getSchemaPath(FacilityAttributesDTO) },
+            }
+           },
         },
       },
       'text/csv': {
@@ -84,15 +89,18 @@ export class FacilitiesController {
   @NotFoundResponse()
   @ApiQueryAttributesMultiSelect()
   @ApiExtraModels(FacilityAttributesDTO)
-  getAllFacilityAttributes(
+  async getAllFacilityAttributes(
     @Query()
     paginiatedFacilityattributesParamsDTO: PaginatedFacilityAttributesParamsDTO,
     @Req() req: Request,
-  ): Promise<FacilityAttributesDTO[]> {
-    return this.service.getAllFacilityAttributes(
+  ):  Promise<ArrayResponse<FacilityAttributesDTO>> {
+    const unitAttributes = await this.service.getAllFacilityAttributes(
       paginiatedFacilityattributesParamsDTO,
       req,
     );
+    return {
+      items: unitAttributes
+    }
   }
 
   @Get('/attributes/applicable')
@@ -108,13 +116,16 @@ export class FacilitiesController {
     explode: false,
   })
   @ApiExtraModels(ApplicableFacilityAttributesDTO)
-  getApplicableFacilityAttributes(
+  async getApplicableFacilityAttributes(
     @Query()
     applicableFacilityAttributesParamsDTO: ApplicableFacilityAttributesParamsDTO,
-  ): Promise<ApplicableFacilityAttributesDTO[]> {
-    return this.service.getApplicableFacilityAttributes(
+  ): Promise<ArrayResponse<ApplicableFacilityAttributesDTO>> {
+    const applicableAttributes = await this.service.getApplicableFacilityAttributes(
       applicableFacilityAttributesParamsDTO,
     );
+    return {
+      items:applicableAttributes
+    }
   }
 
   @Get('/:id')

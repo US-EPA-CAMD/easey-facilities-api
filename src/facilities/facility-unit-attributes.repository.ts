@@ -187,7 +187,7 @@ export class FacilityUnitAttributesRepository extends Repository<
     const { page, perPage } = facilityAttributesParamsDTO;
     const query = this.buildQuery(facilityAttributesParamsDTO);
 
-    if (allowedOrisCodes) {
+    if (allowedOrisCodes?.length > 0) {
       query.andWhere(`fua.facilityId IN (:...facilityIds)`, {
         facilityIds: allowedOrisCodes,
       });
