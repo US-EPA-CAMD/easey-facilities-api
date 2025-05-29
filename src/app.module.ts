@@ -30,6 +30,7 @@ import {
   IsUnitFuelTypeValidator,
   IsUnitTypeValidator,
 } from './validators';
+import { HealthModule } from '@us-epa-camd/easey-common/health/health.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import {
       useClass: TypeOrmConfigService,
     }),
     HttpModule,
+    HealthModule,
     LoggerModule,
     CorsOptionsModule,
     FacilitiesModule,
