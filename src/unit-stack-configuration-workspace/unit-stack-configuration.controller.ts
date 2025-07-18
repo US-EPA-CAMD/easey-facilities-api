@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOkResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiSecurity, ApiTags, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
 import { RoleGuard } from '@us-epa-camd/easey-common/decorators';
 import { LookupType } from '@us-epa-camd/easey-common/enums';
 
@@ -12,6 +12,7 @@ import { ArrayResponse } from '@us-epa-camd/easey-common/interfaces/common.inter
 @ApiSecurity('APIKey')
 @ApiTags('Unit Stack Configurations')
 @ApiExcludeControllerByEnv()
+@ApiExtraModels(UnitStackConfigurationDTO)
 export class UnitStackConfigurationWorkspaceController {
   constructor(
     private readonly service: UnitStackConfigurationWorkspaceService,
@@ -19,9 +20,20 @@ export class UnitStackConfigurationWorkspaceController {
 
   @Get()
   @ApiOkResponse({
-    isArray: true,
-    type: UnitStackConfigurationDTO,
     description: 'Retrieves a list of unit stack configurations by oris code',
+    content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              items: {
+                type: 'array',
+                items: { $ref: getSchemaPath(UnitStackConfigurationDTO) },
+              },
+            },
+          },
+        },
+      }
   })
   @RoleGuard(
     {
