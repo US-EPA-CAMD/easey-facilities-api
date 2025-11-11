@@ -18,12 +18,14 @@ export class Plant extends BaseEntity {
   @PrimaryColumn({
     name: 'fac_id',
     transformer: new NumericColumnTransformer(),
+    type: 'numeric',
   })
   id: number;
 
   @Column({
     name: 'oris_code',
     transformer: new NumericColumnTransformer(),
+    type: 'numeric',
   })
   facilityId: number;
 
@@ -38,6 +40,7 @@ export class Plant extends BaseEntity {
   @Column({
     name: 'epa_region',
     transformer: new NumericColumnTransformer(),
+    type: 'numeric',
   })
   epaRegion: number;
 
