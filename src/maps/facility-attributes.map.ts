@@ -12,14 +12,14 @@ export class FacilityAttributesMap extends BaseMap<
   public async one(entity: any): Promise<any> {
     let associatedGeneratorsAndNameplateCapacityStr = '';
 
-    const splitOwnWithPipe = entity.ownDisplay?.split('|');
-    const splitOprWithPipe = entity.oprDisplay?.split('|');
+    const splitOwnWithPipe:string[] = entity.ownDisplay?.split('|') ?? [];
+    const splitOprWithPipe:string[] = entity.oprDisplay?.split('|') ?? [];
 
-    const uniqueOwn = [...new Set(splitOwnWithPipe)].join('|');
-    const uniqueOpr = [...new Set(splitOprWithPipe)].join('|');
+    const uniqueOwn = [...new Set(splitOwnWithPipe.map(String))].join('|');
+    const uniqueOpr = [...new Set(splitOprWithPipe.map(String))].join('|');
 
     const uniqueOwnOprList = [uniqueOwn, uniqueOpr];
-    const ownerOperator = uniqueOwnOprList.filter(e => e).join('|');
+    const ownerOperator = uniqueOwnOprList.filter(Boolean).join('|');
 
     const generatorIdArr = entity.generatorId?.split(', ');
     const arpNameplateCapacityArr = entity.arpNameplateCapacity?.split(', ');
