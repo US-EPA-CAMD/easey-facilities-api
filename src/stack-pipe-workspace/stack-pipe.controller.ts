@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOkResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiSecurity, ApiTags, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
 import { RoleGuard } from '@us-epa-camd/easey-common/decorators';
 import { LookupType } from '@us-epa-camd/easey-common/enums';
 
@@ -12,14 +12,26 @@ import { ArrayResponse } from '@us-epa-camd/easey-common/interfaces/common.inter
 @ApiSecurity('APIKey')
 @ApiTags('Stacks & Pipes')
 @ApiExcludeControllerByEnv()
+@ApiExtraModels(StackPipeDTO)
 export class StackPipeWorkspaceController {
   constructor(private readonly service: StackPipeWorkspaceService) {}
 
   @Get()
   @ApiOkResponse({
-    isArray: true,
-    type: StackPipeDTO,
     description: 'Retrieves a list of stacks/pipes by oris code',
+    content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              items: {
+                type: 'array',
+                items: { $ref: getSchemaPath(StackPipeDTO) },
+              },
+            },
+          },
+        },
+      }
   })
   @RoleGuard(
     {

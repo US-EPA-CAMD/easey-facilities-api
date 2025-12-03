@@ -16,12 +16,14 @@ export class ProgramYearDim extends BaseEntity {
   @PrimaryColumn({
     name: 'unit_id',
     transformer: new NumericColumnTransformer(),
+    type: 'numeric',
   })
   id: number;
 
   @PrimaryColumn({
     name: 'op_year',
     transformer: new NumericColumnTransformer(),
+    type: 'numeric',
   })
   year: number;
 
@@ -35,10 +37,7 @@ export class ProgramYearDim extends BaseEntity {
   })
   reportingFrequency: string;
 
-  @ManyToOne(
-    () => UnitFact,
-    uf => uf.programYearDim,
-  )
+  @ManyToOne(() => UnitFact, (uf) => uf.programYearDim)
   @JoinColumn([
     {
       name: 'unit_id',

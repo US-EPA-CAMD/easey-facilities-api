@@ -45,6 +45,19 @@ export class FacilitiesController {
   @Get()
   @ApiOkResponse({
     description: 'Retrieves a list of Facilities',
+    content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              items: {
+                type: 'array',
+                items: { $ref: getSchemaPath(FacilityDTO) },
+              },
+            },
+          },
+        },
+      }
   })
   @BadRequestResponse()
   @NotFoundResponse()
@@ -106,6 +119,19 @@ export class FacilitiesController {
   @Get('/attributes/applicable')
   @ApiOkResponse({
     description: 'Retrieves Applicable Facility Attributes',
+    content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            properties: {
+              items: {
+                type: 'array',
+                items: { $ref: getSchemaPath(ApplicableFacilityAttributesDTO) },
+              },
+            },
+          },
+        },
+      }
   })
   @BadRequestResponse()
   @NotFoundResponse()
