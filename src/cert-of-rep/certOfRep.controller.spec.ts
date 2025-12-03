@@ -57,7 +57,7 @@ describe('-- Cert Of Rep Controller --', () => {
           .mockResolvedValue(mockedValues);
     
       await controller.certOfRep(new CertOfRepParamsDTO(), mockRequest as Request);
-    }).not.toThrowError();
+    }).not.toThrow();
   });
 
   it('getFacilityById', async () => {
@@ -75,6 +75,6 @@ describe('-- Cert Of Rep Controller --', () => {
           .mockResolvedValue(mockedValues);
     
       await controller.getFacilityById( Number(), mockRequest as Request);
-    }).not.toThrowError();
+    }).not.toThrow();
   });
 });
