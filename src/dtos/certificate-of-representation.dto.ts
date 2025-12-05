@@ -143,10 +143,6 @@ export class CertificateOfRepresentationDTO {
   @IsNumber()
   longitude: number;
 
-  @IsOptional()
-  @IsString()
-  version:string | null
-
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => RepresentativeDataDTO)
@@ -156,6 +152,18 @@ export class CertificateOfRepresentationDTO {
   @ValidateNested({ each: true })
   @Type(() => UnitDataDTO)
   unitData: UnitDataDTO[];
+}
+
+export class CertificateOfRepresentationDTOList {
+  @IsOptional()
+  @IsString()
+  version:string | null
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CertificateOfRepresentationDTO)
+  planData: CertificateOfRepresentationDTO[];
+
 
   @IsString()
   @IsOptional()

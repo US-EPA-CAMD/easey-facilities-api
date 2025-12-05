@@ -7,7 +7,7 @@ import { LoggerModule } from '@us-epa-camd/easey-common/logger';
 import { CertOfRepController } from './certOfRep.controller';
 import { CertOfRepListService } from './certOfRepList.service';
 import { CertOfRepParamsDTO } from '../dtos/certOfRep.params.dto';
-import { CertificateOfRepresentationDTO } from '../dtos/certificate-of-representation.dto';
+import { CertificateOfRepresentationDTOList } from '../dtos/certificate-of-representation.dto';
 import { Request } from 'express';
 
 jest.mock('./certOfRepList.service');
@@ -51,7 +51,7 @@ describe('-- Cert Of Rep Controller --', () => {
     };
     
     expect(async () => {
-        const mockedValues = [new CertificateOfRepresentationDTO()];
+        const mockedValues = new CertificateOfRepresentationDTOList();
         jest
           .spyOn(service, 'getCertOfRepList')
           .mockResolvedValue(mockedValues);
@@ -69,12 +69,12 @@ describe('-- Cert Of Rep Controller --', () => {
       },
     };
     expect(async () => {
-        const mockedValues = [new CertificateOfRepresentationDTO()];
+        const mockedValues = new CertificateOfRepresentationDTOList();
         jest
           .spyOn(service, 'getCertOfRepById')
           .mockResolvedValue(mockedValues);
     
-      await controller.getFacilityById( Number(), mockRequest as Request);
+      await controller.getFacilityById( new CertOfRepParamsDTO(), Number(), mockRequest as Request);
     }).not.toThrow();
   });
 });

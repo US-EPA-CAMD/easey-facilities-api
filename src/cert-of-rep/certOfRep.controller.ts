@@ -10,7 +10,7 @@ import {
   import { ClientTokenGuard } from '@us-epa-camd/easey-common/guards';
   import { Logger } from '@us-epa-camd/easey-common';
   import { CertOfRepListService} from './certOfRepList.service'
-  import { CertificateOfRepresentationDTO } from '../dtos/certificate-of-representation.dto';
+  import { CertificateOfRepresentationDTOList } from '../dtos/certificate-of-representation.dto';
   import { CertOfRepParamsDTO } from '../dtos/certOfRep.params.dto';
   import { BadRequestResponse, NotFoundResponse } from '@us-epa-camd/easey-common/utilities/common-swagger';
 
@@ -31,15 +31,15 @@ import {
     @UseGuards(ClientTokenGuard)
     @BadRequestResponse()
     @NotFoundResponse()
-    @ApiExtraModels(CertificateOfRepresentationDTO)
+    @ApiExtraModels(CertificateOfRepresentationDTOList)
       @ApiOkResponse({
         description: 'Returns cert of rep data for all facilities associated with the given program or that has been updated since the lastUpdated date provided',
-        type: [CertificateOfRepresentationDTO]
+        type: CertificateOfRepresentationDTOList
       })
     async certOfRep(
      @Query() certOfRepParamsDTO: CertOfRepParamsDTO,
      @Req() request: Request
-    ): Promise<CertificateOfRepresentationDTO[]> {
+    ): Promise<CertificateOfRepresentationDTOList> {
       const authorizationHeader = request.headers['authorization'] as string;
       const clientId = request.headers['x-client-id'] as string;
       const token = authorizationHeader?.split(' ')[1].trim();
@@ -56,21 +56,22 @@ import {
       @UseGuards(ClientTokenGuard)
       @ApiOkResponse({
         description: 'Retrieves a Cert of Rep By Id',
-        type: [CertificateOfRepresentationDTO]
+        type: CertificateOfRepresentationDTOList
       })
       @BadRequestResponse()
       @NotFoundResponse()
-      @ApiExtraModels(CertificateOfRepresentationDTO)
+      @ApiExtraModels(CertificateOfRepresentationDTOList)
       getFacilityById(
+        @Query() certOfRepParamsDTO: CertOfRepParamsDTO,
         @Param('id', ParseIntPipe) id: number,
         @Req() request: Request
-      ): Promise<CertificateOfRepresentationDTO[]> {
+      ): Promise<CertificateOfRepresentationDTOList> {
         const authorizationHeader = request.headers['authorization'] as string;
         const clientId = request.headers['x-client-id'] as string;
         const token = authorizationHeader?.split(' ')[1].trim();
         const apiKey = request.headers['x-api-key'] as string;
 
-        return this.certOfRepListService.getCertOfRepById(id,clientId,token,apiKey);
+        return this.certOfRepListService.getCertOfRepById(id,clientId,token,apiKey,certOfRepParamsDTO?.programCode);
       }
   }
   

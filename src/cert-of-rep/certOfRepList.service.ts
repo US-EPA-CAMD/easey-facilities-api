@@ -6,7 +6,7 @@ import { AxiosResponse } from 'axios';
 import { firstValueFrom } from 'rxjs';
 import * as https from 'https';
 import * as crypto from 'crypto';
-import { CertificateOfRepresentationDTO } from 'src/dtos/certificate-of-representation.dto';
+import { CertificateOfRepresentationDTOList } from 'src/dtos/certificate-of-representation.dto';
 
 
 @Injectable()
@@ -23,7 +23,7 @@ export class CertOfRepListService {
     clientId: string,
     token:string,
     apiKey:string
-  ): Promise<CertificateOfRepresentationDTO[]> {
+  ): Promise<CertificateOfRepresentationDTOList> {
 
     this.logger.debug('get Cert of Reps with params', { lastUpdated, programCode});
 
@@ -92,17 +92,19 @@ export class CertOfRepListService {
     id: number,
     clientId: string,
     token:string,
-    apiKey :string
-  ): Promise<CertificateOfRepresentationDTO[]> {
+    apiKey :string,
+    programCode: string,
+  ): Promise<CertificateOfRepresentationDTOList> {
 
-    this.logger.debug('get Cert of Rep By ID with param ', id);
+    this.logger.info('get Cert of Rep By ID with param ', id);
+    this.logger.info('get Cert of Reps with programCode', { programCode});
 
     const certOfRepApiUrl = this.configService.get<string>('app.certOfRepApi');
     if (!certOfRepApiUrl) {
       throw new HttpException('certOfRepApiUrl is not configured', HttpStatus.NOT_FOUND);
     }
 
-    this.logger.debug('using certOfRepApiUrl: ' + certOfRepApiUrl+'/'+id);
+    this.logger.info('using certOfRepApiUrl: ' + certOfRepApiUrl+'/'+id);
 
     const headers = {
       'x-api-key': apiKey,
@@ -110,6 +112,10 @@ export class CertOfRepListService {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     };
+
+    const body = {
+      programCode : programCode,
+    }
 
     this.logger.debug('Making API call to:', { url: certOfRepApiUrl });
 
@@ -127,6 +133,7 @@ export class CertOfRepListService {
           method: 'GET',
           url: `${certOfRepApiUrl}/${id}`, 
           headers: headers,
+          data: body,
           ...allowLegacyRenegotiationforNodeJsOptions
         }),
       );
