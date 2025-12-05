@@ -3,7 +3,8 @@ import {
     ApiSecurity,
     ApiOkResponse,
     ApiBearerAuth,
-    ApiExtraModels
+    ApiExtraModels,
+    ApiQuery
   } from '@nestjs/swagger';
   import { Request } from 'express';
   import { Controller, UseGuards, Get, Query,   ParseIntPipe, Param, Req } from '@nestjs/common';
@@ -61,17 +62,18 @@ import {
       @BadRequestResponse()
       @NotFoundResponse()
       @ApiExtraModels(CertificateOfRepresentationDTOList)
+      @ApiQuery({ name: 'programCode', required: false, type: String })
       getFacilityById(
-        @Query() certOfRepParamsDTO: CertOfRepParamsDTO,
         @Param('id', ParseIntPipe) id: number,
-        @Req() request: Request
+        @Req() request: Request,
+        @Query('programCode') programCode?: string,
       ): Promise<CertificateOfRepresentationDTOList> {
         const authorizationHeader = request.headers['authorization'] as string;
         const clientId = request.headers['x-client-id'] as string;
         const token = authorizationHeader?.split(' ')[1].trim();
         const apiKey = request.headers['x-api-key'] as string;
 
-        return this.certOfRepListService.getCertOfRepById(id,clientId,token,apiKey,certOfRepParamsDTO?.programCode);
+        return this.certOfRepListService.getCertOfRepById(id,clientId,token,apiKey,programCode);
       }
   }
   

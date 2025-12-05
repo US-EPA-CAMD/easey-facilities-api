@@ -74,7 +74,7 @@ describe('-- Cert Of Rep Controller --', () => {
           .spyOn(service, 'getCertOfRepById')
           .mockResolvedValue(mockedValues);
     
-      await controller.getFacilityById( new CertOfRepParamsDTO(), Number(), mockRequest as Request);
+      await controller.getFacilityById( Number(), mockRequest as Request, String());
     }).not.toThrow();
   });
 });
