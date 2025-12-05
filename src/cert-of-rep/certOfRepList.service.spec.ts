@@ -5,7 +5,7 @@ import { Logger } from '@us-epa-camd/easey-common/logger';
 import { of } from 'rxjs';
 import { AxiosResponse, AxiosHeaders } from 'axios';
 import { CertOfRepListService } from './certOfRepList.service';
-import { CertificateOfRepresentationDTO } from '../dtos/certificate-of-representation.dto';
+import { CertificateOfRepresentationDTOList } from '../dtos/certificate-of-representation.dto';
 
 describe('CertOfRepListService', () => {
   let service: CertOfRepListService;
@@ -53,7 +53,7 @@ describe('CertOfRepListService', () => {
   describe('getCertOfRepList', () => {
     it('should return a list of cert of rep', async () => {
       const mockCertOfReps = [
-        new CertificateOfRepresentationDTO()
+        new CertificateOfRepresentationDTOList()
       ];
       const mockResponse: AxiosResponse = {
         data: mockCertOfReps,
@@ -74,7 +74,7 @@ describe('CertOfRepListService', () => {
   describe('getCertOfRepById', () => {
     it('should return a cert of rep', async () => {
       const mockCertOfReps = [
-        new CertificateOfRepresentationDTO()
+        new CertificateOfRepresentationDTOList()
       ];
       const mockResponse: AxiosResponse = {
         data: mockCertOfReps,
@@ -86,7 +86,7 @@ describe('CertOfRepListService', () => {
 
       jest.spyOn(httpService, 'request').mockReturnValue(of(mockResponse));
 
-      const result = await service.getCertOfRepById(Number(), '', '', '');
+      const result = await service.getCertOfRepById(Number(), '', '', '','' );
 
       expect(result).toEqual(mockCertOfReps);
     });
