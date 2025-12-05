@@ -164,7 +164,6 @@ export class CertificateOfRepresentationDTOList {
   @Type(() => CertificateOfRepresentationDTO)
   planData: CertificateOfRepresentationDTO[];
 
-
   @IsString()
   @IsOptional()
   lastUpdated: string;

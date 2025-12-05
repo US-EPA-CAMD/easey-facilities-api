@@ -96,15 +96,15 @@ export class CertOfRepListService {
     programCode: string,
   ): Promise<CertificateOfRepresentationDTOList> {
 
-    this.logger.info('get Cert of Rep By ID with param ', id);
-    this.logger.info('get Cert of Reps with programCode', { programCode});
+    this.logger.debug('get Cert of Rep By ID with param ', id);
+    this.logger.debug('get Cert of Reps with programCode', { programCode});
 
     const certOfRepApiUrl = this.configService.get<string>('app.certOfRepApi');
     if (!certOfRepApiUrl) {
       throw new HttpException('certOfRepApiUrl is not configured', HttpStatus.NOT_FOUND);
     }
 
-    this.logger.info('using certOfRepApiUrl: ' + certOfRepApiUrl+'/'+id);
+    this.logger.debug('using certOfRepApiUrl: ' + certOfRepApiUrl+'/'+id);
 
     const headers = {
       'x-api-key': apiKey,
