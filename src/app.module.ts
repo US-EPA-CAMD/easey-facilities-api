@@ -22,6 +22,7 @@ import routes from './routes';
 import { StackPipeWorkspaceModule } from './stack-pipe-workspace/stack-pipe.module';
 import { UnitStackConfigurationWorkspaceModule } from './unit-stack-configuration-workspace/unit-stack-configuration.module';
 import { UnitWorkspaceModule } from './unit-workspace/unit.module';
+import { CertificateOfRepresentationModule } from './cert-of-rep/certOfRep.module';
 import {
   IsControlTechnologyValidator,
   IsProgramValidator,
@@ -47,6 +48,7 @@ import { HealthModule } from '@us-epa-camd/easey-common/health/health.module';
     LoggerModule,
     CorsOptionsModule,
     FacilitiesModule,
+    CertificateOfRepresentationModule,
     FacilitiesWorkspaceModule,
     UnitWorkspaceModule,
     StackPipeWorkspaceModule,
