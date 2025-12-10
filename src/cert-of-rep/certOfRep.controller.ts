@@ -7,8 +7,7 @@ import {
     ApiQuery
   } from '@nestjs/swagger';
   import { Request } from 'express';
-  import { Controller, UseGuards, Get, Query,   ParseIntPipe, Param, Req } from '@nestjs/common';
-  import { ClientTokenGuard } from '@us-epa-camd/easey-common/guards';
+  import { Controller, Get, Query,   ParseIntPipe, Param, Req } from '@nestjs/common';
   import { Logger } from '@us-epa-camd/easey-common';
   import { CertOfRepListService} from './certOfRepList.service'
   import { CertificateOfRepresentationDTOList } from '../dtos/certificate-of-representation.dto';
@@ -29,7 +28,6 @@ import {
     @Get('/')
     @ApiSecurity('ClientId')
     @ApiBearerAuth('ClientToken')
-    @UseGuards(ClientTokenGuard)
     @BadRequestResponse()
     @NotFoundResponse()
     @ApiExtraModels(CertificateOfRepresentationDTOList)
@@ -53,7 +51,6 @@ import {
       @Get('/:id')
       @ApiSecurity('ClientId')
       @ApiBearerAuth('ClientToken')
-      @UseGuards(ClientTokenGuard)
       @ApiOkResponse({
         description: 'Retrieves a Cert of Rep By Id',
         type: CertificateOfRepresentationDTOList
