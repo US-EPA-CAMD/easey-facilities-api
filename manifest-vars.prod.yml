@@ -2,6 +2,7 @@ instances: 2
 environment: production
 host: api-easey.app.cloud.gov
 apiHost: api.epa.gov/easey
+certOfRepApi: https://camd.epa.gov/CBS/api/facilities-mgmt/certOfRep
 maxConnectionPool: 15
 idleTimeout: 30000
 connectionTimeout: 10000

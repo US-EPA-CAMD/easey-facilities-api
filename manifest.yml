@@ -28,6 +28,7 @@ applications:
       EASEY_FACILITIES_API_ENABLE_ROLE_GUARD: true
       EASEY_FACILITIES_API_ENABLE_AUTH_TOKEN: true
       TZ: America/New_York
+      EASEY_FACILITIES_CERT_OF_REP_API: ((certOfRepApi))
       EASEY_DB_MAX_CONNECTION_POOL: ((maxConnectionPool))
       EASEY_DB_IDLE_TIMEOUT: ((idleTimeout))
       EASEY_DB_CONNECTION_TIMEOUT: ((connectionTimeout))
