@@ -75,6 +75,9 @@ export default registerAs('app', () => ({
     'EASEY_FACILITIES_API_ENABLE_AUTH_TOKEN',
     true,
   ),
+  enableClientToken: getConfigValueBoolean(
+    'EASEY_CAMD_SERVICES_ENABLE_CLIENT_TOKEN',
+  ),
   // ENABLES DEBUG CONSOLE LOGS
   enableDebug: getConfigValueBoolean('EASEY_FACILITIES_API_ENABLE_DEBUG'),
   perPageLimit: PAGINATION_MAX_PER_PAGE,
@@ -82,6 +85,8 @@ export default registerAs('app', () => ({
   authApi: {
     uri: getConfigValue('EASEY_AUTH_API', `https://${apiHost}/auth-mgmt`),
   },
+
+  certOfRepApi: getConfigValue('EASEY_FACILITIES_CERT_OF_REP_API', 'https://cbsstagei.epa.gov/CBSD'),
 
   maxConnectionPool: getConfigValueNumber('EASEY_DB_MAX_CONNECTION_POOL',15),
   idleTimeout: getConfigValueNumber( 'EASEY_DB_IDLE_TIMEOUT', 30000, ),
