@@ -44,9 +44,8 @@ import {
       const authorizationHeader = request.headers['authorization'] as string;
       const clientId = request.headers['x-client-id'] as string;
       const token = authorizationHeader?.split(' ')[1].trim();
-      const apiKey = request.headers['x-api-key'] as string;
       
-      return this.certOfRepListService.getCertOfRepList(certOfRepParamsDTO?.lastUpdated,certOfRepParamsDTO?.programCode, clientId,token,apiKey);
+      return this.certOfRepListService.getCertOfRepList(certOfRepParamsDTO?.lastUpdated,certOfRepParamsDTO?.programCode, clientId,token);
     }
 
 
@@ -71,9 +70,8 @@ import {
         const authorizationHeader = request.headers['authorization'] as string;
         const clientId = request.headers['x-client-id'] as string;
         const token = authorizationHeader?.split(' ')[1].trim();
-        const apiKey = request.headers['x-api-key'] as string;
 
-        return this.certOfRepListService.getCertOfRepById(id,clientId,token,apiKey,programCode);
+        return this.certOfRepListService.getCertOfRepById(id,clientId,token,programCode);
       }
   }
   

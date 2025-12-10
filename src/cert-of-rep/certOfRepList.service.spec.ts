@@ -65,7 +65,7 @@ describe('CertOfRepListService', () => {
 
       jest.spyOn(httpService, 'request').mockReturnValue(of(mockResponse));
 
-      const result = await service.getCertOfRepList('', '', '', '', '');
+      const result = await service.getCertOfRepList('', '', '', '');
 
       expect(result).toEqual(mockCertOfReps);
     });
@@ -86,7 +86,7 @@ describe('CertOfRepListService', () => {
 
       jest.spyOn(httpService, 'request').mockReturnValue(of(mockResponse));
 
-      const result = await service.getCertOfRepById(Number(), '', '', '','' );
+      const result = await service.getCertOfRepById(Number(), '', '', '' );
 
       expect(result).toEqual(mockCertOfReps);
     });
