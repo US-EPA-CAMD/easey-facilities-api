@@ -2,6 +2,7 @@ instances: 2
 environment: staging
 host: api-easey-stg.app.cloud.gov
 apiHost: api.epa.gov/easey/staging
+certOfRepApi: https://cbsstagei.epa.gov/CBS/api/facilities-mgmt/certOfRep
 maxConnectionPool: 5
 idleTimeout: 5000
 connectionTimeout: 5000
