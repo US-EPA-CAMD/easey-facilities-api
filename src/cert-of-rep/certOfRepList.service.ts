@@ -22,7 +22,6 @@ export class CertOfRepListService {
     programCode: string,
     clientId: string,
     token:string,
-    apiKey:string
   ): Promise<CertificateOfRepresentationDTOList> {
 
     this.logger.debug('get Cert of Reps with params', { lastUpdated, programCode});
@@ -35,7 +34,6 @@ export class CertOfRepListService {
     this.logger.debug('using certOfRepApiUrl: ' + certOfRepApiUrl);
 
     const headers = {
-      'x-api-key': apiKey,
       'x-client-id': clientId,
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -92,7 +90,6 @@ export class CertOfRepListService {
     id: number,
     clientId: string,
     token:string,
-    apiKey :string,
     programCode: string,
   ): Promise<CertificateOfRepresentationDTOList> {
 
@@ -107,7 +104,6 @@ export class CertOfRepListService {
     this.logger.debug('using certOfRepApiUrl: ' + certOfRepApiUrl+'/'+id);
 
     const headers = {
-      'x-api-key': apiKey,
       'x-client-id': clientId,
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
