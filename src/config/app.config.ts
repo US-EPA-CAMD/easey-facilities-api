@@ -58,7 +58,7 @@ export default registerAs('app', () => ({
   enableApiKey: getConfigValueBoolean('EASEY_FACILITIES_API_ENABLE_API_KEY'),
   secretToken: getConfigValue('EASEY_FACILITIES_API_SECRET_TOKEN'),
   enableSecretToken: getConfigValueBoolean(
-    'EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN',true
+    'EASEY_FACILITIES_API_ENABLE_SECRET_TOKEN',
   ),
   enableCors: getConfigValueBoolean('EASEY_FACILITIES_API_ENABLE_CORS', true),
   enableGlobalValidationPipes: getConfigValueBoolean(
@@ -76,7 +76,7 @@ export default registerAs('app', () => ({
     true,
   ),
   enableClientToken: getConfigValueBoolean(
-    'EASEY_CAMD_SERVICES_ENABLE_CLIENT_TOKEN', true
+    'EASEY_CAMD_SERVICES_ENABLE_CLIENT_TOKEN',
   ),
   // ENABLES DEBUG CONSOLE LOGS
   enableDebug: getConfigValueBoolean('EASEY_FACILITIES_API_ENABLE_DEBUG'),
