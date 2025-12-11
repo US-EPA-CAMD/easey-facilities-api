@@ -13,10 +13,12 @@ import {
   import { CertificateOfRepresentationDTOList } from '../dtos/certificate-of-representation.dto';
   import { CertOfRepParamsDTO } from '../dtos/certOfRep.params.dto';
   import { BadRequestResponse, NotFoundResponse } from '@us-epa-camd/easey-common/utilities/common-swagger';
+  import { ApiExcludeControllerByEnv } from '../decorators/swagger-decorator';
 
   @Controller()
   @ApiSecurity('APIKey')
   @ApiTags('Certificate of Representation')
+  @ApiExcludeControllerByEnv()
   export class CertOfRepController {
     constructor(
       private certOfRepListService: CertOfRepListService,
