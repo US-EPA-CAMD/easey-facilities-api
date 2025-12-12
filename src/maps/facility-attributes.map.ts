@@ -21,11 +21,19 @@ export class FacilityAttributesMap extends BaseMap<
     const uniqueOwnOprList = [uniqueOwn, uniqueOpr];
     const ownerOperator = uniqueOwnOprList.filter(Boolean).join('|');
 
-    const generatorIdArr = entity.generatorId?.split(', ');
-    const arpNameplateCapacityArr = entity.arpNameplateCapacity?.split(', ');
-    const otherNameplateCapacityArr = entity.otherNameplateCapacity?.split(
-      ', ',
-    );
+    const parseFieldValue = (value: any): any[] => {
+      if (!value){
+        return [];
+      } 
+      if (typeof value === 'string' || typeof value === 'number') {
+        return value.toString().split(', ').filter(Boolean);
+      }
+      return [value];
+    };
+
+    const generatorIdArr = parseFieldValue(entity.generatorId);
+    const arpNameplateCapacityArr = parseFieldValue(entity.arpNameplateCapacity);
+    const otherNameplateCapacityArr = parseFieldValue(entity.otherNameplateCapacity);
 
     if (generatorIdArr) {
       for (let index = 0; index < generatorIdArr.length; index++) {
