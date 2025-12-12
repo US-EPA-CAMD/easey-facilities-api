@@ -45,8 +45,7 @@ describe('-- Cert Of Rep Controller --', () => {
     const mockRequest: Partial<Request> = {
       headers: {
         'authorization': 'Bearer jwt',
-        'x-client-id': 'client-1',
-        'x-api-key': 'api-key-11',
+        'x-client-id': 'client-1'
       },
     };
     
@@ -64,9 +63,8 @@ describe('-- Cert Of Rep Controller --', () => {
     const mockRequest: Partial<Request> = {
       headers: {
         'authorization': 'Bearer jwt',
-        'x-client-id': 'client-1',
-        'x-api-key': 'api-key-11',
-      },
+        'x-client-id': 'client-1'
+        },
     };
     expect(async () => {
         const mockedValues = new CertificateOfRepresentationDTOList();
