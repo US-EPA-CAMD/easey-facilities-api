@@ -7,17 +7,18 @@ import {
     ApiQuery
   } from '@nestjs/swagger';
   import { Request } from 'express';
-  import { Controller, UseGuards, Get, Query,   ParseIntPipe, Param, Req } from '@nestjs/common';
-  import { ClientTokenGuard } from '@us-epa-camd/easey-common/guards';
+  import { Controller, Get, Query,   ParseIntPipe, Param, Req } from '@nestjs/common';
   import { Logger } from '@us-epa-camd/easey-common';
   import { CertOfRepListService} from './certOfRepList.service'
   import { CertificateOfRepresentationDTOList } from '../dtos/certificate-of-representation.dto';
   import { CertOfRepParamsDTO } from '../dtos/certOfRep.params.dto';
   import { BadRequestResponse, NotFoundResponse } from '@us-epa-camd/easey-common/utilities/common-swagger';
+  import { ApiExcludeControllerByEnv } from '../decorators/swagger-decorator';
 
   @Controller()
   @ApiSecurity('APIKey')
   @ApiTags('Certificate of Representation')
+  @ApiExcludeControllerByEnv()
   export class CertOfRepController {
     constructor(
       private certOfRepListService: CertOfRepListService,
@@ -29,7 +30,6 @@ import {
     @Get('/')
     @ApiSecurity('ClientId')
     @ApiBearerAuth('ClientToken')
-    @UseGuards(ClientTokenGuard)
     @BadRequestResponse()
     @NotFoundResponse()
     @ApiExtraModels(CertificateOfRepresentationDTOList)
@@ -44,9 +44,8 @@ import {
       const authorizationHeader = request.headers['authorization'] as string;
       const clientId = request.headers['x-client-id'] as string;
       const token = authorizationHeader?.split(' ')[1].trim();
-      const apiKey = request.headers['x-api-key'] as string;
       
-      return this.certOfRepListService.getCertOfRepList(certOfRepParamsDTO?.lastUpdated,certOfRepParamsDTO?.programCode, clientId,token,apiKey);
+      return this.certOfRepListService.getCertOfRepList(certOfRepParamsDTO?.lastUpdated,certOfRepParamsDTO?.programCode, clientId,token);
     }
 
 
@@ -54,7 +53,6 @@ import {
       @Get('/:id')
       @ApiSecurity('ClientId')
       @ApiBearerAuth('ClientToken')
-      @UseGuards(ClientTokenGuard)
       @ApiOkResponse({
         description: 'Retrieves a Cert of Rep By Id',
         type: CertificateOfRepresentationDTOList
@@ -71,9 +69,8 @@ import {
         const authorizationHeader = request.headers['authorization'] as string;
         const clientId = request.headers['x-client-id'] as string;
         const token = authorizationHeader?.split(' ')[1].trim();
-        const apiKey = request.headers['x-api-key'] as string;
 
-        return this.certOfRepListService.getCertOfRepById(id,clientId,token,apiKey,programCode);
+        return this.certOfRepListService.getCertOfRepById(id,clientId,token,programCode);
       }
   }
   
