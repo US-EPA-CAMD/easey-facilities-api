@@ -17,6 +17,7 @@ export class ProgramCode extends BaseEntity {
   @Column({
     name: 'emissions_ui_filter',
     transformer: new NumericColumnTransformer(),
+    type: 'numeric',
   })
   emissionsUIFilter: number;
 }
