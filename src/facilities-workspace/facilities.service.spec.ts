@@ -14,7 +14,7 @@ import {
 
 import { FacilityParamsDTO } from '../dtos/facility.params.dto';
 import { FacilitiesRepository } from '../facilities/facilities.repository';
-import { FacilitiesService } from '../facilities/facilities.service';
+import { FacilitiesWorkspaceService } from './facilities.service';
 import { FacilityMap } from '../maps/facility.map';
 import { Plant } from '../entities/plant.entity';
 import { ApplicableFacilityAttributesMap } from '../maps/applicable-facility-attributes.map';
@@ -74,7 +74,7 @@ let req: any;
 
 describe('-- Facilities Service --', () => {
   let facilitiesRepositoryMock: MockType<Repository<Plant>>;
-  let facilitiesService: FacilitiesService;
+  let facilitiesWorkspaceService: FacilitiesWorkspaceService;
   const facilityMap = new FacilityMap();
   let applicableFacilityAttributesMap;
   let facilityUnitAttributesRepository;
@@ -86,7 +86,7 @@ describe('-- Facilities Service --', () => {
       providers: [
         FacilityMap,
         FacilityAttributesMap,
-        FacilitiesService,
+        FacilitiesWorkspaceService,
         {
           provide: FacilitiesRepository,
           useFactory: repositoryMockFactory,
@@ -110,7 +110,7 @@ describe('-- Facilities Service --', () => {
       ],
     }).compile();
 
-    facilitiesService = module.get(FacilitiesService);
+    facilitiesWorkspaceService = module.get(FacilitiesWorkspaceService);
     facilitiesRepositoryMock = module.get(FacilitiesRepository);
     applicableFacilityAttributesMap = module.get(
       ApplicableFacilityAttributesMap,
@@ -153,9 +153,10 @@ describe('-- Facilities Service --', () => {
         plantList,
         totalCount,
       ]);
-      const results = await facilitiesService.getFacilities(
+      const results = await facilitiesWorkspaceService.getFacilities(
         paramsDto,
         undefined,
+        null
       );
       expect(results).toStrictEqual(facilities);
     });
@@ -181,7 +182,7 @@ describe('-- Facilities Service --', () => {
         plants,
         totalCount,
       ]);
-      const results = await facilitiesService.getFacilities(paramsDto, req);
+      const results = await facilitiesWorkspaceService.getFacilities(paramsDto, req, null);
       expect(results).toStrictEqual(facilities);
     });
 
@@ -206,7 +207,7 @@ describe('-- Facilities Service --', () => {
         plants,
         totalCount,
       ]);
-      const results = await facilitiesService.getFacilities(paramsDto, req);
+      const results = await facilitiesWorkspaceService.getFacilities(paramsDto, req, null);
       expect(results).toStrictEqual(facilities);
     });
 
@@ -231,7 +232,7 @@ describe('-- Facilities Service --', () => {
         plants,
         totalCount,
       ]);
-      const results = await facilitiesService.getFacilities(paramsDto, req);
+      const results = await facilitiesWorkspaceService.getFacilities(paramsDto, req, null);
       expect(results).toStrictEqual(facilities);
     });
 
@@ -256,7 +257,7 @@ describe('-- Facilities Service --', () => {
         plants,
         totalCount,
       ]);
-      const results = await facilitiesService.getFacilities(paramsDto, req);
+      const results = await facilitiesWorkspaceService.getFacilities(paramsDto, req, null);
       expect(results).toStrictEqual(facilities);
     });
 
@@ -274,9 +275,10 @@ describe('-- Facilities Service --', () => {
         plants,
         totalCount,
       ]);
-      const results = await facilitiesService.getFacilities(
+      const results = await facilitiesWorkspaceService.getFacilities(
         paramsDto,
         undefined,
+        null
       );
       expect(results).toStrictEqual(facilities);
     });
@@ -288,14 +290,14 @@ describe('-- Facilities Service --', () => {
       const plant = mockPlant(facilityId, 'Test Plant', 123456, 'TX');
       const facility = await facilityMap.one(plant);
       facilitiesRepositoryMock.findOneBy.mockReturnValue(plant);
-      expect(await facilitiesService.getFacilityById(facilityId)).toStrictEqual(
+      expect(await facilitiesWorkspaceService.getFacilityById(facilityId)).toStrictEqual(
         facility,
       );
     });
 
     it('should throw NotFoundException if facility not found', async () => {
       facilitiesRepositoryMock.findOneBy.mockReturnValue(undefined);
-      await facilitiesService
+      await facilitiesWorkspaceService
         .getFacilityById(-1)
         .then()
         .catch(error => {
@@ -319,7 +321,7 @@ describe('-- Facilities Service --', () => {
       applicableFacilityAttributesMap.many.mockResolvedValue(expectedResult);
 
       expect(
-        await facilitiesService.getApplicableFacilityAttributes(params),
+        await facilitiesWorkspaceService.getApplicableFacilityAttributes(params, null),
       ).toBe(expectedResult);
     });
   });
@@ -354,7 +356,7 @@ describe('-- Facilities Service --', () => {
       facilityAttributesMap.many.mockResolvedValue(expectedResult);
 
       expect(
-        await facilitiesService.getAllFacilityAttributes(params, req),
+        await facilitiesWorkspaceService.getAllFacilityAttributes(params, req, null),
       ).toBe(expectedResult);
     });
   });
