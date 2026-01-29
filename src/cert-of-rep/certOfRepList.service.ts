@@ -18,7 +18,7 @@ export class CertOfRepListService {
   ) {}
 
   async getCertOfRepList(
-    lastUpdated: string,
+    lastUpdated: Date,
     programCode: string,
     clientId: string,
     token:string,
