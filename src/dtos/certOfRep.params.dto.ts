@@ -12,7 +12,7 @@ export class CertOfRepParamsDTO {
     example: "1900-01-01T00:00:00",
     required: false
   })
-  lastUpdated?: Date;
+  lastUpdated?: string;
 
 
   @IsOptional()
