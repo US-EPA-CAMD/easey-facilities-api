@@ -126,6 +126,108 @@ describe('FacilityUnitAttributesRepository', () => {
     });
   });
 
+  describe('buildQuery — control-technology SQL composition (TT6897 regression)', () => {
+    // buildQuery inlines its control-tech WHERE clause as a plain
+    // concatenated SQL string and passes it directly to
+    // `query.andWhere(string)`. The existing spec mocks createQueryBuilder,
+    // so there is no real SelectQueryBuilder to call .getSql() on — but the
+    // captured first-argument of andWhere IS the same SQL fragment that
+    // .getSql() / .getQueryAndParameters() would surface for this clause
+    // (the Regex.pipeDelimited output is baked into the string before
+    // TypeORM ever sees it). These assertions operate purely on the captured
+    // SQL string — no DB connection required.
+    const findControlTechClause = (): string | undefined =>
+      queryBuilder.andWhere.mock.calls
+        .map((call: any[]) => call[0])
+        .find(
+          (arg: any) =>
+            typeof arg === 'string' && arg.includes('so2ControlInfo'),
+        );
+
+    it('emits pipe-delimited regex for a single control-tech filter and never comma-delimited', async () => {
+      const ctFilters = new PaginatedFacilityAttributesParamsDTO();
+      ctFilters.controlTechnologies = [
+        ControlTechnology.SELECTIVE_NON_CATALYTIC,
+      ];
+
+      await facilityUnitAttributesRepository.getAllFacilityAttributes(
+        ctFilters,
+        req,
+      );
+
+      const clause = findControlTechClause();
+      expect(clause).toBeDefined();
+      // Pipe-delimited alternation marker produced by Regex.pipeDelimited:
+      expect(clause).toContain('[|]');
+      // Regression guard against accidental revert to Regex.commaDelimited:
+      expect(clause).not.toContain('[,]');
+    });
+
+    it('emits pipe-delimited alternation for every value in a multi-select union, wrapped in an OR group', async () => {
+      const ctFilters = new PaginatedFacilityAttributesParamsDTO();
+      ctFilters.controlTechnologies = [
+        ControlTechnology.SELECTIVE_NON_CATALYTIC,
+        ControlTechnology.SELECTIVE_CATALYTIC,
+      ];
+
+      await facilityUnitAttributesRepository.getAllFacilityAttributes(
+        ctFilters,
+        req,
+      );
+
+      const clause = findControlTechClause();
+      expect(clause).toBeDefined();
+      // Both filter values appear in the clause (buildQuery uppercases the
+      // filter text before passing it into pipeDelimited):
+      expect(clause).toContain('SELECTIVE NON-CATALYTIC REDUCTION');
+      expect(clause).toContain('SELECTIVE CATALYTIC REDUCTION');
+      // Pipe-delimited alternation present, comma-delimited absent:
+      expect(clause).toContain('[|]');
+      expect(clause).not.toContain('[,]');
+      // Union semantics: parenthesized OR group wrapping the branches.
+      const trimmed = (clause as string).trim();
+      expect(trimmed.startsWith('(')).toBe(true);
+      expect(trimmed.endsWith(')')).toBe(true);
+      expect(clause).toContain(' OR ');
+    });
+
+    it('does not emit a control-tech clause when the filter is absent', async () => {
+      const ctFilters = new PaginatedFacilityAttributesParamsDTO();
+      // controlTechnologies intentionally left undefined — this is the
+      // realistic "no filter provided" DTO shape. (Literal [] is truthy in
+      // JS and would fall through the current
+      // `if (params.controlTechnologies)` guard in buildQuery, producing an
+      // empty-grouping andWhere call; that edge case is out of scope for
+      // TT6897 Required #2.)
+
+      await facilityUnitAttributesRepository.getAllFacilityAttributes(
+        ctFilters,
+        req,
+      );
+
+      expect(findControlTechClause()).toBeUndefined();
+    });
+
+    it('references all four *ControlInfo columns in the emitted clause', async () => {
+      const ctFilters = new PaginatedFacilityAttributesParamsDTO();
+      ctFilters.controlTechnologies = [
+        ControlTechnology.SELECTIVE_NON_CATALYTIC,
+      ];
+
+      await facilityUnitAttributesRepository.getAllFacilityAttributes(
+        ctFilters,
+        req,
+      );
+
+      const clause = findControlTechClause();
+      expect(clause).toBeDefined();
+      expect(clause).toContain('fua.so2ControlInfo');
+      expect(clause).toContain('fua.noxControlInfo');
+      expect(clause).toContain('fua.pmControlInfo');
+      expect(clause).toContain('fua.hgControlInfo');
+    });
+  });
+
   describe('lastArchivedYear', () => {
     it('returns the last archived year', async () => {
       const archivedYear = [{ year: 2016 }];
