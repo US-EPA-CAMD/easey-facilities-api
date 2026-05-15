@@ -953,7 +953,7 @@
     webpack "5.106.0"
     webpack-node-externals "3.0.0"
 
-"@nestjs/common@^11.1.19", "@nestjs/common@^11.1.21":
+"@nestjs/common@^11.1.21":
   version "11.1.21"
   resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-11.1.21.tgz#9a45c6c09e90cabfdcc4f9579877fb5d89924d3c"
   integrity sha512-YV1HYDGsm2rnR0vrLKidtrG6jYX5yqiIjeur1j8++dKGqhhsJ6cjMs0RfQRSTUH7IjgDemA59/znQ8nRrE0D9g==
@@ -973,7 +973,7 @@
     dotenv-expand "12.0.3"
     lodash "4.18.1"
 
-"@nestjs/core@^11.1.19", "@nestjs/core@^11.1.21":
+"@nestjs/core@^11.1.21":
   version "11.1.21"
   resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-11.1.21.tgz#609f482d430da2cd55b4f8f478fbe0026b1f5ea5"
   integrity sha512-fqo0BHgny3MOuAL8GSfG3ZUKFVVBaBQD/0iyibnwTONT5vPexjQxJzu+945iloVvBDmrnAaRWxC1gqCDEs/AXQ==
@@ -1012,7 +1012,7 @@
     jsonc-parser "3.3.1"
     pluralize "8.0.0"
 
-"@nestjs/swagger@^11.4.1", "@nestjs/swagger@^11.4.3":
+"@nestjs/swagger@^11.4.3":
   version "11.4.3"
   resolved "https://registry.yarnpkg.com/@nestjs/swagger/-/swagger-11.4.3.tgz#c94101fd36b1f0dc990c2d3273468315da7267cd"
   integrity sha512-LR4BuOj+iBFzhGRnNP0OHjmrPXliDEjrmniXtLsfLDIELjkuUXYCTGjZMqgDdOY+QSabeF59LndaDzOOe+vMmw==
@@ -1570,20 +1570,20 @@
   resolved "https://registry.npmmirror.com/@unrs/resolver-binding-win32-x64-msvc/-/resolver-binding-win32-x64-msvc-1.11.1.tgz#538b1e103bf8d9864e7b85cc96fa8d6fb6c40777"
   integrity sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==
 
-"@us-epa-camd/easey-common@21.5.4":
-  version "21.5.4"
-  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-common/21.5.4/ac432eb7356cb6a93713adfd07f4c139c6380e7c#ac432eb7356cb6a93713adfd07f4c139c6380e7c"
-  integrity sha512-RD855u7UQD6rKMJL6tnthpice78Ibfvi43PQTwXMFuzklqwpYPgHExSrDwTrCa4TBAJjbMoDWelpU8yFpYEDqQ==
+"@us-epa-camd/easey-common@21.5.5":
+  version "21.5.5"
+  resolved "https://npm.pkg.github.com/download/@US-EPA-CAMD/easey-common/21.5.5/67014e8d04a62a8c98b78741ba044701ab52ab82#67014e8d04a62a8c98b78741ba044701ab52ab82"
+  integrity sha512-GMRZHDYFC6Nf5OJlXMkeQXlq3T3U9U7E22rhnLOignKZBEcXxdftaHnjlfKqFDdFTAzyZmkt88FuQhm5fAPD4g==
   dependencies:
     "@golevelup/ts-jest" "^3.0.0"
     "@nestjs/axios" "4.0.1"
-    "@nestjs/common" "^11.1.19"
+    "@nestjs/common" "^11.1.21"
     "@nestjs/config" "^4.0.4"
-    "@nestjs/core" "^11.1.19"
-    "@nestjs/swagger" "^11.4.1"
+    "@nestjs/core" "^11.1.21"
+    "@nestjs/swagger" "^11.4.3"
     "@nestjs/terminus" "^11.1.1"
     "@nestjs/typeorm" "^11.0.1"
-    axios "^1.15.2"
+    axios "^1.16.1"
     class-validator "^0.15.1"
     dotenv "^17.4.2"
     express "^5.2.1"
@@ -2008,7 +2008,7 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-axios@^1.15.2, axios@^1.16.1:
+axios@^1.16.1:
   version "1.16.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.16.1.tgz#517e29291d19d6e8cf919ff264f4fe157261ba12"
   integrity sha512-caYkukvroVPO8KrzuJEb50Hm07KwfBZPEC3VeFHTsqWHvKTsy54hjJz9BS/cdaypROE2rH6xvm9mHX4fgWkr3A==
