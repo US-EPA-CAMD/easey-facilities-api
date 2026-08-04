@@ -90,7 +90,6 @@ export default registerAs('app', () => ({
   },
 
   certOfRepApi: getConfigValue('EASEY_FACILITIES_CERT_OF_REP_API', 'https://cbsstagei.epa.gov/CBSD'),
-  // HTTP verb for the cert-of-rep endpoint: 'GET' or 'POST'. Defaults to GET.
   certOfRepApiMethod: getConfigValue('EASEY_FACILITIES_CERT_OF_REP_API_METHOD', 'GET'),
 
   maxConnectionPool: getConfigValueNumber('EASEY_DB_MAX_CONNECTION_POOL',15),

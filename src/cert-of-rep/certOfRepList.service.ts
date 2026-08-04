@@ -52,8 +52,8 @@ export class CertOfRepListService {
       }),
     };
 
-    // httpService.request is used so the body can be sent regardless of verb
-    // (axios can't send a body with GET). Non-POST falls back to GET.
+    // httpService.request is used so the body can be sent regardless of verb (axios can't send a body with GET).
+    // The CBS API expects a GET request with a body, CAPAS expects POST.
     const method = this.configService.get<string>('app.certOfRepApiMethod');
     try {
 
