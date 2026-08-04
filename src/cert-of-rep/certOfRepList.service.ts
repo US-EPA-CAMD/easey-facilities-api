@@ -52,13 +52,14 @@ export class CertOfRepListService {
       }),
     };
 
-    //The CBS API expects a GET request with a body.
-    //Using the httpService.request method
+    // httpService.request is used so the body can be sent regardless of verb
+    // (axios can't send a body with GET). Non-POST falls back to GET.
+    const method = this.configService.get<string>('app.certOfRepApiMethod');
     try {
 
       const response: AxiosResponse<any> = await firstValueFrom(
         this.httpService.request({
-          method: 'GET',
+          method: method === 'POST' ? 'POST' : 'GET',
           url: certOfRepApiUrl,
           headers: headers,
           data: body,
@@ -122,12 +123,13 @@ export class CertOfRepListService {
     };
 
 
-    //The CBS API expects a GET
+    // Non-POST falls back to GET.
+    const method = this.configService.get<string>('app.certOfRepApiMethod');
     try {
       const response: AxiosResponse<any> = await firstValueFrom(
         this.httpService.request({
-          method: 'GET',
-          url: `${certOfRepApiUrl}/${id}`, 
+          method: method === 'POST' ? 'POST' : 'GET',
+          url: `${certOfRepApiUrl}/${id}`,
           headers: headers,
           data: body,
           ...allowLegacyRenegotiationforNodeJsOptions
