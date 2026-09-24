@@ -12,6 +12,7 @@ environment: development
 apiHost: api.epa.gov/easey/dev
 dbSvc: camd-pg-db
 certOfRepApi: https://cbsstagei.epa.gov/CBSD/api/facilities-mgmt/certOfRep
+certOfRepApiMethod: GET
 maxConnectionPool: 15
 idleTimeout: 30000
 connectionTimeout: 10000

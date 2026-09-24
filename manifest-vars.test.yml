@@ -3,6 +3,7 @@ environment: testing
 host: api-easey-tst.app.cloud.gov
 apiHost: api.epa.gov/easey/test
 certOfRepApi: https://cbsstagei.epa.gov/CBS/api/facilities-mgmt/certOfRep
+certOfRepApiMethod: GET
 maxConnectionPool: 5
 idleTimeout: 5000
 connectionTimeout: 5000

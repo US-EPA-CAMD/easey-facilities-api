@@ -90,6 +90,7 @@ export default registerAs('app', () => ({
   },
 
   certOfRepApi: getConfigValue('EASEY_FACILITIES_CERT_OF_REP_API', 'https://cbsstagei.epa.gov/CBSD'),
+  certOfRepApiMethod: getConfigValue('EASEY_FACILITIES_CERT_OF_REP_API_METHOD', 'GET'),
 
   maxConnectionPool: getConfigValueNumber('EASEY_DB_MAX_CONNECTION_POOL',15),
   idleTimeout: getConfigValueNumber( 'EASEY_DB_IDLE_TIMEOUT', 30000, ),

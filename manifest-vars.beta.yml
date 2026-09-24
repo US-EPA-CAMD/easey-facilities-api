@@ -3,6 +3,7 @@ environment: beta
 host: api-easey-beta.app.cloud.gov
 apiHost: api.epa.gov/easey/beta
 certOfRepApi:  https://cbsprodbeta.epa.gov/CBS/api/facilities-mgmt/certOfRep
+certOfRepApiMethod: GET
 maxConnectionPool: 15
 idleTimeout: 30000
 connectionTimeout: 10000
