@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { Regex, ResponseHeaders } from '@us-epa-camd/easey-common/utilities';
+import {
+  Regex,
+  ResponseHeaders,
+  toRegexParameter,
+} from '@us-epa-camd/easey-common/utilities';
 import { Request } from 'express';
 import { EntityManager, Repository, SelectQueryBuilder } from 'typeorm';
 
 import { PaginatedFacilityAttributesParamsDTO } from '../dtos/facility-attributes.param.dto';
 import { FacilityUnitAttributes } from '../entities/vw-facility-unit-attributes.entity';
-import { toRegexParameter } from '../utils/regex-parameter';
 
 @Injectable()
 export class FacilityUnitAttributesRepository extends Repository<
