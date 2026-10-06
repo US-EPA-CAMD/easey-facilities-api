@@ -36,7 +36,8 @@ const mockRequest = (url: string) => {
   };
 };
 
-const filters: PaginatedFacilityAttributesParamsDTO = new PaginatedFacilityAttributesParamsDTO();
+const filters: PaginatedFacilityAttributesParamsDTO =
+  new PaginatedFacilityAttributesParamsDTO();
 filters.page = undefined;
 filters.perPage = undefined;
 filters.year = [2019];
@@ -66,11 +67,12 @@ describe('FacilityUnitAttributesRepository', () => {
     }).compile();
 
     facilityUnitAttributesRepository = module.get<
-      FacilityUnitAttributesRepository
-    >(FacilityUnitAttributesRepository);
+      FacilityUnitAttributesRepository>(
+        FacilityUnitAttributesRepository,
+      );
     queryBuilder = module.get<SelectQueryBuilder<FacilityUnitAttributes>>(
-      SelectQueryBuilder,
-    );
+        SelectQueryBuilder,
+      );
     req = mockRequest('');
     req.res.setHeader.mockReturnValue();
 
@@ -94,9 +96,9 @@ describe('FacilityUnitAttributesRepository', () => {
       // branch coverage
       const emptyFilters: PaginatedFacilityAttributesParamsDTO = new PaginatedFacilityAttributesParamsDTO();
       let result = await facilityUnitAttributesRepository.getAllFacilityAttributes(
-        emptyFilters,
-        req,
-      );
+          emptyFilters,
+          req,
+        );
 
       result = await facilityUnitAttributesRepository.getAllFacilityAttributes(
         filters,
@@ -116,10 +118,11 @@ describe('FacilityUnitAttributesRepository', () => {
       paginatedFilters.page = 1;
       paginatedFilters.perPage = 10;
 
-      const paginatedResult = await facilityUnitAttributesRepository.getAllFacilityAttributes(
-        paginatedFilters,
-        req,
-      );
+      const paginatedResult =
+        await facilityUnitAttributesRepository.getAllFacilityAttributes(
+          paginatedFilters,
+          req,
+        );
 
       expect(ResponseHeaders.setPagination).toHaveBeenCalled();
       expect(paginatedResult).toEqual('mockFacilityAttributes');
@@ -127,22 +130,11 @@ describe('FacilityUnitAttributesRepository', () => {
   });
 
   describe('buildQuery — control-technology SQL composition (TT6897 regression)', () => {
-    // buildQuery inlines its control-tech WHERE clause as a plain
-    // concatenated SQL string and passes it directly to
-    // `query.andWhere(string)`. The existing spec mocks createQueryBuilder,
-    // so there is no real SelectQueryBuilder to call .getSql() on — but the
-    // captured first-argument of andWhere IS the same SQL fragment that
-    // .getSql() / .getQueryAndParameters() would surface for this clause
-    // (the Regex.pipeDelimited output is baked into the string before
-    // TypeORM ever sees it). These assertions operate purely on the captured
-    // SQL string — no DB connection required.
-    const findControlTechClause = (): string | undefined =>
-      queryBuilder.andWhere.mock.calls
-        .map((call: any[]) => call[0])
-        .find(
-          (arg: any) =>
-            typeof arg === 'string' && arg.includes('so2ControlInfo'),
-        );
+    const findControlTechCall = (): any[] | undefined =>
+      queryBuilder.andWhere.mock.calls.find(
+        (call: any[]) =>
+          typeof call[0] === 'string' && call[0].includes('so2ControlInfo'),
+      );
 
     it('emits pipe-delimited regex for a single control-tech filter and never comma-delimited', async () => {
       const ctFilters = new PaginatedFacilityAttributesParamsDTO();
@@ -155,12 +147,11 @@ describe('FacilityUnitAttributesRepository', () => {
         req,
       );
 
-      const clause = findControlTechClause();
-      expect(clause).toBeDefined();
-      // Pipe-delimited alternation marker produced by Regex.pipeDelimited:
-      expect(clause).toContain('[|]');
-      // Regression guard against accidental revert to Regex.commaDelimited:
-      expect(clause).not.toContain('[,]');
+      const [clause, parameters] = findControlTechCall()!;
+      const patterns = Object.values(parameters).join(' ');
+      expect(clause).toContain(':facilityControlTechnologyRegex0');
+      expect(patterns).toContain('[|]');
+      expect(patterns).not.toContain('[,]');
     });
 
     it('emits pipe-delimited alternation for every value in a multi-select union, wrapped in an OR group', async () => {
@@ -175,17 +166,15 @@ describe('FacilityUnitAttributesRepository', () => {
         req,
       );
 
-      const clause = findControlTechClause();
-      expect(clause).toBeDefined();
-      // Both filter values appear in the clause (buildQuery uppercases the
-      // filter text before passing it into pipeDelimited):
-      expect(clause).toContain('SELECTIVE NON-CATALYTIC REDUCTION');
-      expect(clause).toContain('SELECTIVE CATALYTIC REDUCTION');
-      // Pipe-delimited alternation present, comma-delimited absent:
-      expect(clause).toContain('[|]');
-      expect(clause).not.toContain('[,]');
-      // Union semantics: parenthesized OR group wrapping the branches.
-      const trimmed = (clause as string).trim();
+      const [clause, parameters] = findControlTechCall()!;
+      const patterns = Object.values(parameters).join(' ');
+      expect(clause).not.toContain('SELECTIVE NON-CATALYTIC REDUCTION');
+      expect(clause).not.toContain('SELECTIVE CATALYTIC REDUCTION');
+      expect(patterns).toContain('SELECTIVE NON-CATALYTIC REDUCTION');
+      expect(patterns).toContain('SELECTIVE CATALYTIC REDUCTION');
+      expect(patterns).toContain('[|]');
+      expect(patterns).not.toContain('[,]');
+      const trimmed = clause.trim();
       expect(trimmed.startsWith('(')).toBe(true);
       expect(trimmed.endsWith(')')).toBe(true);
       expect(clause).toContain(' OR ');
@@ -205,7 +194,7 @@ describe('FacilityUnitAttributesRepository', () => {
         req,
       );
 
-      expect(findControlTechClause()).toBeUndefined();
+      expect(findControlTechCall()).toBeUndefined();
     });
 
     it('references all four *ControlInfo columns in the emitted clause', async () => {
@@ -219,12 +208,28 @@ describe('FacilityUnitAttributesRepository', () => {
         req,
       );
 
-      const clause = findControlTechClause();
-      expect(clause).toBeDefined();
+      const [clause] = findControlTechCall()!;
       expect(clause).toContain('fua.so2ControlInfo');
       expect(clause).toContain('fua.noxControlInfo');
       expect(clause).toContain('fua.pmControlInfo');
       expect(clause).toContain('fua.hgControlInfo');
+    });
+
+    it('binds control-technology text instead of adding it to SQL', async () => {
+      const payload = "' OR TRUE OR control_info LIKE '";
+      const filters = new PaginatedFacilityAttributesParamsDTO();
+      filters.controlTechnologies = [payload as ControlTechnology];
+
+      await facilityUnitAttributesRepository.getAllFacilityAttributes(
+        filters,
+        req,
+      );
+
+      const [clause, parameters] = findControlTechCall()!;
+      expect(clause).not.toContain(payload.toUpperCase());
+      expect(parameters.facilityControlTechnologyRegex0).toContain(
+        payload.toUpperCase(),
+      );
     });
   });
 
