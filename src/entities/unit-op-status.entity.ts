@@ -15,7 +15,7 @@ export class UnitOpStatus extends BaseEntity {
   @PrimaryColumn({
     name: 'unit_op_status_id',
     transformer: new NumericColumnTransformer(),
-    type: 'numeric',
+    type: 'integer',
   })
   id: number;
 
