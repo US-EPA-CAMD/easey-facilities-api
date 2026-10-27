@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LoggerModule } from '@us-epa-camd/easey-common/logger';
 
 import { Unit } from '../entities/workspace/unit.entity';
+import { UnitOpStatus } from '../entities/workspace/unit-op-status.entity';
 import { UnitMap } from '../maps/unit.map';
 import { UnitWorkspaceRepository } from './unit.repository';
 import { UnitWorkspaceService } from './unit.service';
@@ -22,6 +23,13 @@ const mockUnit = (id: number, name: string, facId: number) => {
   unit.facId = facId;
   unit.nonLoadBasedIndicator = 0;
   return unit;
+};
+
+const mockUnitOpStatus = (opStatusCode: string, beginDate: string) => {
+  const status = new UnitOpStatus();
+  status.opStatusCode = opStatusCode;
+  status.beginDate = new Date(beginDate);
+  return status;
 };
 
 describe('Unit Workspace Tests', () => {
@@ -57,5 +65,34 @@ describe('Unit Workspace Tests', () => {
       const results = await service.getUnitsByOrisCode(5);
       expect(results).toStrictEqual(unitsDto);
     });
+  });
+
+  describe('map unit operating status', () => {
+    it.each([
+      [
+        'oldest to newest',
+        [
+          mockUnitOpStatus('FUT', '2023-08-08'),
+          mockUnitOpStatus('OPR', '2026-04-11'),
+        ],
+      ],
+      [
+        'newest to oldest',
+        [
+          mockUnitOpStatus('OPR', '2026-04-11'),
+          mockUnitOpStatus('FUT', '2023-08-08'),
+        ],
+      ],
+    ])(
+      'selects the latest status when records are ordered %s',
+      async (_, statuses) => {
+        const unit = mockUnit(91493, '1A', 8489);
+        unit.opStatuses = statuses;
+
+        const result = await map.one(unit);
+
+        expect(result.opStatusCd).toBe('OPR');
+      },
+    );
   });
 });

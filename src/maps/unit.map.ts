@@ -40,6 +40,7 @@ export class UnitMap extends BaseMap<Unit | UnitWorkspace, UnitDTO> {
       if (new Date(cur.beginDate).getTime() > new Date(acc.beginDate).getTime()) {
         return cur;
       }
+      return acc;
     }, null);
 
     return activeOpStatus?.opStatusCode ?? null;
